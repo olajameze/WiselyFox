@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WiselyFox
 
-## Getting Started
+Child-safe, parent-guided adaptive learning platform.
 
-First, run the development server:
+## Requirements
+
+- Node.js 20+
+- npm
+
+## Setup
 
 ```bash
+npm install
+cp .env.example .env
+# Edit .env — set AUTH_SECRET (min 16 chars)
+
+docker compose up -d postgres
+npm run db:migrate:deploy
+npm run db:seed
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Or use the all-in-one setup: `npm run db:setup` (requires Docker).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3000](http://localhost:3000).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Family pilot testing
 
-## Learn More
+See **[docs/FAMILY_TESTING.md](docs/FAMILY_TESTING.md)** for demo credentials, a 30-minute test script, and what is / isn't enabled during the pilot (no real billing).
 
-To learn more about Next.js, take a look at the following resources:
+**Demo parent:** `parent@demo.wiselyfox.test` / `demo123456`  
+**Demo child:** access code `wfox-demo-alex` / PIN `1234`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Production build |
+| `npm run test` | Vitest unit/component tests |
+| `npm run test:e2e` | Playwright E2E tests |
+| `npm run db:migrate` | Create/apply migrations in development |
+| `npm run db:migrate:deploy` | Apply migrations in production/CI |
+| `npm run db:setup` | Start local Postgres (Docker), migrate, and seed |
+| `npm run db:seed` | Seed subjects and admin user |
 
-## Deploy on Vercel
+## Default super admin (seed)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Email: `admin@wiselyfox.test`
+- Password: `admin123456`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Architecture
+
+- **Next.js 15** App Router + TypeScript
+- **CSS Modules** only (no Tailwind)
+- **Prisma** + PostgreSQL (local via Docker; hosted Postgres in production)
+- **Auth.js v5** for parent + child PIN auth
+- **Resend** for email
+- **Stripe** for subscriptions (configure price IDs in `.env`)
+
+See `BUILD.md` for development rules and `docs/` for detailed guides.

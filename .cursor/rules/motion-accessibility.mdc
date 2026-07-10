@@ -1,0 +1,12 @@
+---
+description: Motion accessibility
+globs: "**/*.{css,module.css,tsx}"
+alwaysApply: false
+---
+
+# Motion Accessibility
+
+- Use motion tokens: `--motion-fast`, `--motion-base`, `--motion-slow`
+- Gate animations behind `prefers-reduced-motion: no-preference`
+- No autoplay without user control
+- No seizure-inducing effects

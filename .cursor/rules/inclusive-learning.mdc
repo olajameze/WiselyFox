@@ -1,0 +1,11 @@
+---
+description: Inclusive learning pedagogy rules
+alwaysApply: true
+---
+
+# Inclusive Learning
+
+- Follow UDL principles in lesson templates
+- Accommodations via `accommodation.service.ts`
+- Strengths-based language; no diagnostic claims
+- Reference `docs/INCLUSIVE_LEARNING_RESEARCH.md`

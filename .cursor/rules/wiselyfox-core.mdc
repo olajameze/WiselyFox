@@ -1,0 +1,14 @@
+---
+description: WiselyFox core stack and architecture rules
+alwaysApply: true
+---
+
+# WiselyFox Core
+
+- Next.js 15 App Router + TypeScript
+- CSS Modules only — no Tailwind
+- Feature-based structure under `src/features/`
+- Business logic in `src/server/services/` — never import React there
+- Validate all server inputs with Zod
+- No placeholders; document deferrals in `docs/BACKLOG.md`
+- Add tests for every critical feature

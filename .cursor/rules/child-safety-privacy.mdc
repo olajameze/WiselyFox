@@ -1,0 +1,12 @@
+---
+description: Child safety and privacy
+alwaysApply: true
+---
+
+# Child Safety & Privacy
+
+- Child accounts: PIN only, no email, no public profiles
+- No child PII in analytics, Sentry, or AI prompts
+- Parent controls all child data and consents
+- Marketing opt-in is parent-only and off by default
+- COPPA/GDPR-minded data minimization

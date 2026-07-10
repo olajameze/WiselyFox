@@ -1,0 +1,13 @@
+---
+description: TypeScript standards for WiselyFox
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# TypeScript Standards
+
+- Strict mode enabled
+- Use `type` for unions; `interface` for object shapes
+- Zod schemas at API/action boundaries
+- No `any` unless documented
+- Descriptive names: `requireParent`, `assertHouseholdAccess`

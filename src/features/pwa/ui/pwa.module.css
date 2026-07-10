@@ -1,0 +1,102 @@
+.installBanner {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  padding-top: calc(var(--space-md) + env(safe-area-inset-top, 0px));
+  padding-left: calc(var(--space-md) + env(safe-area-inset-left, 0px));
+  padding-right: calc(var(--space-md) + env(safe-area-inset-right, 0px));
+  background: linear-gradient(135deg, var(--color-primary) 0%, #2563eb 100%);
+  color: white;
+}
+
+.installBanner strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.installBanner p {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  opacity: 0.95;
+}
+
+.installActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .installActions {
+    width: auto;
+  }
+}
+
+.installBtn,
+.dismissBtn,
+.pushBtn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  border: 0;
+}
+
+.installBtn,
+.pushBtn {
+  background: white;
+  color: var(--color-primary);
+}
+
+.dismissBtn {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.pushCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.pushStatus {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.pushActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.pushBtnSecondary {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  border: 0;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+@media (min-width: 768px) {
+  .installBanner {
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    margin: 0 var(--space-lg);
+  }
+}

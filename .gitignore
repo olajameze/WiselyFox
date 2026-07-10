@@ -12,6 +12,11 @@
 
 # testing
 /coverage
+/test-results
+
+# local database
+/prisma/dev.db
+/prisma/*.db-journal
 
 # next.js
 /.next/
@@ -22,6 +27,10 @@
 
 # misc
 .DS_Store
+/public/tutor-photos/*
+!/public/tutor-photos/.gitkeep
+/public/tutor-cvs/*
+!/public/tutor-cvs/.gitkeep
 *.pem
 
 # debug

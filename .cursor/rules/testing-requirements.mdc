@@ -1,0 +1,12 @@
+---
+description: Testing requirements
+globs: "tests/**,**/*.test.{ts,tsx}"
+alwaysApply: false
+---
+
+# Testing
+
+- Vitest for unit tests
+- Testing Library for components
+- Playwright for E2E journeys
+- Mock external services (Resend, Stripe, OpenAI)

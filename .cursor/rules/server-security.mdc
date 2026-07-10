@@ -1,0 +1,13 @@
+---
+description: Server security requirements
+globs: "src/server/**,src/features/**/actions/**"
+alwaysApply: false
+---
+
+# Server Security
+
+- RBAC on every protected action
+- Audit log sensitive operations
+- Never expose stack traces to clients
+- Rate-limit auth and PIN endpoints
+- Hash PINs with bcrypt

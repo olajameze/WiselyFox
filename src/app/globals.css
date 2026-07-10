@@ -1,49 +1,327 @@
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Lexend:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap");
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Notebook study-book palette */
+  --notebook-paper: #faf6ed;
+  --notebook-paper-shadow: #ebe4d4;
+  --notebook-line: rgba(168, 192, 216, 0.55);
+  --notebook-margin: #d4847a;
+  --notebook-ink: #2c2416;
+  --notebook-ink-muted: #4a4034;
+  --notebook-desk: #3d2e22;
+  --notebook-desk-light: #5c4632;
+  --notebook-spine: #8b6914;
+  --notebook-spine-dark: #5a4208;
+  --notebook-trust: #0f2d6b;
+  --notebook-learn: #1746a0;
+  --notebook-warm: #c2410c;
+  --notebook-calm: #2d6a4f;
+  --notebook-line-height: 2rem;
+
+  /* App tokens mapped to notebook theme */
+  --color-bg: var(--notebook-paper);
+  --color-surface: #fffdf8;
+  --color-primary: var(--notebook-learn);
+  --color-primary-soft: #e8f0fe;
+  --color-primary-dark: var(--notebook-trust);
+  --color-accent: #f97316;
+  --color-accent-soft: #fff1e6;
+  --color-accent-dark: #ea580c;
+  --color-reward: #fbbf24;
+  --color-reward-soft: #fef3c7;
+  --color-joy: #8b5cf6;
+  --color-joy-soft: #ede9fe;
+  --color-text: var(--notebook-ink);
+  --color-text-muted: var(--notebook-ink-muted);
+  --color-danger: #dc2626;
+  --color-danger-soft: #fef2f2;
+  --color-success: #16a34a;
+  --color-success-soft: #ecfdf3;
+  --color-border: rgba(44, 36, 22, 0.14);
+  --color-footer: var(--notebook-trust);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+  --shadow-soft: 2px 3px 0 rgba(44, 36, 22, 0.06);
+  --shadow-md: 0 8px 24px rgba(44, 36, 22, 0.12);
+  --shadow-accent: 0 8px 28px rgba(249, 115, 22, 0.22);
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --font-sans: "Lexend", system-ui, sans-serif;
+  --font-display: "Unbounded", system-ui, sans-serif;
+  --font-handwriting: "Caveat", "Segoe Print", cursive;
+  --font-notebook: "Crimson Pro", Georgia, "Times New Roman", serif;
+  --max-width: 1200px;
+  --header-height: 64px;
+  --motion-fast: 150ms;
+  --motion-base: 250ms;
+  --motion-slow: 400ms;
+  --motion-page-turn: 980ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-page-turn: cubic-bezier(0.28, 0.72, 0.38, 1);
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-reduced-motion: reduce) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --motion-fast: 0ms;
+    --motion-base: 0ms;
+    --motion-slow: 0ms;
+    --motion-page-turn: 0ms;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
-html {
-  height: 100%;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
   margin: 0;
+  font-family: var(--font-notebook);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(var(--notebook-line-height) - 1px),
+      var(--notebook-line) calc(var(--notebook-line-height) - 1px),
+      var(--notebook-line) var(--notebook-line-height)
+    ),
+    var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.learn-accessibility-root {
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-handwriting);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  margin: 0 0 var(--space-md);
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+  color: var(--color-primary);
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-md);
+  background: var(--color-accent);
+  color: white;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: var(--space-md);
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.fade-in {
+  animation: fadeIn var(--motion-slow) var(--ease-out) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Child accessibility modes (set on .learn-accessibility-root) */
+.learn-accessibility-root[data-dyslexia="true"] {
+  font-family: "Lexend", "Comic Sans MS", system-ui, sans-serif;
+  letter-spacing: 0.06em;
+  word-spacing: 0.12em;
+  line-height: 1.85;
+}
+
+.learn-accessibility-root[data-dyslexia="true"] p,
+.learn-accessibility-root[data-dyslexia="true"] li {
+  max-width: 65ch;
+}
+
+.learn-accessibility-root[data-high-contrast="true"] {
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-text: #000000;
+  --color-text-muted: #1a1a1a;
+  --color-border: #000000;
+  --color-primary: #0000aa;
+  --color-primary-soft: #e8e8ff;
+  --color-accent: #000000;
+  --color-success: #006400;
+  --color-danger: #8b0000;
+  --color-warning: #5c4d00;
+}
+
+.learn-accessibility-root[data-calm="true"] {
+  --color-bg: #f5f8fc;
+  --color-accent: #6b8cae;
+}
+
+.learn-accessibility-root[data-reduced-motion="true"] *,
+.learn-accessibility-root[data-reduced-motion="true"] *::before,
+.learn-accessibility-root[data-reduced-motion="true"] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+.learn-accessibility-root[data-large-text="true"] {
+  font-size: 1.125rem;
+}
+
+.learn-accessibility-root[data-large-text="true"] h1 {
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
+}
+
+.learn-accessibility-root[data-large-text="true"] h2 {
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
+}
+
+.learn-accessibility-root[data-large-text="true"] button,
+.learn-accessibility-root[data-large-text="true"] .learnNavLink {
+  font-size: 1rem;
+}
+
+/* Dashboard accessibility (parent, admin, tutor — localStorage toggles on html) */
+html[data-dashboard-large-text="true"],
+html[data-parent-large-text="true"] {
+  font-size: 1.0625rem;
+}
+
+html[data-dashboard-high-contrast="true"],
+html[data-parent-high-contrast="true"] {
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-text: #000000;
+  --color-text-muted: #1a1a1a;
+  --color-border: #000000;
+  --color-primary: #0000aa;
+  --color-primary-soft: #e8e8ff;
+  --color-accent: #000000;
+  --color-success: #006400;
+  --color-danger: #8b0000;
+  --color-warning: #5c4d00;
+}
+
+html[data-dashboard-dyslexia="true"] {
+  font-family: "Lexend", "Comic Sans MS", system-ui, sans-serif;
+  letter-spacing: 0.05em;
+  word-spacing: 0.1em;
+  line-height: 1.75;
+}
+
+html[data-dashboard-dyslexia="true"] p,
+html[data-dashboard-dyslexia="true"] li {
+  max-width: 65ch;
+}
+
+html[data-dashboard-calm="true"] {
+  --color-bg: #f5f8fc;
+  --color-accent: #6b8cae;
+}
+
+html[data-dashboard-reduced-motion="true"] *,
+html[data-dashboard-reduced-motion="true"] *::before,
+html[data-dashboard-reduced-motion="true"] *::after,
+html[data-parent-reduced-motion="true"] *,
+html[data-parent-reduced-motion="true"] *::before,
+html[data-parent-reduced-motion="true"] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* PWA standalone + mobile safe areas */
+@supports (padding: env(safe-area-inset-top)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .shell {
+    grid-template-columns: 220px 1fr;
+  }
+}
+
+@media print {
+  body {
+    background: white !important;
   }
 }

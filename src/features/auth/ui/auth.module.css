@@ -1,0 +1,248 @@
+/* ── Notebook auth pages (sign in / sign up) ─────────────────────── */
+
+.authPage {
+  --line-height: var(--notebook-line-height);
+
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  background:
+    radial-gradient(ellipse 120% 80% at 50% 0%, var(--notebook-desk-light) 0%, transparent 55%),
+    linear-gradient(165deg, var(--notebook-desk) 0%, #2a1f16 100%);
+}
+
+.notebookOpen {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  max-width: 480px;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.35));
+}
+
+@media (min-width: 768px) {
+  .notebookOpen {
+    grid-template-columns: 44px 1fr;
+    max-width: 520px;
+  }
+}
+
+.bookSpine {
+  display: none;
+  background:
+    linear-gradient(
+      90deg,
+      var(--notebook-spine-dark) 0%,
+      var(--notebook-spine) 35%,
+      #c9a227 50%,
+      var(--notebook-spine) 65%,
+      var(--notebook-spine-dark) 100%
+    );
+  border-radius: 6px 0 0 6px;
+}
+
+@media (min-width: 768px) {
+  .bookSpine {
+    display: block;
+  }
+}
+
+.authCard {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(var(--line-height) - 1px),
+      var(--notebook-line) calc(var(--line-height) - 1px),
+      var(--notebook-line) var(--line-height)
+    ),
+    var(--notebook-paper) !important;
+  border-radius: 2px 10px 10px 2px !important;
+  box-shadow:
+    inset 48px 0 0 0 var(--notebook-paper),
+    inset 50px 0 0 0 var(--notebook-margin),
+    0 2px 0 rgba(44, 36, 22, 0.06) !important;
+  overflow: visible !important;
+}
+
+.authCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 18px;
+  bottom: 0;
+  width: 14px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 26px,
+    rgba(44, 36, 22, 0.08) 26px,
+    rgba(44, 36, 22, 0.08) 30px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.authCard > div {
+  position: relative;
+  z-index: 1;
+  padding: calc(var(--space-xl) + 4px) var(--space-xl) var(--space-xl)
+    calc(var(--space-xl) + 24px) !important;
+  background: transparent !important;
+}
+
+.pageMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: calc(var(--line-height) * 0.75);
+  font-family: var(--font-handwriting);
+  font-size: 1.0625rem;
+  color: var(--notebook-ink-muted);
+  opacity: 0.8;
+}
+
+.pageMeta span:last-child {
+  font-style: italic;
+}
+
+.authTitle {
+  font-family: var(--font-handwriting);
+  font-size: clamp(1.875rem, 5vw, 2.375rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: calc(var(--line-height) * 0.25);
+  color: var(--notebook-trust);
+  line-height: 1.2;
+}
+
+.authSubtitle {
+  font-family: var(--font-notebook);
+  text-align: center;
+  color: var(--notebook-ink);
+  margin-bottom: var(--space-lg);
+  line-height: var(--line-height);
+  font-size: 1.0625rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+  width: 100%;
+  max-width: 100%;
+  justify-content: center;
+}
+
+.authPage .form label {
+  font-family: var(--font-handwriting);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--notebook-trust);
+}
+
+.authPage .form input[type="email"],
+.authPage .form input[type="password"],
+.authPage .form input[type="text"] {
+  font-family: var(--font-notebook);
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(44, 36, 22, 0.18);
+  border-bottom: 2px solid rgba(44, 36, 22, 0.28);
+  border-radius: 2px;
+  color: var(--notebook-ink);
+}
+
+.authPage .form input:focus {
+  border-color: var(--notebook-trust);
+  box-shadow: 0 0 0 2px rgba(15, 45, 107, 0.12);
+  outline: none;
+}
+
+.authPage .form span {
+  font-family: var(--font-notebook);
+  color: var(--notebook-ink-muted);
+}
+
+.authPage [role="status"],
+.authPage [role="alert"] {
+  font-family: var(--font-notebook);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  border-radius: 2px;
+  border-left-width: 3px;
+}
+
+.authPage [role="status"] {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-color: var(--notebook-margin) !important;
+  color: var(--notebook-ink) !important;
+}
+
+.authPage [role="status"] div:first-child {
+  font-family: var(--font-handwriting);
+  font-size: 1.125rem;
+  color: var(--notebook-trust);
+}
+
+.authPage [role="alert"] {
+  background: rgba(254, 242, 242, 0.85) !important;
+}
+
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  font-family: var(--font-notebook);
+  font-size: 0.9375rem;
+  color: var(--notebook-ink);
+  line-height: 1.5;
+}
+
+.link {
+  text-align: center;
+  margin-top: var(--space-md);
+  font-family: var(--font-notebook);
+  font-size: 1rem;
+  color: var(--notebook-ink-muted);
+  line-height: var(--line-height);
+}
+
+.link a {
+  color: var(--notebook-trust);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link a:hover {
+  color: var(--notebook-warm);
+}
+
+.legalNote {
+  font-family: var(--font-notebook);
+  font-size: 0.875rem;
+  color: var(--notebook-ink-muted);
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notebookOpen {
+    filter: none;
+  }
+}
+
+.tutorSignUpCard {
+  padding: var(--space-xl);
+}

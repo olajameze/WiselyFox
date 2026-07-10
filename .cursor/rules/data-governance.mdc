@@ -1,0 +1,12 @@
+---
+description: Data governance and GDPR compliance
+alwaysApply: true
+---
+
+# Data Governance
+
+- Three tiers: service data, opt-in marketing, anonymized B2B insights
+- Never sell identifiable child data
+- B2B exports: k-anonymity minimum n=30 per cell
+- Audit all super-admin data access
+- Parent rights: export, erasure, consent withdrawal

@@ -1,0 +1,12 @@
+---
+description: CSS design system rules
+globs: "**/*.{css,module.css}"
+alwaysApply: false
+---
+
+# CSS Design System
+
+- Use design tokens from `globals.css` via `var(--token)`
+- Mobile-first media queries
+- No inline styles except dynamic values
+- Motion tokens with `prefers-reduced-motion` fallbacks

@@ -1,0 +1,371 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-height);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  height: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.logo {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  text-decoration: none;
+  letter-spacing: -0.03em;
+}
+
+.nav {
+  display: none;
+  gap: var(--space-md);
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+}
+
+.nav a:hover {
+  color: var(--color-primary);
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.actions a {
+  display: inline-flex;
+}
+
+.authLinks {
+  display: none;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.textLink {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: var(--space-xs) var(--space-sm);
+  white-space: nowrap;
+}
+
+.textLink:hover {
+  color: var(--color-primary);
+}
+
+.authDivider {
+  color: var(--color-border);
+  font-size: 0.75rem;
+  user-select: none;
+}
+
+.tutorCta {
+  display: none;
+}
+
+.joinCta {
+  display: inline-flex;
+}
+
+@media (max-width: 480px) {
+  .inner {
+    padding: 0 var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .joinCta {
+    display: none;
+  }
+
+  .logoNotebook {
+    font-size: 1.35rem;
+  }
+
+  .headerNotebook {
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+  }
+
+  .headerNotebook .inner {
+    min-height: 52px;
+    padding-left: calc(var(--space-sm) + 16px);
+    padding-right: var(--space-sm);
+  }
+}
+
+.menuBtn {
+  display: flex;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.mobileNav a {
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 500;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.mobileAuth {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.mobileAuth a {
+  font-size: 0.9375rem;
+}
+
+@media (min-width: 768px) {
+  .nav {
+    display: flex;
+  }
+  .authLinks {
+    display: flex;
+  }
+  .menuBtn {
+    display: none;
+  }
+  .mobileNav {
+    display: none;
+  }
+}
+
+@media (min-width: 900px) {
+  .tutorCta {
+    display: inline-flex;
+  }
+
+  .nav {
+    gap: var(--space-lg);
+  }
+
+  .nav a {
+    font-size: 0.9375rem;
+  }
+}
+
+.open .mobileNav {
+  display: flex;
+}
+
+/* ── Notebook variant (landing page) ───────────────────────────────── */
+
+.headerNotebook {
+  height: auto;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% 0%, #5c4632 0%, transparent 55%),
+    linear-gradient(165deg, #3d2e22 0%, #2a1f16 100%);
+  border-bottom: none;
+  padding: var(--space-sm) var(--space-lg) 0;
+}
+
+.headerNotebook .inner {
+  position: relative;
+  max-width: calc(var(--max-width) - var(--space-xl));
+  min-height: 58px;
+  padding: var(--space-sm) var(--space-md) var(--space-sm) calc(var(--space-md) + 20px);
+  gap: var(--space-sm);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(2rem - 1px),
+      rgba(168, 192, 216, 0.45) calc(2rem - 1px),
+      rgba(168, 192, 216, 0.45) 2rem
+    ),
+    #faf6ed;
+  border-radius: 8px 8px 2px 2px;
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.28),
+    inset 44px 0 0 0 #faf6ed,
+    inset 46px 0 0 0 #d4847a;
+}
+
+.headerNotebook .inner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 14px;
+  bottom: 0;
+  width: 12px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 26px,
+    rgba(44, 36, 22, 0.07) 26px,
+    rgba(44, 36, 22, 0.07) 30px
+  );
+  pointer-events: none;
+}
+
+.headerNotebook .inner::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 6px;
+  background: linear-gradient(to bottom, rgba(44, 36, 22, 0.08), transparent);
+  border-radius: 0 0 4px 4px;
+  pointer-events: none;
+}
+
+.logoNotebook {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-handwriting);
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: #0f2d6b;
+  letter-spacing: 0.02em;
+}
+
+.logoMark {
+  font-size: 1.25rem;
+  line-height: 1;
+  transform: rotate(-6deg);
+}
+
+.navNotebook a {
+  font-family: var(--font-notebook);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4a4034;
+  position: relative;
+  padding: var(--space-xs) var(--space-sm);
+  white-space: nowrap;
+}
+
+@media (min-width: 900px) {
+  .navNotebook a {
+    font-size: 1rem;
+  }
+}
+
+.headerNotebook .textLink {
+  color: #4a4034;
+  font-family: var(--font-notebook);
+}
+
+.headerNotebook .textLink:hover {
+  color: #0f2d6b;
+}
+
+.headerNotebook .authDivider {
+  color: rgba(44, 36, 22, 0.25);
+}
+
+.navNotebook a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--motion-base) var(--ease-out);
+  opacity: 0.45;
+}
+
+.navNotebook a:hover {
+  color: #0f2d6b;
+}
+
+.navNotebook a:hover::after {
+  transform: scaleX(1);
+}
+
+.headerNotebook .menuBtn {
+  color: #2c2416;
+  font-size: 1.375rem;
+}
+
+.mobileNavNotebook {
+  margin: var(--space-sm) auto 0;
+  max-width: calc(var(--max-width) - var(--space-xl));
+  padding: var(--space-md) var(--space-lg) var(--space-md) calc(var(--space-lg) + 20px);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(2rem - 1px),
+      rgba(168, 192, 216, 0.45) calc(2rem - 1px),
+      rgba(168, 192, 216, 0.45) 2rem
+    ),
+    #faf6ed;
+  border: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.22),
+    inset 44px 0 0 0 #faf6ed,
+    inset 46px 0 0 0 #d4847a;
+}
+
+.mobileNavNotebook a {
+  font-family: var(--font-notebook);
+  font-weight: 600;
+  color: #2c2416;
+  min-height: 2rem;
+  line-height: 2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navNotebook a::after {
+    transition: none;
+    transform: scaleX(1);
+  }
+}

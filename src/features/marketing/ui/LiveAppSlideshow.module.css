@@ -1,0 +1,131 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.device {
+  width: 280px;
+  padding: 12px;
+  background: var(--color-primary-dark);
+  border-radius: 28px;
+  box-shadow: var(--shadow-md);
+}
+
+.screen {
+  border-radius: 18px;
+  padding: var(--space-lg);
+  min-height: 400px;
+  transition: background var(--motion-slow) var(--ease-out);
+}
+
+.mockNav {
+  height: 8px;
+  width: 40%;
+  background: rgba(23, 70, 160, 0.35);
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-lg);
+}
+
+.screen h3 {
+  font-size: 1.25rem;
+  margin-bottom: var(--space-sm);
+}
+
+.screen p {
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.mockCards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.mockCard {
+  height: 48px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-md);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.controls button {
+  min-width: 44px;
+  min-height: 44px;
+  border: none;
+  background: var(--color-surface);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  font-size: 1.25rem;
+}
+
+.dot,
+.dotActive {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.dot {
+  background: var(--color-border);
+}
+
+.dotActive {
+  background: var(--color-accent);
+}
+
+.staticGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-md);
+  width: 100%;
+}
+
+.staticCard {
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  font-size: 0.875rem;
+}
+
+.staticCard p {
+  margin: var(--space-sm) 0 0;
+  color: var(--color-text-muted);
+}
+
+.themeChildHome {
+  background: #e8f0fe;
+}
+
+.themeLesson {
+  background: #fff1e6;
+}
+
+.themeParent {
+  background: #ede9fe;
+}
+
+.themeFocus {
+  background: #fef3c7;
+}
+
+.themeCalm {
+  background: #fffbf5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen {
+    transition: none;
+  }
+}
