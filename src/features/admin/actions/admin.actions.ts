@@ -97,7 +97,7 @@ export async function adminUpdateUserRole(
     }
   }
 
-  let role = parsed.data.role as UserRole;
+  const role = parsed.data.role as UserRole;
   await prisma.user.update({
     where: { id: target.id },
     data: { role },

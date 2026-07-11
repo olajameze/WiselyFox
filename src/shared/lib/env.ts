@@ -32,6 +32,11 @@ const envSchema = z.object({
   PILOT_FEEDBACK_URL: optionalUrl,
   TUTOR_PLATFORM_FEE_BPS: z.coerce.number().default(500),
   BLOB_READ_WRITE_TOKEN: optionalString,
+  VAPID_PUBLIC_KEY: optionalString,
+  VAPID_PRIVATE_KEY: optionalString,
+  VAPID_SUBJECT: optionalString,
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: optionalString,
+  NEXT_PUBLIC_ENABLE_PWA_DEV: optionalString,
 });
 
 export type Env = z.infer<typeof envSchema>;

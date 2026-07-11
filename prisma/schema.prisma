@@ -198,6 +198,7 @@ model ChildProfile {
   studySessions   StudySession[]
   rewards         Reward[]
   quests          QuestProgress[]
+  questStickers   QuestSticker[]
   scheduleItems   LearningScheduleItem[]
   lessonCompletions LessonCompletion[]
   quizAttempts      QuizAttempt[]
@@ -376,9 +377,27 @@ model QuestProgress {
   progress    Int          @default(0)
   target      Int          @default(1)
   completed   Boolean      @default(false)
+  completedAt DateTime?
   periodStart DateTime
   periodEnd   DateTime
   createdAt   DateTime     @default(now())
+
+  @@unique([childId, questSlug, periodStart])
+}
+
+model QuestSticker {
+  id          String       @id @default(cuid())
+  childId     String
+  child       ChildProfile @relation(fields: [childId], references: [id], onDelete: Cascade)
+  questSlug   String
+  questTitle  String
+  stickerSeed String
+  emoji       String
+  label       String
+  bgColor     String
+  xpBonus     Int          @default(15)
+  periodStart DateTime
+  earnedAt    DateTime     @default(now())
 
   @@unique([childId, questSlug, periodStart])
 }
@@ -435,12 +454,13 @@ model QuizAttempt {
 }
 
 model SubjectCompletion {
-  id           String       @id @default(cuid())
-  childId      String
-  child        ChildProfile @relation(fields: [childId], references: [id], onDelete: Cascade)
-  subjectSlug  String
-  subjectTitle String
-  completedAt  DateTime     @default(now())
+  id              String       @id @default(cuid())
+  childId         String
+  child           ChildProfile @relation(fields: [childId], references: [id], onDelete: Cascade)
+  subjectSlug     String
+  subjectTitle    String
+  certificateCode String?      @unique
+  completedAt     DateTime     @default(now())
 
   @@unique([childId, subjectSlug])
 }

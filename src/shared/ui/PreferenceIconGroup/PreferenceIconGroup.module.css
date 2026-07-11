@@ -1,0 +1,31 @@
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.sidebarGroup {
+  justify-content: center;
+  width: 100%;
+  padding: var(--space-sm) 0;
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-sm);
+}
+
+.headerGroup {
+  margin-bottom: 0;
+}
+
+.notebookGroup :global(button),
+.notebookGroup :global(summary) {
+  border-color: rgba(44, 36, 22, 0.18);
+  background: rgba(255, 252, 245, 0.9);
+  color: var(--notebook-ink);
+}
+
+.notebookGroup :global(button:hover),
+.notebookGroup :global(summary:hover) {
+  border-color: var(--notebook-trust);
+  color: var(--notebook-trust);
+}

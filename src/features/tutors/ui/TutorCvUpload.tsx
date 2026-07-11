@@ -44,7 +44,7 @@ export function TutorCvUpload({ currentCvUrl }: Props) {
       }
 
       const saveResult = await setTutorCvUrl(data.url);
-      if (!saveResult.ok) {
+      if (!saveResult.success) {
         setError(saveResult.error);
         setLoading(false);
         return;

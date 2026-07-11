@@ -2,7 +2,8 @@ import Link from "next/link";
 import { requireTutorProfile, getParentProfileForUser } from "@/shared/lib/permissions";
 import { TutorNav } from "./TutorNav";
 import { TutorAccountMenu } from "./TutorAccountMenu";
-import { DashboardAccessibilityToolbar } from "@/shared/ui/DashboardAccessibilityToolbar/DashboardAccessibilityToolbar";
+import { PreferenceIconGroup } from "@/shared/ui/PreferenceIconGroup/PreferenceIconGroup";
+import groupStyles from "@/shared/ui/PreferenceIconGroup/PreferenceIconGroup.module.css";
 import { AppSkipLinks } from "@/shared/ui/AppSkipLinks/AppSkipLinks";
 import shellStyles from "@/shared/ui/DashboardAccountMenu/DashboardAccountMenu.module.css";
 import styles from "./tutor.module.css";
@@ -23,6 +24,10 @@ export async function TutorShell({ children }: { children: React.ReactNode }) {
           <TutorNav />
         </div>
         <div className={shellStyles.sidebarBottom}>
+          <PreferenceIconGroup
+            className={groupStyles.sidebarGroup}
+            hint="Adjust how the tutor dashboard looks on this device."
+          />
           <TutorAccountMenu />
           {parentProfile && (
             <Link href="/parent" className={shellStyles.sidebarBackLink}>
@@ -35,7 +40,6 @@ export async function TutorShell({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
       <main id="tutor-main" className={styles.shellMain}>
-        <DashboardAccessibilityToolbar hint="Adjust how the tutor dashboard looks on this device." />
         {children}
       </main>
     </div>

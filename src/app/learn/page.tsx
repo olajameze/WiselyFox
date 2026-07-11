@@ -2,6 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { requireChild } from "@/shared/lib/permissions";
 import { getLearnChildWithRewards } from "@/features/learning/services/child-session.service";
+import { getChildRewardsDashboard } from "@/features/gamification/services/child-rewards.service";
+import { WeeklyQuestPanel } from "@/features/gamification/ui/WeeklyQuestPanel";
 import { getAccommodationRules } from "@/features/inclusive/services/accommodation.service";
 import { generateDailyObjectives } from "@/server/services/daily-objectives.service";
 import { getAdaptiveRecommendations } from "@/features/learning/services/learning-path.service";
@@ -22,9 +24,10 @@ export default async function LearnHomePage() {
   const ageLabel = isAgeBand(child.ageBand) ? AGE_BAND_LABELS[child.ageBand] : child.ageBand;
   const dailyFact = getDailyFact(child.id);
 
-  const [objectives, recommendations] = await Promise.all([
+  const [objectives, recommendations, rewardsDashboard] = await Promise.all([
     generateDailyObjectives(child.id, child.ageBand),
     getAdaptiveRecommendations(child.id, 3),
+    getChildRewardsDashboard(child.id),
   ]);
 
   return (
@@ -63,6 +66,20 @@ export default async function LearnHomePage() {
       )}
 
       <Card className={styles.cardSpaced}>
+        <WeeklyQuestPanel
+          quests={rewardsDashboard.quests}
+          questsCompleted={rewardsDashboard.questsCompleted}
+          questsTotal={rewardsDashboard.questsTotal}
+          compact
+        />
+        <Link href="/learn/rewards">
+          <Button variant="ghost" size="sm" className={styles.mtSm}>
+            Stickers & rewards
+          </Button>
+        </Link>
+      </Card>
+
+      <Card className={styles.cardSpaced}>
         <h2>Today&apos;s missions</h2>
         <div className={styles.questList}>
           {objectives.map((obj) => (
@@ -77,11 +94,19 @@ export default async function LearnHomePage() {
       {child.rewards.length > 0 && (
         <Card className={styles.cardSpaced}>
           <h2>Your rewards</h2>
-          {child.rewards.map((r) => (
+          <p className={styles.meta}>
+            {child.rewards.length} reward{child.rewards.length === 1 ? "" : "s"} ready to claim!
+          </p>
+          {child.rewards.slice(0, 2).map((r) => (
             <Alert key={r.id} variant="success" title={r.title}>
               {r.description ?? "Approved by your parent!"}
             </Alert>
           ))}
+          <Link href="/learn/rewards">
+            <Button size="sm" className={styles.mtSm}>
+              View all rewards
+            </Button>
+          </Link>
         </Card>
       )}
 
@@ -140,6 +165,11 @@ export default async function LearnHomePage() {
         <Link href="/learn/certificates">
           <Button variant="ghost" size="sm">
             Certificates
+          </Button>
+        </Link>
+        <Link href="/learn/rewards">
+          <Button variant="ghost" size="sm">
+            Rewards
           </Button>
         </Link>
       </div>

@@ -2,7 +2,8 @@ import Link from "next/link";
 import { requireParentOwner } from "@/shared/lib/permissions";
 import { ParentNav } from "./ParentNav";
 import { AccountMenu } from "./AccountMenu";
-import { ParentAccessibilityShell } from "@/features/pwa/ui/ParentAccessibilityShell";
+import { PreferenceIconGroup } from "@/shared/ui/PreferenceIconGroup/PreferenceIconGroup";
+import groupStyles from "@/shared/ui/PreferenceIconGroup/PreferenceIconGroup.module.css";
 import { AppSkipLinks } from "@/shared/ui/AppSkipLinks/AppSkipLinks";
 import shellStyles from "@/shared/ui/DashboardAccountMenu/DashboardAccountMenu.module.css";
 import styles from "./parent.module.css";
@@ -22,6 +23,10 @@ export async function ParentShell({ children }: { children: React.ReactNode }) {
           <ParentNav />
         </div>
         <div className={[shellStyles.sidebarBottom].join(" ")}>
+          <PreferenceIconGroup
+            className={groupStyles.sidebarGroup}
+            hint="Adjust how the parent dashboard looks on this device."
+          />
           <AccountMenu />
           <Link href="/" className={shellStyles.sidebarBackLink}>
             Back to site
@@ -29,7 +34,7 @@ export async function ParentShell({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
       <main id="parent-main" className={styles.shellMain}>
-        <ParentAccessibilityShell>{children}</ParentAccessibilityShell>
+        {children}
       </main>
     </div>
   );

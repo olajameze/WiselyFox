@@ -41,7 +41,8 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
     setShowIosHint(isIosSafari() && !isStandalone());
 
     if ("serviceWorker" in navigator) {
-      if (process.env.NODE_ENV === "development") {
+      const enableDevPwa = process.env.NEXT_PUBLIC_ENABLE_PWA_DEV === "true";
+      if (process.env.NODE_ENV === "development" && !enableDevPwa) {
         void navigator.serviceWorker.getRegistrations().then((registrations) => {
           registrations.forEach((registration) => {
             void registration.unregister();

@@ -11,6 +11,8 @@ export function LearnNav({ showFocusLink = true }: { showFocusLink?: boolean }) 
     { href: "/learn", label: "Home", exact: true },
     { href: "/learn/subjects", label: "Subjects" },
     { href: "/learn/quiz", label: "Quizzes" },
+    { href: "/learn/rewards", label: "Rewards" },
+    { href: "/learn/certificates", label: "Certs" },
     ...(showFocusLink ? [{ href: "/learn/focus", label: "Focus", exact: false as const }] : []),
   ];
 

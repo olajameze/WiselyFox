@@ -682,6 +682,186 @@
   border-bottom: none;
 }
 
+.confidenceLabel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  font-size: 0.9375rem;
+}
+
+.assessmentSummary {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-md);
+}
+
+.domainGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space-sm);
+}
+
+.domainCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.dataTable th,
+.dataTable td {
+  text-align: left;
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-md);
+}
+
+.milestoneList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.milestoneItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.milestoneItem:last-child {
+  border-bottom: none;
+}
+
+.claimActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+}
+
+.mtSm {
+  margin-top: var(--space-sm);
+}
+
+.certCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.stickerBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 2px solid rgba(0, 0, 0, 0.06);
+  text-align: center;
+  min-width: 88px;
+}
+
+.stickerBadgeSm {
+  padding: var(--space-sm);
+  min-width: 64px;
+}
+
+.stickerBadgeSm .stickerEmoji {
+  font-size: 1.5rem;
+}
+
+.stickerBadgeSm .stickerLabel {
+  font-size: 0.7rem;
+}
+
+.stickerBadgeLg .stickerEmoji {
+  font-size: 2.5rem;
+}
+
+.stickerEmoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.stickerLabel {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.stickerDate {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.stickerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: var(--space-md);
+}
+
+.questPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.questPanelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.questProgressList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.questProgressItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.questProgressTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
 .scheduleDay {
   margin-bottom: var(--space-lg);
   padding-bottom: var(--space-md);

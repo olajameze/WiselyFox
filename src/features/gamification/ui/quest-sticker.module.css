@@ -1,0 +1,128 @@
+.stickerBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--sticker-border, rgba(0, 0, 0, 0.06));
+  text-align: center;
+  min-width: 88px;
+}
+
+.stickerBadgeSm {
+  padding: var(--space-sm);
+  min-width: 64px;
+}
+
+.stickerBadgeSm .stickerEmoji {
+  font-size: 1.5rem;
+}
+
+.stickerBadgeSm .stickerLabel {
+  font-size: 0.7rem;
+}
+
+.stickerBadgeLg .stickerEmoji {
+  font-size: 2.5rem;
+}
+
+.stickerEmoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.stickerLabel {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.stickerDate {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.stickerColor0 {
+  background-color: #e8f4ea;
+}
+
+.stickerColor1 {
+  background-color: #fff3e0;
+}
+
+.stickerColor2 {
+  background-color: #e3f2fd;
+}
+
+.stickerColor3 {
+  background-color: #fce4ec;
+}
+
+.stickerColor4 {
+  background-color: #f3e5f5;
+}
+
+.stickerColor5 {
+  background-color: #e0f7fa;
+}
+
+.stickerColor6 {
+  background-color: #fff8e1;
+}
+
+.stickerColor7 {
+  background-color: #e8eaf6;
+}
+
+.stickerColor8 {
+  background-color: #f1f8e9;
+}
+
+.stickerColor9 {
+  background-color: #ffebee;
+}
+
+[data-theme="dark"] .stickerColor0 {
+  background-color: #1e3a24;
+}
+
+[data-theme="dark"] .stickerColor1 {
+  background-color: #3d2e14;
+}
+
+[data-theme="dark"] .stickerColor2 {
+  background-color: #1a2f44;
+}
+
+[data-theme="dark"] .stickerColor3 {
+  background-color: #3d1f2a;
+}
+
+[data-theme="dark"] .stickerColor4 {
+  background-color: #2e1f3d;
+}
+
+[data-theme="dark"] .stickerColor5 {
+  background-color: #14363d;
+}
+
+[data-theme="dark"] .stickerColor6 {
+  background-color: #3d3414;
+}
+
+[data-theme="dark"] .stickerColor7 {
+  background-color: #1f2244;
+}
+
+[data-theme="dark"] .stickerColor8 {
+  background-color: #1f3d1a;
+}
+
+[data-theme="dark"] .stickerColor9 {
+  background-color: #3d1a1a;
+}
+
+[data-theme="dark"] .stickerBadge {
+  --sticker-border: rgba(255, 255, 255, 0.1);
+}

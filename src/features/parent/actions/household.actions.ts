@@ -161,12 +161,13 @@ export async function approveReward(rewardId: string): Promise<ActionResult<null
       type: "ACHIEVEMENT",
       title: "Reward approved!",
       body: `Your parent approved: ${reward.title}`,
-      url: "/learn",
+      url: "/learn/rewards",
     });
   }
 
   revalidatePath("/parent/rewards");
   revalidatePath("/learn");
+  revalidatePath("/learn/rewards");
   return ok(null);
 }
 

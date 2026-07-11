@@ -66,6 +66,89 @@
   --ease-page-turn: cubic-bezier(0.28, 0.72, 0.38, 1);
 }
 
+[data-theme="dark"] {
+  --notebook-paper: #1c1814;
+  --notebook-paper-shadow: #2a241e;
+  --notebook-line: rgba(120, 140, 160, 0.22);
+  --notebook-margin: #8b5a52;
+  --notebook-ink: #f2ebe2;
+  --notebook-ink-muted: #b8aea2;
+  --notebook-desk: #0c0a08;
+  --notebook-desk-light: #1a1510;
+  --notebook-spine: #6b5210;
+  --notebook-spine-dark: #3d3008;
+  --notebook-trust: #8ab4ff;
+  --notebook-learn: #6b9fff;
+  --notebook-warm: #fb923c;
+  --notebook-calm: #4ade80;
+
+  --color-bg: var(--notebook-paper);
+  --color-surface: #242018;
+  --color-primary: var(--notebook-learn);
+  --color-primary-soft: #1a2844;
+  --color-primary-dark: var(--notebook-trust);
+  --color-accent: #fb923c;
+  --color-accent-soft: #3d2814;
+  --color-accent-dark: #fdba74;
+  --color-reward: #fbbf24;
+  --color-reward-soft: #3d3414;
+  --color-joy: #a78bfa;
+  --color-joy-soft: #2e2544;
+  --color-text: var(--notebook-ink);
+  --color-text-muted: var(--notebook-ink-muted);
+  --color-danger: #f87171;
+  --color-danger-soft: #3d1a1a;
+  --color-success: #4ade80;
+  --color-success-soft: #143d24;
+  --color-border: rgba(242, 235, 226, 0.14);
+  --color-footer: #0f1a33;
+  --shadow-soft: 2px 3px 0 rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-accent: 0 8px 28px rgba(251, 146, 60, 0.18);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --notebook-paper: #1c1814;
+    --notebook-paper-shadow: #2a241e;
+    --notebook-line: rgba(120, 140, 160, 0.22);
+    --notebook-margin: #8b5a52;
+    --notebook-ink: #f2ebe2;
+    --notebook-ink-muted: #b8aea2;
+    --notebook-desk: #0c0a08;
+    --notebook-desk-light: #1a1510;
+    --notebook-spine: #6b5210;
+    --notebook-spine-dark: #3d3008;
+    --notebook-trust: #8ab4ff;
+    --notebook-learn: #6b9fff;
+    --notebook-warm: #fb923c;
+    --notebook-calm: #4ade80;
+    --color-bg: var(--notebook-paper);
+    --color-surface: #242018;
+    --color-primary: var(--notebook-learn);
+    --color-primary-soft: #1a2844;
+    --color-primary-dark: var(--notebook-trust);
+    --color-accent: #fb923c;
+    --color-accent-soft: #3d2814;
+    --color-accent-dark: #fdba74;
+    --color-reward: #fbbf24;
+    --color-reward-soft: #3d3414;
+    --color-joy: #a78bfa;
+    --color-joy-soft: #2e2544;
+    --color-text: var(--notebook-ink);
+    --color-text-muted: var(--notebook-ink-muted);
+    --color-danger: #f87171;
+    --color-danger-soft: #3d1a1a;
+    --color-success: #4ade80;
+    --color-success-soft: #143d24;
+    --color-border: rgba(242, 235, 226, 0.14);
+    --color-footer: #0f1a33;
+    --shadow-soft: 2px 3px 0 rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+    --shadow-accent: 0 8px 28px rgba(251, 146, 60, 0.18);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --motion-fast: 0ms;

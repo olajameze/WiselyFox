@@ -1,5 +1,16 @@
 import { prisma } from "@/shared/lib/prisma";
 import { pickQuestions } from "@/features/learning/services/learning-engine.service";
+import { getChildAssessmentHistory } from "@/features/assessment/services/assessment-history.service";
+import { getActiveQuests } from "@/features/gamification/services/quest-progress.service";
+import { getChildStickerCollection, getStickerForQuest } from "@/features/gamification/services/quest-reward.service";
+
+function getWeekPeriodStart(now = new Date()) {
+  const day = now.getDay();
+  const periodStart = new Date(now);
+  periodStart.setDate(now.getDate() - day);
+  periodStart.setHours(0, 0, 0, 0);
+  return periodStart;
+}
 
 export type PrintableQuestion = {
   number: number;
@@ -53,7 +64,17 @@ export async function getWorksheetQuestions(
 }
 
 export async function getChildResultsSummary(childId: string) {
-  const [child, quizAttempts, subjectCompletions, lessonCompletions] = await Promise.all([
+  const [
+    child,
+    quizAttempts,
+    subjectCompletions,
+    lessonCompletions,
+    assessments,
+    rewards,
+    studySessions,
+    quests,
+    stickers,
+  ] = await Promise.all([
     prisma.childProfile.findUnique({
       where: { id: childId },
       include: { learningProfile: true },
@@ -71,7 +92,39 @@ export async function getChildResultsSummary(childId: string) {
       orderBy: { completedAt: "desc" },
       take: 50,
     }),
+    getChildAssessmentHistory(childId),
+    prisma.reward.findMany({
+      where: { childId },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.studySession.findMany({
+      where: { childId, completed: true },
+      orderBy: { startedAt: "desc" },
+      take: 20,
+    }),
+    getActiveQuests(childId),
+    getChildStickerCollection(childId, 12),
   ]);
 
-  return { child, quizAttempts, subjectCompletions, lessonCompletions };
+  const totalStudyMinutes = studySessions.reduce((sum, s) => sum + s.durationMinutes, 0);
+  const periodStart = getWeekPeriodStart();
+  const questsWithStickers = await Promise.all(
+    quests.map(async (q) => ({
+      ...q,
+      sticker: q.completed ? await getStickerForQuest(childId, q.questSlug, periodStart) : null,
+    })),
+  );
+
+  return {
+    child,
+    quizAttempts,
+    subjectCompletions,
+    lessonCompletions,
+    assessments,
+    rewards,
+    studySessions,
+    quests: questsWithStickers,
+    stickers,
+    totalStudyMinutes,
+  };
 }

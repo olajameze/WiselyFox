@@ -63,6 +63,12 @@ export default function manifest(): MetadataRoute.Manifest {
         description: "Manage users, tutors, and system health",
       },
       {
+        name: "Rewards & stickers",
+        short_name: "Rewards",
+        url: "/learn/rewards",
+        description: "View quest stickers and claim rewards",
+      },
+      {
         name: "Focus timer",
         short_name: "Focus",
         url: "/learn/focus",

@@ -8,6 +8,7 @@ const REQUIRED_DELEGATES = [
   "learningScheduleItem",
   "lessonCompletion",
   "tutorProfile",
+  "questSticker",
 ] as const;
 
 function createPrismaClient() {

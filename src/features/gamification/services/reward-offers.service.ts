@@ -1,7 +1,7 @@
 import { prisma } from "@/shared/lib/prisma";
 import { createUserNotification } from "@/server/services/notification-delivery.service";
 
-const REWARD_MILESTONES: { xp: number; title: string; description: string }[] = [
+export const REWARD_MILESTONES: { xp: number; title: string; description: string }[] = [
   { xp: 50, title: "Choose tonight's story", description: "Pick a bedtime book together" },
   { xp: 100, title: "15 minutes extra screen time", description: "Approved leisure time" },
   { xp: 200, title: "Special snack reward", description: "A treat after learning" },

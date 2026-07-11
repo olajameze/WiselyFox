@@ -46,7 +46,7 @@ export function TutorPhotoUpload({ currentPhotoUrl }: Props) {
       }
 
       const saveResult = await setTutorProfilePhoto(data.url);
-      if (!saveResult.ok) {
+      if (!saveResult.success) {
         setError(saveResult.error);
         setLoading(false);
         return;

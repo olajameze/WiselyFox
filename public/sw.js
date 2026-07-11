@@ -1,10 +1,11 @@
 /* WiselyFox service worker: offline shell + push notifications */
-const CACHE = "wiselyfox-v4";
+const CACHE = "wiselyfox-v5";
 const OFFLINE_URL = "/offline.html";
 const PRECACHE = [
   "/",
   OFFLINE_URL,
   "/learn/offline",
+  "/learn/rewards",
   "/icons/icon.svg",
   "/icons/icon-192.png",
   "/icons/icon-512.png",
@@ -111,14 +112,19 @@ self.addEventListener("push", (event) => {
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
   const target = event.notification.data?.url ?? "/parent/notifications";
+  const absoluteTarget = new URL(target, self.location.origin).href;
+
   event.waitUntil(
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
       for (const client of clientList) {
         if (client.url.startsWith(self.location.origin) && "focus" in client) {
+          if ("navigate" in client) {
+            return client.navigate(absoluteTarget).then(() => client.focus());
+          }
           return client.focus();
         }
       }
-      if (self.clients.openWindow) return self.clients.openWindow(target);
+      if (self.clients.openWindow) return self.clients.openWindow(absoluteTarget);
     }),
   );
 });

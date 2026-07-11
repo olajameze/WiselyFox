@@ -12,32 +12,65 @@ export default async function LearnCertificatesPage() {
   });
   if (!child) redirect("/child-sign-in");
 
-  const certificates = await prisma.quizAttempt.findMany({
-    where: { childId: child.id, passed: true, certificateCode: { not: null } },
-    orderBy: { completedAt: "desc" },
-  });
+  const [quizCerts, subjectCerts] = await Promise.all([
+    prisma.quizAttempt.findMany({
+      where: { childId: child.id, passed: true, certificateCode: { not: null } },
+      orderBy: { completedAt: "desc" },
+    }),
+    prisma.subjectCompletion.findMany({
+      where: { childId: child.id, certificateCode: { not: null } },
+      orderBy: { completedAt: "desc" },
+    }),
+  ]);
+
+  const all = [
+    ...quizCerts.map((c) => ({
+      id: c.id,
+      type: "quiz" as const,
+      title: c.subjectTitle,
+      detail: `${c.score}%`,
+      date: c.completedAt,
+      code: c.certificateCode!,
+    })),
+    ...subjectCerts.map((c) => ({
+      id: c.id,
+      type: "subject" as const,
+      title: c.subjectTitle,
+      detail: "Subject complete",
+      date: c.completedAt,
+      code: c.certificateCode!,
+    })),
+  ].sort((a, b) => b.date.getTime() - a.date.getTime());
 
   return (
     <>
       <header className={styles.pageHeader}>
         <h1>Your certificates</h1>
-        <p className={styles.pageSubtitle}>Earned when you pass a subject quiz (60% or higher).</p>
+        <p className={styles.pageSubtitle}>
+          Earned when you pass a subject quiz (60%+) or complete every lesson in a subject.
+        </p>
       </header>
 
-      {certificates.length === 0 ? (
+      {all.length === 0 ? (
         <Card>
-          <p className={styles.meta}>Pass a subject quiz to earn your first certificate!</p>
+          <p className={styles.meta}>Pass a quiz or finish a full subject to earn your first certificate.</p>
           <Link href="/learn/quiz">
             <Button size="sm">Take a quiz</Button>
           </Link>
         </Card>
       ) : (
         <div className={styles.questList}>
-          {certificates.map((c) => (
-            <Card key={c.id}>
-              <strong>{c.subjectTitle}</strong>{" "}
-              <Badge variant="success">{c.score}%</Badge>
-              <p className={styles.meta}>{c.completedAt.toLocaleDateString("en-GB")}</p>
+          {all.map((c) => (
+            <Card key={`${c.type}-${c.id}`}>
+              <div className={styles.certCardHeader}>
+                <strong>{c.title}</strong>
+                <Badge variant="success">{c.detail}</Badge>
+              </div>
+              <p className={styles.meta}>
+                {c.type === "quiz" ? "Quiz certificate" : "Subject completion"} ·{" "}
+                {c.date.toLocaleDateString("en-GB")}
+              </p>
+              <p className={styles.meta}>Code: {c.code}</p>
               <Link href={`/learn/certificates/${c.id}`}>
                 <Button size="sm">View certificate</Button>
               </Link>

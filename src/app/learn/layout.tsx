@@ -8,6 +8,7 @@ import { getAccommodationRules } from "@/features/inclusive/services/accommodati
 import { getTodaySchedule } from "@/features/parent/services/schedule.service";
 import { LearnNav } from "@/features/learning/ui/LearnNav";
 import { ChildAccountMenu } from "@/features/learning/ui/ChildAccountMenu";
+import { LearnHeaderPreferences } from "@/features/learning/ui/LearnHeaderPreferences";
 import { LearnAccessibilityShell } from "@/features/learning/ui/LearnAccessibilityShell";
 import { VisualScheduleBar } from "@/features/learning/ui/VisualScheduleBar";
 import { AppSkipLinks } from "@/shared/ui/AppSkipLinks/AppSkipLinks";
@@ -52,6 +53,7 @@ export default async function LearnLayout({ children }: { children: React.ReactN
             {profile.streakDays > 0 && (
               <Badge variant="warning">{profile.streakDays} day streak</Badge>
             )}
+            <LearnHeaderPreferences />
             <ChildAccountMenu />
           </div>
         </header>

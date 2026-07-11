@@ -3,10 +3,10 @@ import { createUserNotification } from "@/server/services/notification-delivery.
 
 const PASS_SCORE = 60;
 
-function makeCertificateCode(subjectSlug: string): string {
-  const prefix = subjectSlug.replace(/[^a-z]/gi, "").slice(0, 4).toUpperCase() || "WF";
+function makeCertificateCode(subjectSlug: string, prefix = "WF"): string {
+  const subj = subjectSlug.replace(/[^a-z]/gi, "").slice(0, 4).toUpperCase() || "SUBJ";
   const suffix = Date.now().toString(36).toUpperCase().slice(-6);
-  return `WF-${prefix}-${suffix}`;
+  return `${prefix}-${subj}-${suffix}`;
 }
 
 export async function recordQuizAttempt(input: {
@@ -91,6 +91,7 @@ export async function maybeRecordSubjectCompletion(childId: string, subjectSlug:
       childId,
       subjectSlug,
       subjectTitle: subject.title,
+      certificateCode: makeCertificateCode(subjectSlug, "WFS"),
     },
   });
 
@@ -103,8 +104,18 @@ export async function maybeRecordSubjectCompletion(childId: string, subjectSlug:
       userId: child.parent.userId,
       type: "LEARNING",
       title: `${child.displayName} completed ${subject.title}!`,
-      body: `All ${subject.lessons.length} lessons finished in this subject, view results and print a summary.`,
-      url: `/parent/children/${childId}/results`,
+      body: `All ${subject.lessons.length} lessons finished. Subject completion certificate is ready.`,
+      url: `/parent/children/${childId}/certificates`,
+    });
+  }
+
+  if (child?.userId) {
+    await createUserNotification({
+      userId: child.userId,
+      type: "ACHIEVEMENT",
+      title: `Subject complete: ${subject.title}`,
+      body: "You earned a subject completion certificate!",
+      url: "/learn/certificates",
     });
   }
 

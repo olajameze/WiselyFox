@@ -1,89 +1,120 @@
-"use client";
-
-import { useState } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { Button, Card, Alert } from "@/shared/ui";
-import { ASSESSMENT_QUESTIONS } from "@/features/assessment/services/assessment.service";
-import { submitAssessment } from "@/features/onboarding/actions/onboarding.actions";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { requireParentOwner, assertHouseholdAccess } from "@/shared/lib/permissions";
+import { prisma } from "@/shared/lib/prisma";
+import {
+  getChildAssessmentHistory,
+  getLatestChildAssessment,
+  formatAssessmentDomain,
+} from "@/features/assessment/services/assessment-history.service";
+import { Card, Button, Badge, Alert } from "@/shared/ui";
 import styles from "@/features/parent/ui/parent.module.css";
 
-export default function AssessmentPage() {
-  const params = useParams();
-  const childId = params.childId as string;
-  const router = useRouter();
-  const [index, setIndex] = useState(0);
-  const [answers, setAnswers] = useState<
-    { questionId: string; correct: boolean; responseTimeMs: number; confidence: number }[]
-  >([]);
-  const [startTime, setStartTime] = useState(Date.now());
-  const [confidence, setConfidence] = useState(3);
-  const [result, setResult] = useState<{ level: string; score: number } | null>(null);
-  const [loading, setLoading] = useState(false);
+export default async function AssessmentHubPage({
+  params,
+}: {
+  params: Promise<{ childId: string }>;
+}) {
+  const user = await requireParentOwner();
+  const { childId } = await params;
+  await assertHouseholdAccess(childId, user.id);
 
-  const q = ASSESSMENT_QUESTIONS[index];
+  const child = await prisma.childProfile.findUnique({
+    where: { id: childId },
+    select: { displayName: true },
+  });
+  if (!child) notFound();
 
-  async function answer(option: string) {
-    const responseTimeMs = Date.now() - startTime;
-    const newAnswers = [
-      ...answers,
-      { questionId: q.id, correct: option === q.correct, responseTimeMs, confidence },
-    ];
-    setAnswers(newAnswers);
-
-    if (index < ASSESSMENT_QUESTIONS.length - 1) {
-      setIndex(index + 1);
-      setStartTime(Date.now());
-      setConfidence(3);
-    } else {
-      setLoading(true);
-      const res = await submitAssessment({ childId, answers: newAnswers });
-      setLoading(false);
-      if (res.success) setResult(res.data);
-    }
-  }
-
-  if (result) {
-    return (
-      <div className={`container ${styles.narrowPage}`}>
-        <Card>
-          <h2>Assessment complete</h2>
-          <Alert variant="success" title={`Level: ${result.level}`}>
-            Score: {result.score.toFixed(0)}%, We&apos;ll use this to personalise learning.
-          </Alert>
-          <Button fullWidth onClick={() => router.push("/parent")}>
-            Back to dashboard
-          </Button>
-        </Card>
-      </div>
-    );
-  }
+  const [latest, history] = await Promise.all([
+    getLatestChildAssessment(childId),
+    getChildAssessmentHistory(childId),
+  ]);
 
   return (
-    <div className={`container ${styles.narrowPage}`}>
-      <Card>
-        <p className={styles.questionMeta}>
-          Question {index + 1} of {ASSESSMENT_QUESTIONS.length}
+    <div className={styles.dashboard}>
+      <Link href="/parent">
+        <Button variant="ghost" size="sm">
+          ← Dashboard
+        </Button>
+      </Link>
+
+      <header className={styles.pageHeader}>
+        <h1>Entrance assessment — {child.displayName}</h1>
+        <p className={styles.pageSubtitle}>
+          A short 5-question baseline across reading, maths, logic, memory, and attention. Results set
+          your child&apos;s starting level for adaptive picks.
         </p>
-        <h2>{q.prompt}</h2>
-        <div className={styles.answerList}>
-          {q.options.map((opt) => (
-            <Button key={opt} variant="secondary" fullWidth onClick={() => answer(opt)} disabled={loading}>
-              {opt}
-            </Button>
-          ))}
-        </div>
-        <label>
-          How confident are you? ({confidence})
-          <input
-            type="range"
-            min={1}
-            max={5}
-            value={confidence}
-            onChange={(e) => setConfidence(Number(e.target.value))}
-            className={styles.rangeInput}
-          />
-        </label>
-      </Card>
+      </header>
+
+      {!latest ? (
+        <Alert variant="info" title="No assessment yet">
+          Run the entrance assessment to unlock personalised lesson recommendations on the learn home.
+        </Alert>
+      ) : (
+        <Card header={<h2>Latest result</h2>}>
+          <div className={styles.assessmentSummary}>
+            <div>
+              <Badge variant="success">{latest.levelResult}</Badge>
+              <p className={styles.meta}>
+                Score {latest.score.toFixed(0)}% · Completed{" "}
+                {latest.completedAt.toLocaleString("en-GB")}
+              </p>
+            </div>
+            <Link href={`/parent/children/${childId}/results`}>
+              <Button variant="secondary" size="sm">
+                Full results
+              </Button>
+            </Link>
+          </div>
+          <div className={styles.domainGrid}>
+            {latest.domainScores.map((d) => (
+              <div key={d.domain} className={styles.domainCard}>
+                <strong>{formatAssessmentDomain(d.domain)}</strong>
+                <span>
+                  {d.correct}/{d.total} correct
+                </span>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      <div className={styles.actionRow}>
+        <Link href={`/parent/assessment/${childId}/run`}>
+          <Button>{latest ? "Retake assessment" : "Run assessment"}</Button>
+        </Link>
+      </div>
+
+      {history.length > 0 && (
+        <Card header={<h2>Assessment history</h2>} className={styles.mtLg}>
+          <div className={styles.tableWrap}>
+            <table className={styles.dataTable}>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Level</th>
+                  <th>Score</th>
+                  <th>Domains</th>
+                </tr>
+              </thead>
+              <tbody>
+                {history.map((row) => (
+                  <tr key={row.id}>
+                    <td>{row.completedAt.toLocaleDateString("en-GB")}</td>
+                    <td>{row.levelResult}</td>
+                    <td>{row.score.toFixed(0)}%</td>
+                    <td>
+                      {row.domainScores
+                        .map((d) => `${formatAssessmentDomain(d.domain)} ${d.correct}/${d.total}`)
+                        .join(", ")}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
     </div>
   );
 }

@@ -1,11 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { prisma } from "@/shared/lib/prisma";
 import { requireChild } from "@/shared/lib/permissions";
 import { fail, ok, type ActionResult } from "@/shared/lib/errors";
 import { calculateMastery, nextReviewDate } from "@/features/learning/services/learning-engine.service";
 import { maybeOfferReward, maybeOfferQuizReward } from "@/features/gamification/services/reward-offers.service";
+import { computeStudyRewards } from "@/features/gamification/services/rewards.service";
+import { incrementQuest } from "@/features/gamification/services/quest-progress.service";
 import { recordLessonCompletion } from "@/features/learning/services/lesson-progress.service";
 import {
   maybeRecordSubjectCompletion,
@@ -13,6 +16,33 @@ import {
   recordQuizAttempt,
 } from "@/features/learning/services/quiz-results.service";
 import { logAudit } from "@/server/services/audit.service";
+
+async function applyStudyRewards(childId: string, profileId: string, baseXp: number, perfect = false) {
+  const profile = await prisma.learningProfile.findUnique({ where: { id: profileId } });
+  if (!profile) return { xpGain: baseXp, prevXp: 0 };
+
+  const { xp, coins, streakDays } = computeStudyRewards({
+    baseXp,
+    currentStreak: profile.streakDays,
+    lastStudyDate: profile.lastStudyDate,
+    perfect,
+  });
+
+  const prevXp = profile.xp;
+
+  await prisma.learningProfile.update({
+    where: { id: profileId },
+    data: {
+      xp: { increment: xp },
+      coins: { increment: coins },
+      streakDays,
+      lastStudyDate: new Date(),
+    },
+  });
+
+  await maybeOfferReward(childId, prevXp + xp, prevXp);
+  return { xpGain: xp, prevXp };
+}
 
 export async function completeLesson(input: {
   subjectSlug: string;
@@ -32,7 +62,6 @@ export async function completeLesson(input: {
   if (!lesson) return fail("Lesson not found");
 
   const xpGain = 10 + lesson.difficulty * 5;
-  const prevXp = child.learningProfile.xp;
   const skillSlug = `${input.subjectSlug}:foundation`;
   const existing = await prisma.masteryRecord.findUnique({
     where: { childId_skillSlug: { childId: child.id, skillSlug } },
@@ -41,14 +70,6 @@ export async function completeLesson(input: {
     calculateMastery((existing?.masteryScore ?? 30) / 100, true, lesson.difficulty) * 100;
 
   await prisma.$transaction([
-    prisma.learningProfile.update({
-      where: { id: child.learningProfile.id },
-      data: {
-        xp: { increment: xpGain },
-        coins: { increment: 2 },
-        lastStudyDate: new Date(),
-      },
-    }),
     prisma.studySession.create({
       data: {
         childId: child.id,
@@ -76,6 +97,12 @@ export async function completeLesson(input: {
     }),
   ]);
 
+  const { xpGain: actualXp } = await applyStudyRewards(
+    child.id,
+    child.learningProfile.id,
+    xpGain,
+  );
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   await prisma.dailyObjective.updateMany({
@@ -88,9 +115,9 @@ export async function completeLesson(input: {
     data: { completed: true },
   });
 
-  await maybeOfferReward(child.id, prevXp + xpGain, prevXp);
-
   await recordLessonCompletion(child.id, input.subjectSlug, input.lessonSlug);
+
+  await incrementQuest(child.id, "lessons-week");
 
   await maybeRecordSubjectCompletion(child.id, input.subjectSlug);
 
@@ -102,10 +129,14 @@ export async function completeLesson(input: {
   });
 
   revalidatePath("/learn");
+  revalidatePath("/learn/rewards");
+  revalidatePath("/learn/certificates");
   revalidatePath("/parent");
+  revalidatePath(`/parent/children/${child.id}/certificates`);
+  revalidatePath(`/parent/children/${child.id}/results`);
   revalidatePath(`/learn/subjects/${input.subjectSlug}`);
   revalidatePath(`/learn/lesson/${input.subjectSlug}/${input.lessonSlug}`);
-  return ok({ xp: xpGain });
+  return ok({ xp: actualXp });
 }
 
 export async function completeQuiz(input: {
@@ -124,8 +155,7 @@ export async function completeQuiz(input: {
   if (!subject) return fail("Subject not found");
 
   const score = input.total > 0 ? Math.round((input.correct / input.total) * 100) : 0;
-  const xpGain = 5 + input.correct * 3;
-  const prevXp = child.learningProfile.xp;
+  const baseXp = 5 + input.correct * 3;
   const skillSlug = `${input.subjectSlug}:foundation`;
   const passed = score >= 60;
 
@@ -136,14 +166,6 @@ export async function completeQuiz(input: {
     calculateMastery((existing?.masteryScore ?? 30) / 100, passed, 2) * 100;
 
   await prisma.$transaction([
-    prisma.learningProfile.update({
-      where: { id: child.learningProfile.id },
-      data: {
-        xp: { increment: xpGain },
-        coins: { increment: passed ? 5 : 1 },
-        lastStudyDate: new Date(),
-      },
-    }),
     prisma.studySession.create({
       data: {
         childId: child.id,
@@ -171,8 +193,15 @@ export async function completeQuiz(input: {
     }),
   ]);
 
+  const { xpGain: actualXp } = await applyStudyRewards(
+    child.id,
+    child.learningProfile.id,
+    baseXp,
+    score === 100,
+  );
+
   await maybeOfferQuizReward(child.id, score);
-  await maybeOfferReward(child.id, prevXp + xpGain, prevXp);
+  if (passed) await incrementQuest(child.id, "quiz-week");
 
   const attempt = await recordQuizAttempt({
     childId: child.id,
@@ -193,16 +222,51 @@ export async function completeQuiz(input: {
   });
 
   revalidatePath("/learn");
+  revalidatePath("/learn/rewards");
+  revalidatePath("/learn/certificates");
   revalidatePath("/parent");
   revalidatePath(`/parent/children/${child.id}/results`);
   revalidatePath(`/parent/children/${child.id}/certificates`);
   return ok({
-    xp: xpGain,
+    xp: actualXp,
     score,
     passed: attempt.passed,
     certificateCode: attempt.certificateCode,
     attemptId: attempt.id,
   });
+}
+
+const claimRewardSchema = z.object({ rewardId: z.string().min(1) });
+
+export async function claimReward(rewardId: string): Promise<ActionResult<null>> {
+  const user = await requireChild();
+  const parsed = claimRewardSchema.safeParse({ rewardId });
+  if (!parsed.success) return fail("Invalid reward");
+
+  const child = await prisma.childProfile.findFirst({ where: { userId: user.id } });
+  if (!child) return fail("Child profile not found");
+
+  const reward = await prisma.reward.findUnique({ where: { id: parsed.data.rewardId } });
+  if (!reward || reward.childId !== child.id) return fail("Reward not found");
+  if (!reward.approved) return fail("Your parent has not approved this reward yet");
+  if (reward.claimed) return fail("You already claimed this reward");
+
+  await prisma.reward.update({
+    where: { id: reward.id },
+    data: { claimed: true },
+  });
+
+  await logAudit({
+    actorId: user.id,
+    action: "child.reward.claim",
+    resource: "Reward",
+    resourceId: reward.id,
+  });
+
+  revalidatePath("/learn");
+  revalidatePath("/learn/rewards");
+  revalidatePath("/parent/rewards");
+  return ok(null);
 }
 
 export async function completeFocusSession(minutes: number): Promise<ActionResult<{ xp: number }>> {
@@ -212,25 +276,30 @@ export async function completeFocusSession(minutes: number): Promise<ActionResul
     include: { learningProfile: true },
   });
   if (!child?.learningProfile) return fail("Child profile not found");
+  if (minutes < 5) return fail("Focus sessions must be at least 5 minutes");
 
-  const xpGain = Math.min(20, minutes * 2);
+  const baseXp = Math.min(20, minutes * 2);
 
-  await prisma.$transaction([
-    prisma.learningProfile.update({
-      where: { id: child.learningProfile.id },
-      data: { xp: { increment: xpGain }, lastStudyDate: new Date() },
-    }),
-    prisma.studySession.create({
-      data: {
-        childId: child.id,
-        durationMinutes: minutes,
-        focusMode: true,
-        completed: true,
-      },
-    }),
-  ]);
+  await prisma.studySession.create({
+    data: {
+      childId: child.id,
+      durationMinutes: minutes,
+      focusMode: true,
+      completed: true,
+    },
+  });
+
+  const { xpGain: actualXp } = await applyStudyRewards(
+    child.id,
+    child.learningProfile.id,
+    baseXp,
+  );
+
+  await incrementQuest(child.id, "focus-week");
 
   revalidatePath("/learn");
+  revalidatePath("/learn/rewards");
+  revalidatePath("/learn/certificates");
   revalidatePath("/parent");
-  return ok({ xp: xpGain });
+  return ok({ xp: actualXp });
 }
