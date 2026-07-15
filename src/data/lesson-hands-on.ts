@@ -3,8 +3,10 @@ import {
   LESSON_PRACTICE_STEPS,
   SECTION_PRACTICE,
   SECTION_VIDEOS,
+  SUBJECT_OVERVIEW_VIDEO,
   practiceVideoForLesson,
   videoForLesson,
+  type VideoRef,
 } from "./subject-media";
 
 /** Add videos, hands on instructions, and learning methods to lesson steps. */
@@ -20,12 +22,12 @@ export function enhanceLessonStepsForHandsOn(
   return steps.map((step) => {
     const next = { ...step };
 
-    if (step.title === "Learn" && learnVideo) {
+    if (step.title === "Learn") {
+      // UDL: every Learn step includes a watchable video for visual learners.
+      // Always use the verified catalog so stale hardcoded IDs cannot break embeds.
       next.method = "watch";
-      next.videoId = next.videoId ?? learnVideo.videoId;
-      next.videoTitle = next.videoTitle ?? `${lesson.title}, ${learnVideo.videoTitle}`;
-    } else if (step.title === "Learn") {
-      next.method = next.method ?? "read";
+      next.videoId = learnVideo.videoId;
+      next.videoTitle = `${lesson.title}: ${learnVideo.videoTitle}`;
     }
 
     if (step.title === "Practice") {
@@ -33,10 +35,8 @@ export function enhanceLessonStepsForHandsOn(
       if (!next.instructions?.length && practiceSteps) {
         next.instructions = practiceSteps;
       }
-      if (!next.videoId && practiceVideo) {
-        next.videoId = practiceVideo.videoId;
-        next.videoTitle = `How to practise, ${practiceVideo.videoTitle}`;
-      }
+      next.videoId = practiceVideo.videoId;
+      next.videoTitle = `How to practise: ${practiceVideo.videoTitle}`;
     }
 
     if (step.title === "Warm up") {
@@ -51,17 +51,72 @@ export function enhanceLessonStepsForHandsOn(
   });
 }
 
+/** Attach hands-on practice only. Videos live on the dedicated Videos page. */
 export function enhanceStudyGuideWithMedia(
   subjectSlug: string,
   sections: StudyGuideSection[],
 ): StudyGuideSection[] {
-  const videos = SECTION_VIDEOS[subjectSlug] ?? [];
   const practices = SECTION_PRACTICE[subjectSlug] ?? [];
 
   return sections.map((section, i) => ({
     ...section,
-    videoId: section.videoId ?? videos[i]?.videoId,
-    videoTitle: section.videoTitle ?? videos[i]?.videoTitle,
+    // Strip any embedded section videos so study text stays text-first.
+    videoId: undefined,
+    videoTitle: undefined,
     practice: section.practice ?? practices[i],
   }));
+}
+
+export type SubjectVideoItem = {
+  title: string;
+  videoId: string;
+  videoTitle: string;
+  kind: "overview" | "topic" | "lesson";
+};
+
+/** Curated watch list for `/learn/videos/[subjectSlug]`. */
+export function getSubjectVideoLibrary(
+  subjectSlug: string,
+  sectionTitles: string[] = [],
+  lessonClips: { title: string; video: VideoRef }[] = [],
+): SubjectVideoItem[] {
+  const overview = SUBJECT_OVERVIEW_VIDEO[subjectSlug];
+  const sectionVideos = SECTION_VIDEOS[subjectSlug] ?? [];
+  const items: SubjectVideoItem[] = [];
+  const seen = new Set<string>();
+
+  function push(item: SubjectVideoItem) {
+    if (seen.has(item.videoId)) return;
+    seen.add(item.videoId);
+    items.push(item);
+  }
+
+  if (overview) {
+    push({
+      title: "Subject overview",
+      videoId: overview.videoId,
+      videoTitle: overview.videoTitle,
+      kind: "overview",
+    });
+  }
+
+  sectionVideos.forEach((video, i) => {
+    push({
+      title: sectionTitles[i] ?? `Topic ${i + 1}`,
+      videoId: video.videoId,
+      videoTitle: video.videoTitle,
+      kind: "topic",
+    });
+  });
+
+  for (const clip of lessonClips) {
+    push({
+      title: clip.title,
+      videoId: clip.video.videoId,
+      videoTitle: clip.video.videoTitle,
+      kind: "lesson",
+    });
+  }
+
+  return items;
 }

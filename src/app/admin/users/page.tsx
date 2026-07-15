@@ -46,7 +46,7 @@ export default async function AdminUsersPage() {
                 return (
                 <tr key={u.id}>
                   <td>
-                    {u.email ?? u.name ?? u.childProfile?.displayName ?? "—"}
+                    {u.email ?? u.name ?? u.childProfile?.displayName ?? "Not set"}
                     {u.childProfile && (
                       <div className={styles.meta}>
                         Child of {u.childProfile.parent.user.email ?? "parent"}
@@ -59,7 +59,7 @@ export default async function AdminUsersPage() {
                     </Badge>
                   </td>
                   <td>
-                    {u.parentProfile?.subscription?.plan ?? "—"}{" "}
+                    {u.parentProfile?.subscription?.plan ?? "Not set"}{" "}
                     {u.parentProfile?.children.length
                       ? `(${u.parentProfile.children.length} child)`
                       : ""}

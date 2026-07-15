@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Input, Card, Alert } from "@/shared/ui";
 import { signInChild } from "@/features/auth/actions/auth.actions";
+import {
+  DEMO_CHILD_ACCESS_CODE,
+  DEMO_CHILD_PIN,
+} from "@/shared/lib/demo-credentials";
 import styles from "./auth.module.css";
 
-export function ChildSignInForm() {
-  const router = useRouter();
-  const params = useSearchParams();
-  const consentError = params.get("error") === "consent";
+export function ChildSignInForm({ consentError = false }: { consentError?: boolean }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -23,18 +23,17 @@ export function ChildSignInForm() {
       accessCode: fd.get("accessCode") as string,
       pin: fd.get("pin") as string,
     });
-    setLoading(false);
     if (!result.success) {
+      setLoading(false);
       setError(result.error);
       return;
     }
-    router.push("/learn");
-    router.refresh();
+    window.location.assign("/learn");
   }
 
   return (
     <div className={styles.authPage}>
-      <Card className={styles.authCard}>
+      <Card className={`${styles.authCard} ${styles.childAuthCard}`}>
         <h1 className={styles.authTitle}>Hi there!</h1>
         <p className={styles.authSubtitle}>Enter your access code and PIN from your parent</p>
         {consentError && (
@@ -44,18 +43,23 @@ export function ChildSignInForm() {
         )}
         {error && <Alert variant="error">{error}</Alert>}
         <Alert variant="info" title="Demo learner">
-          Access code: wfox demo alex, PIN: 1234
+          Access code: {DEMO_CHILD_ACCESS_CODE}, PIN: {DEMO_CHILD_PIN}
         </Alert>
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <Input name="accessCode" label="Access code" required autoComplete="off" />
-          <Input
-            name="pin"
-            type="password"
-            label="PIN"
-            required
-            inputMode="numeric"
-            autoComplete="off"
-          />
+        <form className={`${styles.form} ${styles.childForm}`} onSubmit={handleSubmit}>
+          <div className={styles.fieldAccessCode}>
+            <Input name="accessCode" label="Access code" required autoComplete="off" />
+          </div>
+          <div className={styles.fieldPin}>
+            <Input
+              name="pin"
+              type="password"
+              label="PIN"
+              required
+              inputMode="numeric"
+              autoComplete="off"
+              maxLength={6}
+            />
+          </div>
           <div className={styles.formActions}>
             <Button type="submit" loading={loading}>
               Let&apos;s learn
@@ -63,7 +67,9 @@ export function ChildSignInForm() {
           </div>
         </form>
         <p className={styles.link}>
-          <Link href="/sign-in">Parent sign in</Link>
+          <Link href="/sign-in" prefetch>
+            Parent sign in
+          </Link>
         </p>
       </Card>
     </div>

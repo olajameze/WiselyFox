@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import styles from "@/features/parent/ui/parent.module.css";
 import { getPilotCoordinatorEmail, getPilotFeedbackUrl, getSupportEmail, getSupportMailto } from "@/shared/lib/site-config";
+
+export const metadata: Metadata = {
+  title: "Support",
+  description: "Get help with WiselyFox accounts, accessibility, data requests, and the family pilot.",
+  alternates: { canonical: "/support" },
+};
 
 export default function SupportPage() {
   const supportEmail = getSupportEmail();

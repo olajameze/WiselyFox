@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import styles from "./admin.module.css";
 
 const AdminNavCloseContext = createContext<(() => void) | null>(null);
@@ -14,10 +14,12 @@ export function AdminSidebar({
   email,
   nav,
   footer,
+  headerActions,
 }: {
   email: string;
-  nav: React.ReactNode;
-  footer: React.ReactNode;
+  nav: ReactNode;
+  footer: ReactNode;
+  headerActions?: ReactNode;
 }) {
   const [navOpen, setNavOpen] = useState(false);
   const closeNav = () => setNavOpen(false);
@@ -58,6 +60,7 @@ export function AdminSidebar({
         <Link href="/admin" className={styles.mobileBrand}>
           WiselyFox Admin
         </Link>
+        {headerActions ? <div className={styles.mobileActions}>{headerActions}</div> : null}
       </header>
 
       {navOpen && (
@@ -73,12 +76,17 @@ export function AdminSidebar({
         id="admin-sidebar"
         className={[styles.sidebar, navOpen ? styles.sidebarOpen : ""].filter(Boolean).join(" ")}
       >
-        <Link href="/admin" className={styles.sidebarBrand} onClick={closeNav}>
-          WiselyFox Admin
-        </Link>
-        <p className={styles.sidebarUser} title={email}>
-          {email}
-        </p>
+        <div className={styles.sidebarChrome}>
+          <div className={styles.sidebarBrandRow}>
+            <Link href="/admin" className={styles.sidebarBrand} onClick={closeNav}>
+              WiselyFox Admin
+            </Link>
+            {headerActions}
+          </div>
+          <p className={styles.sidebarUser} title={email}>
+            {email}
+          </p>
+        </div>
         <div className={styles.sidebarNavWrap}>{nav}</div>
         <div className={styles.sidebarFooter}>{footer}</div>
       </aside>

@@ -24,15 +24,15 @@ export function PricingSection() {
         as="h2"
         className={`${styles.sectionTitle} ${styles.sectionTitleLearn}`}
         startWhenVisible
-        speed={55}
+        speed={22}
       />
       <WritingText
         text="Family pilot: full access with no card required. Paid plans launch later."
         as="p"
         className={styles.sectionSubtitle}
         startWhenVisible
-        speed={28}
-        delay={200}
+        speed={12}
+        delay={60}
       />
 
       <div className={styles.toggle} role="group" aria-label="Billing interval">
@@ -63,7 +63,7 @@ export function PricingSection() {
             as="h3"
             className={`${styles.cardTitle} ${styles.cardTitleLearn}`}
             startWhenVisible
-            speed={50}
+            speed={18}
           />
           <p>1 child, Full learning access</p>
           <div className={styles.price}>
@@ -86,8 +86,8 @@ export function PricingSection() {
             as="h3"
             className={`${styles.cardTitle} ${styles.cardTitleWarm}`}
             startWhenVisible
-            speed={50}
-            delay={120}
+            speed={18}
+            delay={40}
           />
           <p>Up to 5 children, Household controls</p>
           <div className={styles.price}>

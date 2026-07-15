@@ -6,6 +6,14 @@
   display: inline;
 }
 
+.inkVisible {
+  opacity: 1;
+}
+
+.inkHidden {
+  opacity: 0;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .writing:not(.complete) .inkLine {
     animation: inkFlow var(--motion-slow) var(--ease-out) infinite alternate;

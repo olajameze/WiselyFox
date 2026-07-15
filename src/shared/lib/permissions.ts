@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { auth } from "@/features/auth/auth";
 import { prisma } from "@/shared/lib/prisma";
 import { getSuperAdminEmails } from "@/shared/lib/env";
@@ -13,7 +14,7 @@ export type SessionUser = {
   hasTutorProfile?: boolean;
 };
 
-export async function getSessionUser(): Promise<SessionUser | null> {
+export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
   const session = await auth();
   if (!session?.user?.id) return null;
   return {
@@ -24,7 +25,7 @@ export async function getSessionUser(): Promise<SessionUser | null> {
     hasParentProfile: session.user.hasParentProfile,
     hasTutorProfile: session.user.hasTutorProfile,
   };
-}
+});
 
 export async function requireAuth(): Promise<SessionUser> {
   const user = await getSessionUser();
@@ -40,7 +41,7 @@ export async function requireParent(): Promise<SessionUser> {
   return user;
 }
 
-export async function requireParentOwner(): Promise<SessionUser> {
+export const requireParentOwner = cache(async (): Promise<SessionUser> => {
   const user = await requireParent();
   if (user.role === UserRole.SUPERADMIN) return user;
 
@@ -52,7 +53,7 @@ export async function requireParentOwner(): Promise<SessionUser> {
     throw new AppError("Household owner access required", "FORBIDDEN", 403);
   }
   return user;
-}
+});
 
 export async function requireTutorProfile(): Promise<{ user: SessionUser; tutor: TutorProfile }> {
   const user = await requireAuth();

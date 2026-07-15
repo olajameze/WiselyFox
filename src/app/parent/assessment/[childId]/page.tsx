@@ -39,7 +39,7 @@ export default async function AssessmentHubPage({
       </Link>
 
       <header className={styles.pageHeader}>
-        <h1>Entrance assessment — {child.displayName}</h1>
+        <h1>Entrance assessment: {child.displayName}</h1>
         <p className={styles.pageSubtitle}>
           A short 5-question baseline across reading, maths, logic, memory, and attention. Results set
           your child&apos;s starting level for adaptive picks.

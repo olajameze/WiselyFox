@@ -67,7 +67,7 @@ export function TutorCvUpload({ currentCvUrl }: Props) {
 
   return (
     <div>
-      <p className={styles.meta}>Optional — parents can view your CV on your public profile.</p>
+      <p className={styles.meta}>Optional. Parents can view your CV on your public profile.</p>
       {currentCvUrl && (
         <p>
           <a href={currentCvUrl} target="_blank" rel="noopener noreferrer">

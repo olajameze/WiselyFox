@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import styles from "@/features/parent/ui/parent.module.css";
 import { CONSENT_VERSION } from "@/shared/lib/consent";
 import { getSupportEmail, getSupportMailto } from "@/shared/lib/site-config";
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description: "Terms for using WiselyFox, the child-safe parent-guided learning platform.",
+  alternates: { canonical: "/terms" },
+};
 
 export default function TermsPage() {
   const supportEmail = getSupportEmail();

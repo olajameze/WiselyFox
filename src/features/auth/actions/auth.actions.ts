@@ -12,6 +12,9 @@ import { env } from "@/shared/lib/env";
 import { CONSENT_VERSION } from "@/shared/lib/consent";
 import { syncSuperAdminRole } from "@/server/services/super-admin.service";
 import { resolvePostLoginRedirect } from "@/shared/lib/user-capabilities";
+import { checkRateLimit } from "@/server/services/rate-limit.service";
+import { getClientIp } from "@/shared/lib/client-ip";
+import { normalizeAccessCodeInput } from "@/shared/lib/access-code";
 
 const signUpSchema = z.object({
   name: z.string().min(2),
@@ -33,10 +36,15 @@ export async function signUpParent(
   if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? "Invalid input");
 
   const { name, email, password, marketingOptIn } = parsed.data;
+  const ip = await getClientIp();
+  const limited = checkRateLimit("sign-up", `${ip}:${email}`);
+  if (!limited.ok) return fail(limited.message);
+
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) return fail("An account with this email already exists");
 
-  const passwordHash = await bcrypt.hash(password, 12);
+  // Cost 10 is OWASP-acceptable and materially faster than 12 on signup.
+  const passwordHash = await bcrypt.hash(password, 10);
   const fraudScore = scoreSignupFraud(email);
 
   const user = await prisma.user.create({
@@ -115,7 +123,9 @@ export async function signInParent(
   const parsed = signInSchema.safeParse(input);
   if (!parsed.success) return fail("Invalid credentials");
 
-  const account = await prisma.user.findUnique({ where: { email: parsed.data.email } });
+  const ip = await getClientIp();
+  const limited = checkRateLimit("sign-in", `${ip}:${parsed.data.email}`);
+  if (!limited.ok) return fail(limited.message);
 
   try {
     const result = await signIn("parent-credentials", {
@@ -124,6 +134,11 @@ export async function signInParent(
       redirect: false,
     });
     if (result?.error) return fail("Invalid email or password");
+
+    const account = await prisma.user.findUnique({
+      where: { email: parsed.data.email },
+      select: { id: true, role: true },
+    });
     const redirectTo = account
       ? await resolvePostLoginRedirect(account.id, account.role)
       : "/parent";
@@ -143,6 +158,11 @@ export async function signInChild(
 ): Promise<ActionResult<null>> {
   const parsed = childPinSchema.safeParse(input);
   if (!parsed.success) return fail("Invalid access code or PIN");
+
+  const accessCode = normalizeAccessCodeInput(parsed.data.accessCode);
+  const ip = await getClientIp();
+  const limited = checkRateLimit("child-pin", `${ip}:${accessCode}`);
+  if (!limited.ok) return fail(limited.message);
 
   try {
     const result = await signIn("child-pin", {

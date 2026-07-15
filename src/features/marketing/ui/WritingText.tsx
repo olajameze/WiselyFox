@@ -91,7 +91,6 @@ export function WritingText({
     };
   }, [armed, delay, reducedMotion, speed, text]);
 
-  const displayText = reducedMotion ? text : text.slice(0, visibleChars);
   const isComplete = visibleChars >= text.length || reducedMotion;
 
   const rootClassName = [styles.writing, className, isComplete ? styles.complete : ""]
@@ -99,8 +98,22 @@ export function WritingText({
     .join(" ");
 
   const inkLine = (
-    <span ref={ref} className={styles.inkLine}>
-      {displayText}
+    <span
+      ref={ref}
+      className={styles.inkLine}
+      aria-busy={!isComplete}
+    >
+      {Array.from(text).map((ch, i) => {
+        const visible = reducedMotion || i < visibleChars;
+        return (
+          <span
+            key={`${i}-${ch}`}
+            className={visible ? styles.inkVisible : styles.inkHidden}
+          >
+            {ch}
+          </span>
+        );
+      })}
       {!isComplete && <span className={styles.cursor} aria-hidden="true" />}
     </span>
   );

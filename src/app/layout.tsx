@@ -4,15 +4,39 @@ import type { Metadata, Viewport } from "next";
 import { PwaProvider } from "@/features/pwa/ui/PwaProvider";
 import { ThemeProvider } from "@/shared/ui/ThemeProvider/ThemeProvider";
 import { PageTurnTransition } from "@/shared/ui/PageTurn/PageTurnTransition";
+import { NavigationProgress } from "@/shared/ui/NavigationProgress/NavigationProgress";
 import { THEME_STORAGE_KEY } from "@/shared/lib/theme";
+import { getSiteUrl } from "@/shared/lib/site-config";
+
+const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "WiselyFox",
-    template: "%s, WiselyFox",
+    template: "%s | WiselyFox",
   },
-  description: "Child safe, parent guided adaptive learning for mobile, tablet, and desktop.",
+  description:
+    "Child safe, parent guided adaptive learning for mobile, tablet, and desktop. Inclusive support built in.",
   applicationName: "WiselyFox",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_GB",
+    url: siteUrl,
+    siteName: "WiselyFox",
+    title: "WiselyFox | Child safe adaptive learning",
+    description:
+      "Parent guided learning with inclusive support for every mind. Join the family pilot, no card required.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "WiselyFox | Child safe adaptive learning",
+    description:
+      "Parent guided learning with inclusive support for every mind. Join the family pilot, no card required.",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -61,6 +85,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <PwaProvider>
+            <NavigationProgress />
             <PageTurnTransition>{children}</PageTurnTransition>
           </PwaProvider>
         </ThemeProvider>

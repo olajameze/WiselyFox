@@ -1,5 +1,9 @@
 import { prisma } from "@/shared/lib/prisma";
-import { REWARD_MILESTONES } from "@/features/gamification/services/reward-offers.service";
+import {
+  REWARD_MILESTONES,
+  STREAK_REWARDS,
+  getNextStreakReward,
+} from "@/features/gamification/services/reward-offers.service";
 import { getNextXpMilestone } from "@/features/gamification/services/rewards.service";
 import { getActiveQuests } from "@/features/gamification/services/quest-progress.service";
 import { getChildStickerCollection, getStickerForQuest } from "@/features/gamification/services/quest-reward.service";
@@ -31,10 +35,12 @@ export async function getChildRewardsDashboard(childId: string) {
   );
 
   const xp = profile?.xp ?? 0;
+  const streakDays = profile?.streakDays ?? 0;
   const nextMilestoneXp = getNextXpMilestone(xp, REWARD_MILESTONES);
   const nextMilestone = nextMilestoneXp
     ? REWARD_MILESTONES.find((m) => m.xp === nextMilestoneXp) ?? null
     : null;
+  const nextStreakReward = getNextStreakReward(streakDays);
 
   const questsCompleted = quests.filter((q) => q.completed).length;
 
@@ -46,6 +52,9 @@ export async function getChildRewardsDashboard(childId: string) {
     stickers,
     nextMilestone,
     nextMilestoneXp,
+    nextStreakReward,
+    streakDays,
+    streakMilestones: STREAK_REWARDS,
     milestones: REWARD_MILESTONES,
     pendingApproval: rewards.filter((r) => !r.approved),
     readyToClaim: rewards.filter((r) => r.approved && !r.claimed),

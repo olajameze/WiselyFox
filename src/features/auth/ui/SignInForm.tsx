@@ -2,19 +2,21 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Input, Card, Alert } from "@/shared/ui";
 import { signInParent } from "@/features/auth/actions/auth.actions";
 import styles from "./auth.module.css";
 
 type SignInFormProps = {
   variant?: "parent" | "tutor";
+  callbackUrl?: string;
+  registered?: boolean;
 };
 
-export function SignInForm({ variant = "parent" }: SignInFormProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
+export function SignInForm({
+  variant = "parent",
+  callbackUrl,
+  registered = false,
+}: SignInFormProps) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const isTutor = variant === "tutor";
@@ -28,15 +30,15 @@ export function SignInForm({ variant = "parent" }: SignInFormProps) {
       email: fd.get("email") as string,
       password: fd.get("password") as string,
     });
-    setLoading(false);
     if (!result.success) {
+      setLoading(false);
       setError(result.error);
       return;
     }
     const destination =
       callbackUrl && callbackUrl.startsWith("/") ? callbackUrl : result.data.redirectTo;
-    router.push(destination);
-    router.refresh();
+    // Full navigation applies the session cookie without a double RSC refresh
+    window.location.assign(destination);
   }
 
   return (
@@ -54,6 +56,11 @@ export function SignInForm({ variant = "parent" }: SignInFormProps) {
               ? "Sign in to your tutor dashboard"
               : "Sign in to your parent account"}
           </p>
+          {registered && (
+            <Alert variant="success" title="Account created">
+              You can sign in with your new parent account.
+            </Alert>
+          )}
           {error && <Alert variant="error">{error}</Alert>}
           {!isTutor && (
             <Alert variant="info" title="Demo accounts">
@@ -72,30 +79,45 @@ export function SignInForm({ variant = "parent" }: SignInFormProps) {
           <p className={styles.link}>
             {isTutor ? (
               <>
-                New tutor? <Link href="/tutor/sign-up">Create free tutor account</Link>
+                New tutor? <Link href="/tutor/sign-up" prefetch>
+                  Create free tutor account
+                </Link>
               </>
             ) : (
               <>
-                No account? <Link href="/sign-up">Create parent account</Link>
+                No account?{" "}
+                <Link href="/sign-up" prefetch>
+                  Create parent account
+                </Link>
               </>
             )}
           </p>
           <p className={styles.link}>
             {isTutor ? (
-              <Link href="/sign-in">Sign in as parent instead</Link>
+              <Link href="/sign-in" prefetch>
+                Sign in as parent instead
+              </Link>
             ) : (
               <>
-                <Link href="/tutor/sign-in">Sign in as tutor</Link>
+                <Link href="/tutor/sign-in" prefetch>
+                  Sign in as tutor
+                </Link>
                 {" · "}
-                <Link href="/tutor/sign-up">Become a tutor (free)</Link>
+                <Link href="/tutor/sign-up" prefetch>
+                  Become a tutor (free)
+                </Link>
               </>
             )}
           </p>
           <p className={styles.link}>
-            <Link href="/child-sign-in">Child sign in</Link>
+            <Link href="/child-sign-in" prefetch>
+              Child sign in
+            </Link>
           </p>
           <p className={styles.link}>
-            <Link href="/tutors">Browse tutors</Link>
+            <Link href="/tutors" prefetch>
+              Browse tutors
+            </Link>
           </p>
         </Card>
       </div>

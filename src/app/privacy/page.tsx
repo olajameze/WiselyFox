@@ -1,7 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import styles from "@/features/parent/ui/parent.module.css";
 import { CONSENT_VERSION } from "@/shared/lib/consent";
 import { getSupportEmail, getSupportMailto } from "@/shared/lib/site-config";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description:
+    "How WiselyFox collects, uses, and protects family data. Parent consent, child PIN accounts, and your rights.",
+  alternates: { canonical: "/privacy" },
+};
 
 export default function PrivacyPage() {
   const supportEmail = getSupportEmail();

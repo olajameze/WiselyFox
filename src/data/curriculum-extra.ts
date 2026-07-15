@@ -213,7 +213,7 @@ export const CURRICULUM_EXTRA: Record<
         durationMinutes: 14,
         steps: [
           { title: "Warm up", content: "What do plants need to grow green and tall?", method: "discuss", tip: "Light, water, carbon dioxide." },
-          { title: "Learn", content: "Photosynthesis: chlorophyll in leaves traps light energy to make glucose and release oxygen.", method: "watch", videoId: "dNiN_k99Ih4", videoTitle: "Photosynthesis basics", tip: "Plants are producers in food chains." },
+          { title: "Learn", content: "Photosynthesis: chlorophyll in leaves traps light energy to make glucose and release oxygen.", method: "watch", tip: "Plants are producers in food chains." },
           { title: "Practice", content: "Draw a plant and label roots, stem, leaves, and sunlight arrow.", method: "draw", tip: "Arrows show energy flow." },
           { title: "Review", content: "Oxygen from plants supports animal life.", method: "quiz", tip: "Test leaves vs roots roles." },
         ],

@@ -31,12 +31,12 @@ export default async function StudyGuidePage({
       <header className={styles.pageHeader}>
         <h1>{subject.title} study guide</h1>
         <p className={styles.pageSubtitle}>
-          Read, watch, discuss, and pass quick checks, tailored for {ageBandLabel(child.ageBand)}.
+          Read, discuss, practise, and pass quick checks, tailored for {ageBandLabel(child.ageBand)}.
         </p>
       </header>
 
       <Alert variant="info" title="Multi method learning">
-        Study guides mix reading, discussion, drawing, and quizzes. Pair with video lessons where available.
+        This guide is for reading and practice. Open the Videos page for curated clips.
       </Alert>
 
       <StudyGuideViewer

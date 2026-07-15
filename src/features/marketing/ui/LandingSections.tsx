@@ -6,26 +6,8 @@ import { AppDemoPreview } from "./AppDemoPreview";
 import { PricingSection } from "./PricingSection";
 import { WaitlistSection } from "./WaitlistSection";
 import { WritingText } from "./WritingText";
+import { LANDING_FAQS } from "../lib/landing-faqs";
 import styles from "../styles/marketing.module.css";
-
-const FAQS = [
-  {
-    q: "How does the family pilot work?",
-    a: "Create a free parent account, no card required. You get full access while we gather feedback from real families. Billing will be added before public launch.",
-  },
-  {
-    q: "Can I switch from Essential to Family?",
-    a: "Yes, upgrade instantly from Settings in your parent dashboard. During the pilot, plan changes do not charge your card.",
-  },
-  {
-    q: "Is my child's data safe?",
-    a: "Absolutely. Children log in with a PIN only. No ads, no public profiles, and we never sell identifiable child data.",
-  },
-  {
-    q: "Do you support ADHD, autism, and dyslexia?",
-    a: "Yes. During onboarding you tell us about your child's strengths and needs. WiselyFox applies calm mode, visual schedules, chunked lessons, dyslexia-friendly text, and ADHD-informed focus breaks automatically—parents can adjust everything in Accessibility settings.",
-  },
-];
 
 export function LandingSections() {
   return (
@@ -36,15 +18,15 @@ export function LandingSections() {
           as="h2"
           className={`${styles.sectionTitle} ${styles.sectionTitleLearn}`}
           startWhenVisible
-          speed={55}
+          speed={22}
         />
         <WritingText
           text="A calm peek at learning, lessons, and the parent dashboard."
           as="p"
           className={styles.sectionSubtitle}
           startWhenVisible
-          speed={28}
-          delay={200}
+          speed={12}
+          delay={80}
         />
         <LiveAppSlideshow />
       </section>
@@ -58,15 +40,15 @@ export function LandingSections() {
           as="h2"
           className={`${styles.sectionTitle} ${styles.sectionTitleWarm}`}
           startWhenVisible
-          speed={55}
+          speed={22}
         />
         <WritingText
           text="Click through real app scenarios, no account needed."
           as="p"
           className={styles.sectionSubtitle}
           startWhenVisible
-          speed={30}
-          delay={200}
+          speed={12}
+          delay={80}
         />
         <AppDemoPreview />
       </section>
@@ -77,7 +59,7 @@ export function LandingSections() {
           as="h2"
           className={`${styles.sectionTitle} ${styles.sectionTitleWarm}`}
           startWhenVisible
-          speed={55}
+          speed={22}
         />
         <div className={`${styles.grid} ${styles.grid3}`}>
           <Card interactive className={styles.featureCard}>
@@ -87,7 +69,7 @@ export function LandingSections() {
               as="h3"
               className={`${styles.cardTitle} ${styles.cardTitleLearn}`}
               startWhenVisible
-              speed={42}
+              speed={18}
             />
             <p>
               Maths, reading, coding, money literacy, and how to learn, not just what to learn.
@@ -100,8 +82,8 @@ export function LandingSections() {
               as="h3"
               className={`${styles.cardTitle} ${styles.cardTitleLearn}`}
               startWhenVisible
-              speed={42}
-              delay={120}
+              speed={18}
+              delay={40}
             />
             <p>
               Entrance assessment sets the level. Lessons adapt to mastery, gaps, and pace.
@@ -114,8 +96,8 @@ export function LandingSections() {
               as="h3"
               className={`${styles.cardTitle} ${styles.cardTitleWarm}`}
               startWhenVisible
-              speed={42}
-              delay={240}
+              speed={18}
+              delay={80}
             />
             <p>
               Full visibility, reward approval, schedules, and privacy settings you can trust.
@@ -133,15 +115,15 @@ export function LandingSections() {
           as="h2"
           className={`${styles.sectionTitle} ${styles.sectionTitleCalm}`}
           startWhenVisible
-          speed={55}
+          speed={22}
         />
         <WritingText
           text="Onboarding captures your child's strengths and needs, then applies tailored accessibility settings across lessons, quizzes, and focus sessions."
           as="p"
           className={styles.sectionSubtitle}
           startWhenVisible
-          speed={24}
-          delay={200}
+          speed={10}
+          delay={60}
         />
         <div className={styles.grid}>
           <Card className={styles.noteCard}>
@@ -150,7 +132,7 @@ export function LandingSections() {
               as="h3"
               className={`${styles.cardTitle} ${styles.cardTitleCalm}`}
               startWhenVisible
-              speed={45}
+              speed={18}
             />
             <p>
               Softer colours, reduced motion, and optional hidden timers in parent Settings. Gentle
@@ -163,8 +145,8 @@ export function LandingSections() {
               as="h3"
               className={`${styles.cardTitle} ${styles.cardTitleCalm}`}
               startWhenVisible
-              speed={45}
-              delay={100}
+              speed={18}
+              delay={40}
             />
             <p>
               Predictable step-by-step lesson flows for ADHD and autistic learners, plus
@@ -177,11 +159,11 @@ export function LandingSections() {
               as="h3"
               className={`${styles.cardTitle} ${styles.cardTitleCalm}`}
               startWhenVisible
-              speed={45}
-              delay={200}
+              speed={18}
+              delay={80}
             />
             <p>
-              Short timed blocks with movement breaks every 10 minutes for ADHD profiles—session
+              Short timed blocks with movement breaks every 10 minutes for ADHD profiles. Session
               length is parent-controlled.
             </p>
           </Card>
@@ -191,8 +173,8 @@ export function LandingSections() {
               as="h3"
               className={`${styles.cardTitle} ${styles.cardTitleCalm}`}
               startWhenVisible
-              speed={45}
-              delay={300}
+              speed={18}
+              delay={120}
             />
             <p>
               Dyslexia-friendly fonts and spacing, high contrast, larger text toggles, and lessons
@@ -210,7 +192,7 @@ export function LandingSections() {
           as="h2"
           className={`${styles.sectionTitle} ${styles.sectionTitleTrust}`}
           startWhenVisible
-          speed={55}
+          speed={22}
         />
         <div className={styles.grid}>
           <Card className={styles.noteCard}>
@@ -219,7 +201,7 @@ export function LandingSections() {
               as="h3"
               className={`${styles.cardTitle} ${styles.cardTitleTrust}`}
               startWhenVisible
-              speed={45}
+              speed={18}
             />
             <p>GDPR minded. Parent consent gates. No child data sold. No third party ads.</p>
           </Card>
@@ -229,11 +211,12 @@ export function LandingSections() {
               as="h3"
               className={`${styles.cardTitle} ${styles.cardTitleTrust}`}
               startWhenVisible
-              speed={45}
-              delay={150}
+              speed={18}
+              delay={40}
             />
             <p>
-              Encrypted sessions, rate limited logins, bot protection, and audited admin access.
+              Encrypted sessions, rate limited sign-in and PIN checks, disposable-email screening,
+              and audited admin access.
             </p>
           </Card>
         </div>
@@ -249,18 +232,18 @@ export function LandingSections() {
           as="h2"
           className={`${styles.sectionTitle} ${styles.sectionTitleTrust}`}
           startWhenVisible
-          speed={55}
+          speed={22}
         />
         <div className={styles.faq}>
-          {FAQS.map((f, i) => (
+          {LANDING_FAQS.map((f, i) => (
             <div key={f.q} className={styles.faqItem}>
               <WritingText
                 text={f.q}
                 as="div"
                 className={styles.faqQ}
                 startWhenVisible
-                speed={38}
-                delay={i * 80}
+                speed={16}
+                delay={i * 30}
               />
               <p className={styles.faqA}>{f.a}</p>
             </div>

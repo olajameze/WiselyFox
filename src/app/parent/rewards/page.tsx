@@ -82,7 +82,7 @@ export default async function ParentRewardsPage() {
         )}
       </Card>
 
-      <Card header={<h2>Approved — ready to claim ({approved.length})</h2>} className={styles.mtLg}>
+      <Card header={<h2>Approved, ready to claim ({approved.length})</h2>} className={styles.mtLg}>
         {approved.length === 0 ? (
           <p className={styles.meta}>
             Approved rewards appear here until your child claims them on the learn app.

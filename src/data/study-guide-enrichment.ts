@@ -144,6 +144,96 @@ export const GUIDE_ENRICHMENTS: Record<string, GuideSectionEnrichment[]> = {
       check: { prompt: "Growth mindset means…", options: ["Skills improve with effort", "Talent never changes", "Avoid all feedback", "Quit when stuck"], correctAnswer: "Skills improve with effort", explanation: "Effort and feedback drive improvement." },
     },
   ],
+  psychology: [
+    { keyPoints: ["Evidence over labels.", "Mind and behaviour can be studied kindly."], check: { prompt: "Psychology uses…", options: ["Evidence", "Only gossip", "Magic only", "No questions"], correctAnswer: "Evidence", explanation: "Careful methods matter." } },
+    { keyPoints: ["Retrieval practice strengthens memory.", "Sleep supports consolidation."], check: { prompt: "Active recall means…", options: ["Testing yourself", "Only highlighting", "Skipping review", "Avoiding sleep"], correctAnswer: "Testing yourself", explanation: "Retrieval builds memory." } },
+    { keyPoints: ["Attention is limited.", "Short focus blocks help many learners."], check: { prompt: "A helpful focus habit is…", options: ["Short calm blocks", "Never resting", "All-night cramming only", "Ignoring distractions forever"], correctAnswer: "Short calm blocks", explanation: "Attention needs breaks." } },
+    { keyPoints: ["Slow down for important choices.", "Check more than one source."], check: { prompt: "Bias can…", options: ["Affect judgment", "Never appear", "Replace evidence", "Delete memory"], correctAnswer: "Affect judgment", explanation: "Awareness improves decisions." } },
+  ],
+  philosophy: [
+    { keyPoints: ["Clear questions open inquiry.", "Definitions matter."], check: { prompt: "Philosophy often starts with…", options: ["Clear questions", "Only insults", "Ignoring reasons", "Random shouting"], correctAnswer: "Clear questions", explanation: "Questions frame thinking." } },
+    { keyPoints: ["Give reasons for claims.", "Consider other views calmly."], check: { prompt: "A strong argument needs…", options: ["Reasons", "Only volume", "No evidence", "Ignoring others"], correctAnswer: "Reasons", explanation: "Reasons support claims." } },
+    { keyPoints: ["Knowledge claims need justification.", "Uncertainty can be honest."], check: { prompt: "Saying 'I might be wrong' can be…", options: ["Intellectual honesty", "Always weakness", "Proof of failure", "Ignoring truth"], correctAnswer: "Intellectual honesty", explanation: "Humility aids inquiry." } },
+    { keyPoints: ["Values can conflict.", "Explain trade-offs carefully."], check: { prompt: "Ethics weighs…", options: ["Values in real choices", "Only fashion", "Random noise", "No consequences"], correctAnswer: "Values in real choices", explanation: "Ethics is practical." } },
+  ],
+  sociology: [
+    { keyPoints: ["Groups shape norms.", "Belonging affects behaviour."], check: { prompt: "A social norm is…", options: ["An expected group behaviour", "A type of rock", "Only a maths rule", "Weather"], correctAnswer: "An expected group behaviour", explanation: "Norms guide groups." } },
+    { keyPoints: ["Avoid stereotypes.", "Use evidence about access and fairness."], check: { prompt: "Sociology studies…", options: ["Groups and social life", "Only atoms", "Only planets", "Magic"], correctAnswer: "Groups and social life", explanation: "Society is the focus." } },
+    { keyPoints: ["Institutions organise roles.", "Rules can help or harm."], check: { prompt: "Schools are an example of…", options: ["An institution", "A planet", "An atom", "A password"], correctAnswer: "An institution", explanation: "Institutions structure life." } },
+    { keyPoints: ["Ask who benefits from a rule.", "Evidence beats assumptions."], check: { prompt: "Fairness questions ask about…", options: ["Access and respect", "Only shoe size", "Ignoring people", "Deleting rules always"], correctAnswer: "Access and respect", explanation: "Fairness is social." } },
+  ],
+  economics: [
+    { keyPoints: ["Resources are limited.", "Choices have opportunity costs."], check: { prompt: "Scarcity means…", options: ["Resources are limited", "Everything is free", "No choices exist", "Prices never change"], correctAnswer: "Resources are limited", explanation: "Limits force trade-offs." } },
+    { keyPoints: ["Prices signal demand and supply.", "Incentives shape behaviour."], check: { prompt: "Opportunity cost is…", options: ["The next best option given up", "A free gift", "Only tax", "A coin type"], correctAnswer: "The next best option given up", explanation: "Trade-offs have costs." } },
+    { keyPoints: ["Budgets plan income and spending.", "Trade creates mutual gains when fair."], check: { prompt: "A budget tracks…", options: ["Income and spending", "Only wishes", "Weather", "Homework titles"], correctAnswer: "Income and spending", explanation: "Budgets organise money." } },
+    { keyPoints: ["Inflation raises general prices.", "Read economic claims carefully."], check: { prompt: "Inflation usually means prices…", options: ["Rise over time", "Fall forever", "Never change", "Disappear"], correctAnswer: "Rise over time", explanation: "General price level rises." } },
+  ],
+  astronomy: [
+    { keyPoints: ["Earth rotates for day and night.", "Stars are distant suns."], check: { prompt: "Day and night happen because…", options: ["Earth rotates", "The Sun turns off", "Clouds delete the Moon", "Stars sink underground"], correctAnswer: "Earth rotates", explanation: "Rotation cycles light." } },
+    { keyPoints: ["Moon phases come from sunlight angles.", "Orbit changes what we see."], check: { prompt: "Moon phases are caused by…", options: ["Changing sunlight angles", "The Moon melting", "Earth shrinking", "Paint on the Moon"], correctAnswer: "Changing sunlight angles", explanation: "Light and position matter." } },
+    { keyPoints: ["Planets orbit the Sun.", "Scale models help, but simplify."], check: { prompt: "Earth orbits…", options: ["The Sun", "The Moon only", "A nearby star other than the Sun", "Nothing"], correctAnswer: "The Sun", explanation: "Solar system centre for planets." } },
+    { keyPoints: ["Gravity shapes orbits.", "Evidence comes from observation and maths."], check: { prompt: "A light-year measures…", options: ["Distance", "Time of day only", "Temperature", "Mass of Earth only"], correctAnswer: "Distance", explanation: "How far light travels in a year." } },
+  ],
+  "artificial-intelligence": [
+    { keyPoints: ["AI learns patterns from data.", "It is not magic and can be wrong."], check: { prompt: "AI systems mainly learn from…", options: ["Patterns in data", "Magic spells", "Guessing only", "Ignoring examples"], correctAnswer: "Patterns in data", explanation: "Machine learning uses data." } },
+    { keyPoints: ["Supervised learning uses labels.", "Biased data can bias outputs."], check: { prompt: "Supervised learning uses…", options: ["Labelled examples", "No data", "Only rumours", "Random passwords"], correctAnswer: "Labelled examples", explanation: "Labels guide training." } },
+    { keyPoints: ["Clear prompts help.", "Rewrite and verify answers."], check: { prompt: "A responsible AI habit is…", options: ["Checking facts and protecting privacy", "Sharing PINs with bots", "Trusting every answer", "Uploading private photos freely"], correctAnswer: "Checking facts and protecting privacy", explanation: "Verify and protect data." } },
+    { keyPoints: ["Protect privacy.", "Ask consent before uploading people."], check: { prompt: "Confident AI answers…", options: ["Can still be wrong", "Are always perfect", "Never need checking", "Replace all teachers"], correctAnswer: "Can still be wrong", explanation: "Humans verify important claims." } },
+  ],
+  robotics: [
+    { keyPoints: ["Sense, decide, act.", "People design robots."], check: { prompt: "A robot typically…", options: ["Senses, decides, and acts", "Only prints paper", "Never uses sensors", "Is always human"], correctAnswer: "Senses, decides, and acts", explanation: "Sense-decide-act defines robotics." } },
+    { keyPoints: ["Sensors measure the world.", "Actuators create movement."], check: { prompt: "An actuator…", options: ["Creates movement or force", "Only stores photos", "Blocks all sensors", "Deletes programs"], correctAnswer: "Creates movement or force", explanation: "Actuators move parts." } },
+    { keyPoints: ["Test with clear steps.", "Include stop conditions."], check: { prompt: "Safe robot testing needs…", options: ["Clear steps and supervision", "No rules", "Ignoring parents", "Skipping stop conditions"], correctAnswer: "Clear steps and supervision", explanation: "Safety first." } },
+    { keyPoints: ["Humans set goals and ethics.", "Responsibility stays with people."], check: { prompt: "People stay responsible for…", options: ["Goals and ethical use of robots", "Nothing at all", "Only paint colour", "Ignoring errors"], correctAnswer: "Goals and ethical use of robots", explanation: "Humans set purpose and limits." } },
+  ],
+  english: [
+    { keyPoints: ["Find the main idea.", "Details support the point."], check: { prompt: "The main idea is…", options: ["The big point of a text", "Only the last word", "A random detail", "The author's birthday"], correctAnswer: "The big point of a text", explanation: "Main idea is the core message." } },
+    { keyPoints: ["Subject + verb builds clarity.", "Punctuation guides readers."], check: { prompt: "A clear sentence usually needs…", options: ["A subject and a verb", "Only emojis", "No punctuation ever", "Twenty clauses"], correctAnswer: "A subject and a verb", explanation: "Subject + verb builds clarity." } },
+    { keyPoints: ["One idea per paragraph.", "Plan before drafting."], check: { prompt: "One paragraph should usually…", options: ["Develop one idea", "Cover ten unrelated topics", "Avoid evidence", "Skip a topic sentence always"], correctAnswer: "Develop one idea", explanation: "One idea per paragraph." } },
+    { keyPoints: ["Know your speaking purpose.", "Listen as carefully as you speak."], check: { prompt: "Purposeful speaking starts with…", options: ["Knowing your goal", "Speaking as fast as possible", "Ignoring listeners", "Never practising"], correctAnswer: "Knowing your goal", explanation: "Purpose guides the talk." } },
+  ],
+  geometry: [
+    { keyPoints: ["Name shape properties.", "Sketch before calculating."], check: { prompt: "Perimeter measures…", options: ["Distance around a shape", "Space inside only", "Temperature", "Speed"], correctAnswer: "Distance around a shape", explanation: "Perimeter goes around." } },
+    { keyPoints: ["Add all outer sides for perimeter.", "Keep units consistent."], check: { prompt: "Area of a rectangle is…", options: ["Length times width", "Length plus width", "Only the diagonal", "Perimeter squared"], correctAnswer: "Length times width", explanation: "A = l × w." } },
+    { keyPoints: ["Triangle area = ½bh.", "State square units."], check: { prompt: "Area of a triangle is…", options: ["Half base times height", "Base plus height", "Base times height times 2", "Perimeter only"], correctAnswer: "Half base times height", explanation: "A = ½bh." } },
+    { keyPoints: ["Diameter = 2 × radius.", "Keep π clear in working."], check: { prompt: "Diameter is…", options: ["Twice the radius", "Half the radius", "Equal to area", "Always π"], correctAnswer: "Twice the radius", explanation: "d = 2r." } },
+  ],
+  statistics: [
+    { keyPoints: ["Fair samples represent the group.", "Clear questions reduce bias."], check: { prompt: "A fair sample…", options: ["Represents the group studied", "Only includes friends", "Ignores the question", "Has zero people"], correctAnswer: "Represents the group studied", explanation: "Representation matters." } },
+    { keyPoints: ["Mean averages; median is middle; mode is most common."], check: { prompt: "The median is…", options: ["The middle value when ordered", "Always the largest", "Never useful", "Only for words"], correctAnswer: "The middle value when ordered", explanation: "Order then pick middle." } },
+    { keyPoints: ["Read axes and units first.", "Scales can change the story."], check: { prompt: "The mean is…", options: ["The average of the values", "The most common value", "The middle always", "A chart title"], correctAnswer: "The average of the values", explanation: "Add and divide for mean." } },
+    { keyPoints: ["Correlation ≠ causation.", "State uncertainty honestly."], check: { prompt: "Correlation…", options: ["Does not always mean causation", "Always proves cause", "Means data is fake", "Removes all charts"], correctAnswer: "Does not always mean causation", explanation: "Be careful with cause claims." } },
+  ],
+  biology: [
+    { keyPoints: ["Cells are life's building blocks.", "Observe living characteristics."], check: { prompt: "Cells are…", options: ["Basic units of life", "Only rocks", "Never in plants", "Only computers"], correctAnswer: "Basic units of life", explanation: "Life is cellular." } },
+    { keyPoints: ["Photosynthesis captures light energy.", "Food chains transfer energy."], check: { prompt: "Photosynthesis mainly happens in…", options: ["Plants and some other producers", "Only metals", "Only clouds", "Never with light"], correctAnswer: "Plants and some other producers", explanation: "Producers capture light energy." } },
+    { keyPoints: ["Respiration releases usable energy.", "Systems work together."], check: { prompt: "ATP is important because…", options: ["It carries usable energy in cells", "It replaces food forever", "It is a type of rock", "It stops respiration"], correctAnswer: "It carries usable energy in cells", explanation: "ATP fuels cell work." } },
+    { keyPoints: ["Ecosystems include living and non-living parts.", "Changes can ripple."], check: { prompt: "An ecosystem includes…", options: ["Living and non-living parts", "Only one animal", "Only weather apps", "No interactions"], correctAnswer: "Living and non-living parts", explanation: "Ecosystems are connected systems." } },
+  ],
+  chemistry: [
+    { keyPoints: ["Elements are one atom type.", "The periodic table organises them."], check: { prompt: "An element contains…", options: ["One type of atom", "Any random mixture", "Only light", "No atoms"], correctAnswer: "One type of atom", explanation: "Elements are pure atom types." } },
+    { keyPoints: ["Compounds have fixed ratios.", "Mixtures can often be separated."], check: { prompt: "A mixture…", options: ["Can often be separated physically", "Always explodes", "Has no substances", "Is always one atom"], correctAnswer: "Can often be separated physically", explanation: "Mixtures keep separable parts." } },
+    { keyPoints: ["Reactions rearrange atoms.", "Mass is conserved in closed systems."], check: { prompt: "In a closed chemical reaction, mass…", options: ["Is conserved", "Always doubles", "Disappears", "Becomes energy only with no matter"], correctAnswer: "Is conserved", explanation: "Atoms rearrange; mass holds." } },
+    { keyPoints: ["Safety and supervision first.", "Never taste unknown chemicals."], check: { prompt: "In a lab you should…", options: ["Follow safety rules with supervision", "Taste unknown chemicals", "Ignore eye protection", "Mix everything quickly"], correctAnswer: "Follow safety rules with supervision", explanation: "Safety first." } },
+  ],
+  physics: [
+    { keyPoints: ["Speed is distance ÷ time.", "Use units."], check: { prompt: "Speed is…", options: ["Distance divided by time", "Only direction", "Force times mass always", "A type of energy store"], correctAnswer: "Distance divided by time", explanation: "s = d/t." } },
+    { keyPoints: ["Forces push or pull.", "Unbalanced forces change motion."], check: { prompt: "An unbalanced force…", options: ["Changes an object's motion", "Does nothing ever", "Removes gravity forever", "Stops time"], correctAnswer: "Changes an object's motion", explanation: "Net force accelerates." } },
+    { keyPoints: ["Energy transfers and transforms.", "It is conserved in closed systems."], check: { prompt: "Energy in a closed system…", options: ["Is conserved", "Appears from nowhere", "Vanishes completely", "Is only light"], correctAnswer: "Is conserved", explanation: "Energy transforms and transfers." } },
+    { keyPoints: ["Graphs show motion patterns.", "Label axes clearly."], check: { prompt: "A flat distance-time graph means…", options: ["No change in position", "Maximum acceleration", "Infinite speed", "Negative mass"], correctAnswer: "No change in position", explanation: "Flat means stationary." } },
+  ],
+  computing: [
+    { keyPoints: ["Hardware is physical; software is code.", "Both are needed."], check: { prompt: "Software is…", options: ["Instructions programs run", "Only the keyboard", "Always a cable", "Never code"], correctAnswer: "Instructions programs run", explanation: "Software is code." } },
+    { keyPoints: ["Algorithms are step-by-step methods.", "Test with small examples."], check: { prompt: "An algorithm is…", options: ["A step-by-step method", "A random guess", "Only a photo", "A type of battery"], correctAnswer: "A step-by-step method", explanation: "Algorithms are procedures." } },
+    { keyPoints: ["The internet is a network of networks.", "Trust choices matter."], check: { prompt: "The internet is…", options: ["A network of networks", "One single cable in one house", "Only social apps", "Never about addresses"], correctAnswer: "A network of networks", explanation: "Many networks interconnect." } },
+    { keyPoints: ["Databases organise records.", "Protect personal data."], check: { prompt: "Databases help by…", options: ["Organising records for search and update", "Deleting all files randomly", "Replacing electricity", "Blocking learning"], correctAnswer: "Organising records for search and update", explanation: "Structured data is searchable." } },
+  ],
+  cybersecurity: [
+    { keyPoints: ["Pause on odd messages.", "Phishing tricks people."], check: { prompt: "Phishing tries to…", options: ["Trick you into sharing secrets", "Improve your sleep", "Fix grammar", "Water plants"], correctAnswer: "Trick you into sharing secrets", explanation: "Phishing is social engineering." } },
+    { keyPoints: ["Unique passwords + MFA.", "Never share codes."], check: { prompt: "MFA means…", options: ["An extra login check beyond a password", "Sharing passwords widely", "Turning off updates", "Posting PINs publicly"], correctAnswer: "An extra login check beyond a password", explanation: "Multiple factors protect accounts." } },
+    { keyPoints: ["Share less by default.", "Review permissions."], check: { prompt: "A good privacy habit is…", options: ["Reviewing what you share and app permissions", "Posting home addresses often", "Ignoring settings", "Using the same password everywhere"], correctAnswer: "Reviewing what you share and app permissions", explanation: "Minimise and review." } },
+    { keyPoints: ["Tell a trusted adult.", "Secure accounts calmly."], check: { prompt: "After a suspected hack…", options: ["Tell a trusted adult and secure accounts", "Ignore it forever", "Share recovery codes online", "Delete evidence always without help"], correctAnswer: "Tell a trusted adult and secure accounts", explanation: "Report and secure." } },
+  ],
 };
 
 export function enrichStudyGuideSections(

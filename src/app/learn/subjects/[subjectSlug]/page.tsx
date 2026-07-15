@@ -171,6 +171,11 @@ export default async function LearnSubjectPage({
             Study guide
           </Button>
         </Link>
+        <Link href={`/learn/videos/${subject.slug}`}>
+          <Button variant="secondary" size="sm">
+            Videos
+          </Button>
+        </Link>
         <Link href={`/learn/quiz/${subject.slug}`}>
           <Button variant="secondary" size="sm">
             Take quiz

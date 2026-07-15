@@ -5,6 +5,10 @@ import { prisma } from "@/shared/lib/prisma";
 import { env } from "@/shared/lib/env";
 import { syncSuperAdminRole } from "@/server/services/super-admin.service";
 import { getUserCapabilities } from "@/shared/lib/user-capabilities";
+import {
+  accessCodeCompactKey,
+  normalizeAccessCodeInput,
+} from "@/shared/lib/access-code";
 import type { UserRole } from "@prisma/client";
 import type {} from "next-auth/jwt";
 
@@ -43,6 +47,30 @@ async function loadProfileFlags(userId: string) {
   };
 }
 
+async function findChildByAccessCode(raw: string) {
+  const normalized = normalizeAccessCodeInput(raw);
+  const include = { user: true } as const;
+
+  const exact = await prisma.childProfile.findUnique({
+    where: { accessCode: normalized },
+    include,
+  });
+  if (exact) return exact;
+
+  const compact = accessCodeCompactKey(raw);
+  if (!compact) return null;
+
+  const rows = await prisma.$queryRaw<{ id: string }[]>`
+    SELECT id FROM "ChildProfile"
+    WHERE regexp_replace(lower("accessCode"), '[^a-z0-9]', '', 'g') = ${compact}
+    LIMIT 1
+  `;
+  const id = rows[0]?.id;
+  if (!id) return null;
+
+  return prisma.childProfile.findUnique({ where: { id }, include });
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   pages: {
@@ -67,8 +95,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const valid = await bcrypt.compare(password, user.passwordHash);
         if (!valid) return null;
 
-        const role = await syncSuperAdminRole(user.id, user.email);
-        const flags = await loadProfileFlags(user.id);
+        const [role, flags] = await Promise.all([
+          syncSuperAdminRole(user.id, user.email),
+          loadProfileFlags(user.id),
+        ]);
 
         return {
           id: user.id,
@@ -92,10 +122,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const pin = credentials?.pin as string | undefined;
         if (!accessCode || !pin) return null;
 
-        const child = await prisma.childProfile.findUnique({
-          where: { accessCode },
-          include: { user: true },
-        });
+        const child = await findChildByAccessCode(accessCode);
         if (!child?.pinHash || !child.user) return null;
 
         const valid = await bcrypt.compare(pin, child.pinHash);

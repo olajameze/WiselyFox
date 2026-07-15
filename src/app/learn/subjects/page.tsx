@@ -23,14 +23,26 @@ export default async function LearnSubjectsPage() {
     subjectMatchesChildAge(parseSubjectAgeBands(s.ageBands), child.ageBand),
   );
 
-  const lessonCounts = await Promise.all(
-    subjects.map(async (subject) => {
-      const lessons = await prisma.lesson.findMany({
-        where: { subjectId: subject.id, published: true },
-        select: { ageBand: true },
-      });
-      return filterContentForAge(lessons, child.ageBand).length;
-    }),
+  const lessons =
+    subjects.length === 0
+      ? []
+      : await prisma.lesson.findMany({
+          where: {
+            published: true,
+            subjectId: { in: subjects.map((s) => s.id) },
+          },
+          select: { subjectId: true, ageBand: true },
+        });
+
+  const lessonsBySubject = new Map<string, { ageBand: string }[]>();
+  for (const lesson of lessons) {
+    const list = lessonsBySubject.get(lesson.subjectId) ?? [];
+    list.push(lesson);
+    lessonsBySubject.set(lesson.subjectId, list);
+  }
+
+  const lessonCounts = subjects.map(
+    (subject) => filterContentForAge(lessonsBySubject.get(subject.id) ?? [], child.ageBand).length,
   );
 
   return (
@@ -63,6 +75,11 @@ export default async function LearnSubjectsPage() {
               <Link href={`/learn/guide/${subject.slug}`}>
                 <Button variant="secondary" size="sm">
                   Study guide
+                </Button>
+              </Link>
+              <Link href={`/learn/videos/${subject.slug}`}>
+                <Button variant="secondary" size="sm">
+                  Videos
                 </Button>
               </Link>
               <Link href={`/learn/quiz/${subject.slug}`}>

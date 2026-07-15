@@ -8,6 +8,41 @@ export const REWARD_MILESTONES: { xp: number; title: string; description: string
   { xp: 350, title: "Pick a family activity", description: "Board game or walk" },
 ];
 
+/** Parent-approved rewards for consecutive daily study streaks. */
+export const STREAK_REWARDS: { days: number; title: string; description: string }[] = [
+  {
+    days: 5,
+    title: "5 day streak star",
+    description: "Studied five days in a row, pick a small celebration with a parent",
+  },
+  {
+    days: 7,
+    title: "7 day streak champion",
+    description: "A full week of learning, choose a favourite activity together",
+  },
+  {
+    days: 14,
+    title: "Two week streak hero",
+    description: "Fourteen days of showing up, earn a bigger family treat",
+  },
+];
+
+async function notifyParentReward(childId: string, title: string) {
+  const child = await prisma.childProfile.findUnique({
+    where: { id: childId },
+    include: { parent: true },
+  });
+  if (child?.parent.userId) {
+    await createUserNotification({
+      userId: child.parent.userId,
+      type: "ACHIEVEMENT",
+      title: "Reward waiting for approval",
+      body: `${child.displayName} earned: ${title}`,
+      url: "/parent/rewards",
+    });
+  }
+}
+
 export async function maybeOfferReward(childId: string, newXp: number, prevXp: number) {
   for (const milestone of REWARD_MILESTONES) {
     if (prevXp < milestone.xp && newXp >= milestone.xp) {
@@ -26,21 +61,36 @@ export async function maybeOfferReward(childId: string, newXp: number, prevXp: n
         },
       });
 
-      const child = await prisma.childProfile.findUnique({
-        where: { id: childId },
-        include: { parent: true },
-      });
-      if (child?.parent.userId) {
-        await createUserNotification({
-          userId: child.parent.userId,
-          type: "ACHIEVEMENT",
-          title: "Reward waiting for approval",
-          body: `${child.displayName} earned: ${milestone.title}`,
-          url: "/parent/rewards",
-        });
-      }
+      await notifyParentReward(childId, milestone.title);
       break;
     }
+  }
+}
+
+/**
+ * Offer streak rewards once each milestone is reached.
+ * Also backfills if the child already has a long streak but never received the reward.
+ */
+export async function maybeOfferStreakReward(childId: string, streakDays: number) {
+  for (const milestone of STREAK_REWARDS) {
+    if (streakDays < milestone.days) continue;
+
+    const existing = await prisma.reward.findFirst({
+      where: { childId, title: milestone.title },
+    });
+    if (existing) continue;
+
+    await prisma.reward.create({
+      data: {
+        childId,
+        type: "streak",
+        title: milestone.title,
+        description: milestone.description,
+        approved: false,
+      },
+    });
+
+    await notifyParentReward(childId, milestone.title);
   }
 }
 
@@ -65,17 +115,9 @@ export async function maybeOfferQuizReward(childId: string, score: number) {
     },
   });
 
-  const child = await prisma.childProfile.findUnique({
-    where: { id: childId },
-    include: { parent: true },
-  });
-  if (child?.parent.userId) {
-    await createUserNotification({
-      userId: child.parent.userId,
-      type: "ACHIEVEMENT",
-      title: "Reward waiting for approval",
-      body: `${child.displayName} earned: Perfect quiz star`,
-      url: "/parent/rewards",
-    });
-  }
+  await notifyParentReward(childId, "Perfect quiz star");
+}
+
+export function getNextStreakReward(streakDays: number): (typeof STREAK_REWARDS)[number] | null {
+  return STREAK_REWARDS.find((r) => r.days > streakDays) ?? null;
 }

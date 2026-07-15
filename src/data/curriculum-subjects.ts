@@ -53,8 +53,6 @@ export const ADDITIONAL_SUBJECTS: CurriculumSubject[] = [
             title: "Learn",
             content: "Living things grow, reproduce, respond, and need energy. A habitat provides what a species needs, pond, forest, or city park.",
             method: "watch",
-            videoId: "lVqUMK0_PL4",
-            videoTitle: "Introduction to cells & living things",
             tip: "After the video, name one living and one non-living thing.",
           },
           { title: "Practice", content: "Draw a habitat (e.g. garden). Label food, water, shelter, and two animals that live there.", method: "draw", tip: "Use arrows to show who eats what." },
@@ -73,8 +71,6 @@ export const ADDITIONAL_SUBJECTS: CurriculumSubject[] = [
             title: "Learn",
             content: "Forces are pushes or pulls. Gravity pulls objects toward Earth. Friction slows things on rough surfaces.",
             method: "watch",
-            videoId: "00jbG_cfGuQ",
-            videoTitle: "Introduction to gravity",
             tip: "Notice gravity when you drop a pencil.",
           },
           { title: "Practice", content: "Roll a toy on carpet vs smooth floor. Which stops first? Why?", method: "practice", tip: "Friction is higher on carpet." },
@@ -111,8 +107,6 @@ export const ADDITIONAL_SUBJECTS: CurriculumSubject[] = [
             title: "Learn",
             content: "Earth orbits the Sun yearly; the Moon orbits Earth monthly. Phases of the Moon are caused by how much sunlit side we see.",
             method: "watch",
-            videoId: "nq1yq0tuw5s",
-            videoTitle: "Earth's rotation and revolution",
             tip: "Watch the sky for the Moon this week.",
           },
           { title: "Practice", content: "Sketch Earth, Sun, and Moon for day vs night on your location.", method: "draw", tip: "Label day side and night side." },
@@ -133,7 +127,7 @@ export const ADDITIONAL_SUBJECTS: CurriculumSubject[] = [
     slug: "history",
     title: "History",
     description: "Timelines, sources, and how the past shapes today.",
-    ageBands: ["8-10", "11-13", "14-16", "17-19", "20-23"],
+    ageBands: ["5-7", "8-10", "11-13", "14-16", "17-19", "20-23"],
     studyGuide: {
       intro:
         "History uses evidence from sources, letters, photos, artefacts, accounts. Read, watch, discuss, and check facts like a historian.",
@@ -209,7 +203,7 @@ export const ADDITIONAL_SUBJECTS: CurriculumSubject[] = [
     slug: "geography",
     title: "Geography",
     description: "Maps, climates, people & places, from local to global.",
-    ageBands: ["8-10", "11-13", "14-16", "17-19", "20-23"],
+    ageBands: ["5-7", "8-10", "11-13", "14-16", "17-19", "20-23"],
     studyGuide: {
       intro: "Geography links places, people, and environments. Use maps, data, photos, and field observation.",
       sections: [
@@ -241,7 +235,7 @@ export const ADDITIONAL_SUBJECTS: CurriculumSubject[] = [
         durationMinutes: 14,
         steps: [
           { title: "Warm up", content: "What's the difference between weather today and climate over 30 years?", method: "discuss", tip: "Climate is the long term average." },
-          { title: "Learn", content: "The water cycle: evaporation, condensation, precipitation. Oceans and the Sun power weather systems.", method: "watch", videoId: "al-do-Gq74E", videoTitle: "The water cycle", tip: "Draw the cycle after watching." },
+          { title: "Learn", content: "The water cycle: evaporation, condensation, precipitation. Oceans and the Sun power weather systems.", method: "watch", tip: "Draw the cycle after watching." },
           { title: "Practice", content: "Record temperature and conditions for five days.", method: "practice", tip: "Same time each day is fairer." },
           { title: "Review", content: "Climate change shifts long term patterns, geography helps us respond.", method: "read", tip: "Compare notes with Met Office learning resources." },
         ],
@@ -359,7 +353,7 @@ export const ADDITIONAL_SUBJECTS: CurriculumSubject[] = [
     slug: "digital-skills",
     title: "Digital Skills",
     description: "Online safety, research, typing, and tools for school and work.",
-    ageBands: ["8-10", "11-13", "14-16", "17-19", "20-23"],
+    ageBands: ["5-7", "8-10", "11-13", "14-16", "17-19", "20-23"],
     studyGuide: {
       intro: "Digital skills blend reading, watching tutorials, practising safely, and discussing rules with parents.",
       sections: [

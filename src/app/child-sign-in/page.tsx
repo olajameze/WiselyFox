@@ -1,10 +1,10 @@
-import { Suspense } from "react";
 import { ChildSignInForm } from "@/features/auth/ui/ChildSignInForm";
 
-export default function ChildSignInPage() {
-  return (
-    <Suspense fallback={null}>
-      <ChildSignInForm />
-    </Suspense>
-  );
+export default async function ChildSignInPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const params = await searchParams;
+  return <ChildSignInForm consentError={params.error === "consent"} />;
 }

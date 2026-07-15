@@ -1,5 +1,7 @@
 /** Curated educational embed IDs (youtube-nocookie), parent-supervised viewing. */
 
+import { resolveLessonVideo } from "./lesson-videos";
+
 export type VideoRef = { videoId: string; videoTitle: string };
 
 export type PracticeActivity = {
@@ -8,88 +10,193 @@ export type PracticeActivity = {
   reflection: string;
 };
 
-/** One overview video per subject for study guide intro. */
+/** One overview video per subject for study guide intro (oEmbed-verified IDs). */
 export const SUBJECT_OVERVIEW_VIDEO: Record<string, VideoRef> = {
-  maths: { videoId: "Hmwvj9LN4bY", videoTitle: "Number lines and counting" },
-  reading: { videoId: "BFrXj9B0L7E", videoTitle: "Reading comprehension strategies" },
-  coding: { videoId: "ePgZ8KG816g", videoTitle: "What is computer science?" },
-  money: { videoId: "zo7iGTvDgsw", videoTitle: "Money and budgeting basics" },
-  "study-skills": { videoId: "TdWAj5O9k4E", videoTitle: "How to study effectively" },
-  science: { videoId: "lVqUMK0_PL4", videoTitle: "Introduction to living things" },
-  history: { videoId: "oOg5V7Ruir0", videoTitle: "Understanding timelines" },
-  geography: { videoId: "al-do-Gq74E", videoTitle: "The water cycle" },
-  "health-wellbeing": { videoId: "GYQS3pP9HZ8", videoTitle: "Healthy habits for learners" },
-  "digital-skills": { videoId: "Awfy3cZjiWk", videoTitle: "Staying safe online" },
-  "career-skills": { videoId: "ZadieB50EF0", videoTitle: "Workplace skills introduction" },
+  maths: { videoId: "T5Qf0qSSJFI", videoTitle: "Math Antics: Place Value" },
+  reading: { videoId: "pLlv2o6UfTU", videoTitle: "Crash Course: Navigating Digital Information" },
+  coding: { videoId: "O5nskjZ_GoI", videoTitle: "Crash Course Computer Science #1" },
+  money: { videoId: "sVKQn2I4HDM", videoTitle: "Budgeting Basics" },
+  "study-skills": { videoId: "IlU-zDU6aQ0", videoTitle: "Study Less, Study Smart" },
+  science: { videoId: "N6IAzlugWw0", videoTitle: "Khan Academy: The scientific method" },
+  history: { videoId: "Yocja_N5s1I", videoTitle: "Crash Course World History #1" },
+  geography: { videoId: "93LLwiMjDko", videoTitle: "Crash Course Geography #1" },
+  "health-wellbeing": { videoId: "5MuIMqhT8DM", videoTitle: "TED: Sleep is your superpower" },
+  "digital-skills": { videoId: "vNpkUyEOa_8", videoTitle: "Common Sense: My Online Neighborhood" },
+  "career-skills": { videoId: "HAnw168huqA", videoTitle: "Think Fast, Talk Smart: Communication" },
+  psychology: { videoId: "vo4pMVb0R6M", videoTitle: "Crash Course Psychology #1" },
+  philosophy: { videoId: "1A_CAkYt3GY", videoTitle: "Crash Course Philosophy #1" },
+  sociology: { videoId: "YnCJU6PaCio", videoTitle: "Crash Course Sociology #1" },
+  economics: { videoId: "3ez10ADR_gM", videoTitle: "Crash Course Economics #1" },
+  astronomy: { videoId: "0rHUDWjR5gg", videoTitle: "Crash Course Astronomy #1" },
+  "artificial-intelligence": { videoId: "a0_lo_GDcFw", videoTitle: "Crash Course AI #1" },
+  robotics: { videoId: "vVTA-E3G8bQ", videoTitle: "TED-Ed: Talos, the first robot" },
+  english: { videoId: "HAnw168huqA", videoTitle: "Clear English communication" },
+  geometry: { videoId: "xCdxURXMdFY", videoTitle: "Math Antics: Area" },
+  statistics: { videoId: "h8EYEJ32oQ8", videoTitle: "Khan Academy: Mean, median, mode" },
+  biology: { videoId: "QnQe0xW_JY4", videoTitle: "Crash Course Biology #1" },
+  chemistry: { videoId: "FSyAehMdpyI", videoTitle: "Crash Course Chemistry #1" },
+  physics: { videoId: "ZM8ECpBuQYE", videoTitle: "Crash Course Physics #1" },
+  computing: { videoId: "O5nskjZ_GoI", videoTitle: "Crash Course Computer Science #1" },
+  cybersecurity: { videoId: "inWWhr5tnEA", videoTitle: "What is cybersecurity?" },
 };
 
 /** Section-level videos aligned to study guide sections (by index). */
 export const SECTION_VIDEOS: Record<string, VideoRef[]> = {
   maths: [
-    { videoId: "Hmwvj9LN4bY", videoTitle: "Number sense visualised" },
-    { videoId: "2tc0QDfWIQU", videoTitle: "Multiplication as groups" },
-    { videoId: "3qFFFKKfPCY", videoTitle: "Solving word problems" },
-    { videoId: "TdWAj5O9k4E", videoTitle: "Practice habits" },
+    { videoId: "T5Qf0qSSJFI", videoTitle: "Place value" },
+    { videoId: "FJ5qLWP3Fqo", videoTitle: "Multiplication" },
+    { videoId: "mAvuom42NyY", videoTitle: "Addition for word problems" },
+    { videoId: "IlU-zDU6aQ0", videoTitle: "Practice habits" },
   ],
   reading: [
-    { videoId: "BFrXj9B0L7E", videoTitle: "Phonics and decoding" },
-    { videoId: "m9Oj2HmQyXs", videoTitle: "Finding the main idea" },
-    { videoId: "m9Oj2HmQyXs", videoTitle: "Context clues" },
-    { videoId: "BFrXj9B0L7E", videoTitle: "Writing clear sentences" },
+    { videoId: "saF3-f0XWAY", videoTitle: "Phonics and decoding" },
+    { videoId: "pLlv2o6UfTU", videoTitle: "Finding the main idea in sources" },
+    { videoId: "pLlv2o6UfTU", videoTitle: "Context and claims" },
+    { videoId: "HAnw168huqA", videoTitle: "Clear sentences and speaking" },
   ],
   coding: [
-    { videoId: "ePgZ8KG816g", videoTitle: "Algorithms in daily life" },
-    { videoId: "lkIFF4maKMU", videoTitle: "Loops explained" },
-    { videoId: "ePgZ8KG816g", videoTitle: "If/else decisions" },
-    { videoId: "lkIFF4maKMU", videoTitle: "Variables and debugging" },
+    { videoId: "O5nskjZ_GoI", videoTitle: "Algorithms in early computing" },
+    { videoId: "RBSGKlAvoiM", videoTitle: "Loops and data structures" },
+    { videoId: "O5nskjZ_GoI", videoTitle: "If/else decisions" },
+    { videoId: "rfscVS0vtbw", videoTitle: "Variables in Python" },
   ],
   money: [
-    { videoId: "zo7iGTvDgsw", videoTitle: "Coins and notes" },
-    { videoId: "zo7iGTvDgsw", videoTitle: "Needs vs wants" },
-    { videoId: "zo7iGTvDgsw", videoTitle: "Simple budgets" },
-    { videoId: "zo7iGTvDgsw", videoTitle: "Saving and interest" },
+    { videoId: "sVKQn2I4HDM", videoTitle: "Coins, notes, and budgets" },
+    { videoId: "_7J1JVCxWJM", videoTitle: "Needs vs wants" },
+    { videoId: "7GSGA8SVsOs", videoTitle: "Simple budgets" },
+    { videoId: "GtaoP0skPWc", videoTitle: "Saving and interest" },
   ],
   "study-skills": [
-    { videoId: "TdWAj5O9k4E", videoTitle: "Focus environment" },
-    { videoId: "TdWAj5O9k4E", videoTitle: "Focus blocks" },
-    { videoId: "TdWAj5O9k4E", videoTitle: "Memory techniques" },
-    { videoId: "TdWAj5O9k4E", videoTitle: "Reflection habits" },
+    { videoId: "IlU-zDU6aQ0", videoTitle: "Focus environment" },
+    { videoId: "E7CwqNHn_Ns", videoTitle: "Note-taking" },
+    { videoId: "SZbdK9e9bxs", videoTitle: "Memory techniques" },
+    { videoId: "IlU-zDU6aQ0", videoTitle: "Reflection habits" },
   ],
   science: [
-    { videoId: "lVqUMK0_PL4", videoTitle: "Scientific thinking" },
-    { videoId: "dNiN_k99Ih4", videoTitle: "Living things" },
-    { videoId: "00jbG_cfGuQ", videoTitle: "Forces and motion" },
-    { videoId: "nq1yq0tuw5s", videoTitle: "Earth and space" },
+    { videoId: "N6IAzlugWw0", videoTitle: "Scientific thinking" },
+    { videoId: "QnQe0xW_JY4", videoTitle: "Living things" },
+    { videoId: "ZM8ECpBuQYE", videoTitle: "Forces and motion" },
+    { videoId: "libKVRa01L8", videoTitle: "Earth and space" },
   ],
   history: [
-    { videoId: "oOg5V7Ruir0", videoTitle: "Timelines" },
-    { videoId: "oOg5V7Ruir0", videoTitle: "Primary sources" },
-    { videoId: "oOg5V7Ruir0", videoTitle: "Causes of change" },
-    { videoId: "oOg5V7Ruir0", videoTitle: "Local history" },
+    { videoId: "Yocja_N5s1I", videoTitle: "Timelines" },
+    { videoId: "n7ndRwqJYDM", videoTitle: "Primary sources and civilisations" },
+    { videoId: "8Nn5uqE3C9w", videoTitle: "Causes of change" },
+    { videoId: "pLlv2o6UfTU", videoTitle: "Evaluating historical claims" },
   ],
   geography: [
-    { videoId: "al-do-Gq74E", videoTitle: "Map skills" },
-    { videoId: "al-do-Gq74E", videoTitle: "Weather and climate" },
-    { videoId: "al-do-Gq74E", videoTitle: "Human geography" },
-    { videoId: "al-do-Gq74E", videoTitle: "Sustainability" },
+    { videoId: "93LLwiMjDko", videoTitle: "Map skills and geography" },
+    { videoId: "HCDVN7DCzYE", videoTitle: "Weather and climate" },
+    { videoId: "93LLwiMjDko", videoTitle: "Human geography" },
+    { videoId: "oJAbATJCugs", videoTitle: "Sustainability" },
   ],
   "health-wellbeing": [
-    { videoId: "GYQS3pP9HZ8", videoTitle: "Balanced living" },
-    { videoId: "GYQS3pP9HZ8", videoTitle: "Physical activity" },
-    { videoId: "GYQS3pP9HZ8", videoTitle: "Sleep and learning" },
-    { videoId: "GYQS3pP9HZ8", videoTitle: "Mental wellbeing" },
+    { videoId: "xyQY8a-ng6g", videoTitle: "Food and the brain" },
+    { videoId: "aUaInS6HIGo", videoTitle: "Movement and health" },
+    { videoId: "5MuIMqhT8DM", videoTitle: "Sleep and learning" },
+    { videoId: "w6T02g5hnT4", videoTitle: "Mental wellbeing and mindfulness" },
   ],
   "digital-skills": [
-    { videoId: "Awfy3cZjiWk", videoTitle: "Online safety" },
-    { videoId: "Awfy3cZjiWk", videoTitle: "Research skills" },
-    { videoId: "Awfy3cZjiWk", videoTitle: "Documents and slides" },
-    { videoId: "Awfy3cZjiWk", videoTitle: "Accessibility tools" },
+    { videoId: "vNpkUyEOa_8", videoTitle: "Online safety" },
+    { videoId: "pLlv2o6UfTU", videoTitle: "Research skills" },
+    { videoId: "E7CwqNHn_Ns", videoTitle: "Documents and notes" },
+    { videoId: "MjPpG2e71Ec", videoTitle: "Privacy tools" },
   ],
   "career-skills": [
-    { videoId: "ZadieB50EF0", videoTitle: "Communication at work" },
-    { videoId: "ZadieB50EF0", videoTitle: "Teamwork" },
-    { videoId: "ZadieB50EF0", videoTitle: "Business basics" },
-    { videoId: "ZadieB50EF0", videoTitle: "Growth mindset" },
+    { videoId: "HAnw168huqA", videoTitle: "Communication at work" },
+    { videoId: "HAnw168huqA", videoTitle: "Teamwork conversations" },
+    { videoId: "3ez10ADR_gM", videoTitle: "Business and economics basics" },
+    { videoId: "5MgBikgcWnY", videoTitle: "Growth mindset for skills" },
+  ],
+  psychology: [
+    { videoId: "vo4pMVb0R6M", videoTitle: "What psychologists study" },
+    { videoId: "bSycdIx-C48", videoTitle: "Memory and learning" },
+    { videoId: "w6T02g5hnT4", videoTitle: "Emotion and calm focus" },
+    { videoId: "UGxGDdQnC1Y", videoTitle: "Thinking carefully with others" },
+  ],
+  philosophy: [
+    { videoId: "1A_CAkYt3GY", videoTitle: "Asking good questions" },
+    { videoId: "NKEhdsnKKHs", videoTitle: "Logic basics" },
+    { videoId: "3_t4obUc51A", videoTitle: "Ethics" },
+    { videoId: "1A_CAkYt3GY", videoTitle: "Knowledge and belief" },
+  ],
+  sociology: [
+    { videoId: "YnCJU6PaCio", videoTitle: "The sociological perspective" },
+    { videoId: "DbTt_ySTjaY", videoTitle: "Groups and norms" },
+    { videoId: "YnCJU6PaCio", videoTitle: "Institutions" },
+    { videoId: "pLlv2o6UfTU", videoTitle: "Inequality, fairness, and media" },
+  ],
+  economics: [
+    { videoId: "3ez10ADR_gM", videoTitle: "Scarcity and choice" },
+    { videoId: "LwLh6ax0zTE", videoTitle: "Supply and demand" },
+    { videoId: "3ez10ADR_gM", videoTitle: "Incentives" },
+    { videoId: "sVKQn2I4HDM", videoTitle: "Everyday economics" },
+  ],
+  astronomy: [
+    { videoId: "0rHUDWjR5gg", videoTitle: "What astronomy is" },
+    { videoId: "libKVRa01L8", videoTitle: "Earth in space" },
+    { videoId: "0rHUDWjR5gg", videoTitle: "Stars and light" },
+    { videoId: "0fKBhvDjuy0", videoTitle: "Scale of the cosmos" },
+  ],
+  "artificial-intelligence": [
+    { videoId: "a0_lo_GDcFw", videoTitle: "What AI is" },
+    { videoId: "4qVRBYAdLAo", videoTitle: "Machine learning" },
+    { videoId: "z-EtmaFJieY", videoTitle: "Using AI ideas carefully" },
+    { videoId: "oV3ZY6tJiA0", videoTitle: "Ethics and neural nets" },
+  ],
+  robotics: [
+    { videoId: "vVTA-E3G8bQ", videoTitle: "What robots are" },
+    { videoId: "O5nskjZ_GoI", videoTitle: "Sensors and computing" },
+    { videoId: "z-EtmaFJieY", videoTitle: "Control and learning" },
+    { videoId: "a0_lo_GDcFw", videoTitle: "Robots and people" },
+  ],
+  english: [
+    { videoId: "saF3-f0XWAY", videoTitle: "Reading foundations" },
+    { videoId: "HAnw168huqA", videoTitle: "Clear sentences" },
+    { videoId: "E7CwqNHn_Ns", videoTitle: "Writing structure" },
+    { videoId: "HAnw168huqA", videoTitle: "Speaking and listening" },
+  ],
+  geometry: [
+    { videoId: "AAY1bsazcgM", videoTitle: "Shapes and perimeter" },
+    { videoId: "AAY1bsazcgM", videoTitle: "Perimeter" },
+    { videoId: "xCdxURXMdFY", videoTitle: "Area" },
+    { videoId: "O-cawByg2aA", videoTitle: "Circles" },
+  ],
+  statistics: [
+    { videoId: "h8EYEJ32oQ8", videoTitle: "Collecting data ideas" },
+    { videoId: "k3aKKasOmIw", videoTitle: "Mean, median, mode" },
+    { videoId: "h8EYEJ32oQ8", videoTitle: "Charts and averages" },
+    { videoId: "pLlv2o6UfTU", videoTitle: "Careful claims" },
+  ],
+  biology: [
+    { videoId: "QnQe0xW_JY4", videoTitle: "Life and cells" },
+    { videoId: "sQK3Yr4Sc_k", videoTitle: "Energy for life" },
+    { videoId: "00jbG_cfGuQ", videoTitle: "Body energy systems" },
+    { videoId: "oJAbATJCugs", videoTitle: "Ecosystems and change" },
+  ],
+  chemistry: [
+    { videoId: "FSyAehMdpyI", videoTitle: "Atoms and elements" },
+    { videoId: "bka20Q9TN6M", videoTitle: "Compounds and matter" },
+    { videoId: "FSyAehMdpyI", videoTitle: "Reactions" },
+    { videoId: "N6IAzlugWw0", videoTitle: "Safety and method" },
+  ],
+  physics: [
+    { videoId: "ZM8ECpBuQYE", videoTitle: "Motion" },
+    { videoId: "ZM8ECpBuQYE", videoTitle: "Forces" },
+    { videoId: "00jbG_cfGuQ", videoTitle: "Energy" },
+    { videoId: "ZM8ECpBuQYE", videoTitle: "Models and graphs" },
+  ],
+  computing: [
+    { videoId: "O5nskjZ_GoI", videoTitle: "Hardware and software" },
+    { videoId: "RBSGKlAvoiM", videoTitle: "Algorithms and data" },
+    { videoId: "O5nskjZ_GoI", videoTitle: "Networks" },
+    { videoId: "HXV3zeQKqGY", videoTitle: "Storing data" },
+  ],
+  cybersecurity: [
+    { videoId: "pLlv2o6UfTU", videoTitle: "Threats basics" },
+    { videoId: "inWWhr5tnEA", videoTitle: "Passwords and MFA" },
+    { videoId: "7bRZdUtmH8k", videoTitle: "Privacy" },
+    { videoId: "sdpxddDzXfE", videoTitle: "Safe response" },
   ],
 };
 
@@ -161,6 +268,96 @@ export const SECTION_PRACTICE: Record<string, PracticeActivity[]> = {
     { title: "Mini P&L", instructions: ["Imagine a lemonade stand.", "List 3 costs and price per cup.", "Estimate cups sold.", "Calculate rough profit."], reflection: "Revenue minus costs = ?" },
     { title: "Feedback practice", instructions: ["Ask for one kind feedback on a skill.", "Listen without arguing.", "Write one improvement.", "Try it once."], reflection: "How will you grow?" },
   ],
+  psychology: [
+    { title: "Evidence check", instructions: ["Write one claim about learning.", "Find one supporting reason.", "Note what evidence is missing.", "Revise the claim kindly."], reflection: "What made the claim clearer?" },
+    { title: "Self-test three", instructions: ["Pick a topic you studied today.", "Write three recall questions.", "Answer without notes.", "Check and fix gaps."], reflection: "Which question was hardest?" },
+    { title: "Focus block", instructions: ["Remove one distraction.", "Set a 10-minute timer.", "Work on one task.", "Rate focus 1 to 5."], reflection: "What helped attention?" },
+    { title: "Respectful disagree", instructions: ["Write a claim you disagree with.", "Write one fair counter-reason.", "Keep language kind.", "Share with a parent if helpful."], reflection: "Did you focus on the idea?" },
+  ],
+  philosophy: [
+    { title: "Define the term", instructions: ["Pick a big word (fairness, knowledge, or duty).", "Write your definition in one sentence.", "Ask someone else's definition.", "Compare differences."], reflection: "Why do definitions matter?" },
+    { title: "Premise practice", instructions: ["Write a short argument.", "Label premises and conclusion.", "Check if the conclusion follows.", "Fix one weak premise."], reflection: "Was the argument valid?" },
+    { title: "Values map", instructions: ["Name two values in a small dilemma.", "List who is affected.", "Write one reasoned choice.", "Discuss with a parent."], reflection: "Which value weighed most?" },
+    { title: "Belief update", instructions: ["Write a belief you hold.", "Add one piece of evidence.", "Note what would change your mind.", "Keep an open mind."], reflection: "How strong is your evidence?" },
+  ],
+  sociology: [
+    { title: "Personal and public", instructions: ["Write one personal habit.", "Name a school or family rule that shapes it.", "Explain the link in one sentence.", "Share with a parent."], reflection: "How does society shape the habit?" },
+    { title: "Norms list", instructions: ["List two home norms and two school norms.", "Mark written or unspoken.", "Note one that helps belonging.", "Ask if any exclude."], reflection: "Which norm is most important?" },
+    { title: "Institution sketch", instructions: ["Pick school, media, or government.", "Write its main purpose.", "List two roles people play.", "Note one outcome it produces."], reflection: "Who sets the rules?" },
+    { title: "Headline rewrite", instructions: ["Find one news headline.", "Rewrite it more precisely.", "Remove exaggeration.", "Check a second source."], reflection: "What changed in meaning?" },
+  ],
+  economics: [
+    { title: "Trade-off note", instructions: ["Choose an evening activity.", "Write the opportunity cost.", "List one benefit of each option.", "Decide and explain why."], reflection: "What did you give up?" },
+    { title: "Price story", instructions: ["Name a popular scarce item.", "Predict what happens to price.", "Give one reason for demand.", "Give one reason for supply."], reflection: "Did supply or demand dominate?" },
+    { title: "Incentive design", instructions: ["Pick a helpful habit (recycling).", "Design one positive incentive.", "Predict an unintended effect.", "Adjust the plan."], reflection: "Who responds to the incentive?" },
+    { title: "Mini budget", instructions: ["List sample income.", "List three expenses.", "Set one saving goal.", "Check if numbers balance."], reflection: "What is left to save?" },
+  ],
+  astronomy: [
+    { title: "Sky journal", instructions: ["With a parent, look at the night sky safely.", "Note moon phase if visible.", "List two objects you see.", "Write one question."], reflection: "What do you want to learn next?" },
+    { title: "Day and night model", instructions: ["Use a ball and lamp.", "Mark your location.", "Rotate the ball.", "Point to day and night sides."], reflection: "What causes day and night?" },
+    { title: "Light travel thought", instructions: ["Write why distant light is old news.", "Give one galaxy example in words.", "Explain to someone.", "Ask one follow-up question."], reflection: "How does distance equal time?" },
+    { title: "Scale order", instructions: ["Order: Earth, solar system, Milky Way.", "Write powers-of-ten style sizes if you can.", "Check with a trusted source.", "Teach someone the order."], reflection: "Which jump in scale surprised you?" },
+  ],
+  "artificial-intelligence": [
+    { title: "AI around you", instructions: ["List three AI tools you use.", "Write what each tries to do.", "Note one risk for each.", "Share with a parent."], reflection: "Which tool needs the most checking?" },
+    { title: "Tiny labelled set", instructions: ["Write three sample messages.", "Label spam or not spam.", "Explain how a model could learn.", "Note a bias risk."], reflection: "Were your labels fair?" },
+    { title: "Prompt practice", instructions: ["Write a clear learning prompt.", "Ask for an explanation, not final answers.", "Rewrite the output in your words.", "Check one fact."], reflection: "Did verification catch an error?" },
+    { title: "Privacy rules", instructions: ["List two things never to paste into AI.", "Write a family AI rule.", "Ask a parent to review it.", "Post the rule near your study space."], reflection: "Which rule protects you most?" },
+  ],
+  robotics: [
+    { title: "Sense decide act", instructions: ["Draw a robot.", "Label a sensor.", "Label a decision.", "Label an actuator."], reflection: "Which part was hardest to label?" },
+    { title: "Sensor match", instructions: ["List light, distance, and sound.", "Match each to a device.", "Say what output it might trigger.", "Check with a parent."], reflection: "Which sensor is most familiar?" },
+    { title: "Safe sequence", instructions: ["Write five robot tidy-up steps.", "Add a stop condition.", "Remove one unsafe step.", "Number the final list."], reflection: "Where is the emergency stop?" },
+    { title: "Benefit and risk", instructions: ["Pick a helpful robot.", "Write one benefit.", "Write one risk.", "Suggest a safety rule."], reflection: "Who should stay in control?" },
+  ],
+  english: [
+    { title: "Main idea find", instructions: ["Read one paragraph.", "Underline the main idea.", "List two details.", "Summarise aloud."], reflection: "Did the first sentence help?" },
+    { title: "Sentence polish", instructions: ["Write three sentences.", "Check subject and verb.", "Read aloud.", "Fix one unclear sentence."], reflection: "Which sentence is clearest?" },
+    { title: "Paragraph build", instructions: ["Choose one idea.", "Write a topic sentence.", "Add two supports.", "Add a closing line."], reflection: "Is it one idea only?" },
+    { title: "30-second talk", instructions: ["Pick a hobby.", "Write three points.", "Practise timing 30 seconds.", "Present to a parent."], reflection: "Was your purpose clear?" },
+  ],
+  geometry: [
+    { title: "Shape hunt", instructions: ["Find five shapes at home.", "Name each.", "Note sides or curves.", "Sketch one."], reflection: "Which property mattered most?" },
+    { title: "Perimeter walk", instructions: ["Measure a book in cm.", "Add all sides.", "Check units.", "Compare with a second object."], reflection: "Did you miss a side?" },
+    { title: "Area grid", instructions: ["Draw a 4 by 3 rectangle on squared paper.", "Count squares.", "Multiply length × width.", "Confirm both match."], reflection: "Why use square units?" },
+    { title: "Circle parts", instructions: ["Draw a circle.", "Mark radius and diameter.", "Write C ≈ πd.", "Write A ≈ πr²."], reflection: "Did you mix radius and diameter?" },
+  ],
+  statistics: [
+    { title: "Fair question", instructions: ["Write one survey question.", "Rewrite it to be fairer.", "Say who should be asked.", "Note sample size."], reflection: "What bias did you remove?" },
+    { title: "MMM practice", instructions: ["Use 2, 3, 3, 7.", "Find mean.", "Find median.", "Find mode."], reflection: "Which measure fits best here?" },
+    { title: "Chart checklist", instructions: ["Invent a bar chart title.", "Name two axes.", "Choose units.", "Write one careful claim."], reflection: "What could mislead a reader?" },
+    { title: "Claim rewrite", instructions: ["Write an overconfident claim.", "Rewrite carefully.", "Add a limit.", "Share with a parent."], reflection: "Is the careful claim clearer?" },
+  ],
+  biology: [
+    { title: "Living checklist", instructions: ["List three living things.", "Tick shared needs.", "Name one non-living thing.", "Explain the difference."], reflection: "What need is shared most?" },
+    { title: "Food chain draw", instructions: ["Start with a plant.", "Add a herbivore.", "Add a carnivore.", "Add sunlight as energy."], reflection: "Where does energy enter?" },
+    { title: "Breathing link", instructions: ["Note resting breathing.", "Do light activity safely.", "Note breathing again.", "Explain energy need simply."], reflection: "Why did rate change?" },
+    { title: "Habitat factors", instructions: ["Pick a park or garden.", "List two living factors.", "List two non-living factors.", "Show one interaction."], reflection: "Which factor is easiest to change?" },
+  ],
+  chemistry: [
+    { title: "Element hunt", instructions: ["Find five element names with a parent.", "Write their symbols if known.", "Say if each is metal or not if you can.", "Keep a mini table."], reflection: "Which element surprised you?" },
+    { title: "Sort matter", instructions: ["Classify water, salad, oxygen.", "Use element, compound, or mixture.", "Explain one choice.", "Check with a parent."], reflection: "Which was trickiest?" },
+    { title: "Reaction story", instructions: ["Describe burning wood carefully.", "Name reactants in words.", "Name products in words.", "State that atoms rearrange."], reflection: "What stayed the same conceptually?" },
+    { title: "Safety card", instructions: ["Write three lab rules.", "Add eye protection.", "Add adult supervision.", "Keep the card visible."], reflection: "Which rule is non-negotiable?" },
+  ],
+  physics: [
+    { title: "Speed calc", instructions: ["Use 100 m in 20 s.", "Write speed = distance/time.", "Calculate.", "Include units."], reflection: "What do the units tell you?" },
+    { title: "Force arrows", instructions: ["Draw a book on a table.", "Add gravity arrow.", "Add support arrow.", "Say if forces balance."], reflection: "Are the arrows equal?" },
+    { title: "Energy trail", instructions: ["Describe a falling ball.", "Name energy stores.", "Describe the bounce transfer.", "Note energy spreading as heat/sound."], reflection: "Where did energy go?" },
+    { title: "Graph sketch", instructions: ["Draw distance-time axes.", "Show walking.", "Show resting as flat.", "Label axes."], reflection: "What does flat mean?" },
+  ],
+  computing: [
+    { title: "Hardware vs software", instructions: ["List three hardware items.", "List three software items.", "Explain one dependency.", "Share with a parent."], reflection: "Can software run without hardware?" },
+    { title: "Algorithm write", instructions: ["Write steps to find the largest of three numbers.", "Number each step.", "Test with 4, 9, 2.", "Fix unclear wording."], reflection: "Did your steps always work?" },
+    { title: "Network sketch", instructions: ["Draw device to router.", "Draw router to internet.", "Label Wi-Fi vs internet.", "Note one trust choice."], reflection: "What leaves your home network?" },
+    { title: "Mini database", instructions: ["Make columns: title, author, read?", "Add three books.", "Sort by read status.", "Ask one query aloud."], reflection: "Why do columns help?" },
+  ],
+  cybersecurity: [
+    { title: "Phish flags", instructions: ["Write a fake urgent message.", "Highlight three red flags.", "Say what you would do instead.", "Tell a parent the plan."], reflection: "Which flag is easiest to spot?" },
+    { title: "MFA check", instructions: ["Pick one important account with a parent.", "Check if MFA is on.", "Turn it on if safe and allowed.", "Store backup codes safely."], reflection: "Did MFA add a second check?" },
+    { title: "Privacy checklist", instructions: ["List five privacy habits.", "Review one app permission together.", "Reduce one unnecessary share.", "Write a weekly reminder."], reflection: "What did you share less of?" },
+    { title: "Incident steps", instructions: ["Write stop, tell adult, secure account.", "Add change password from a safe device.", "Add report if needed.", "Practise saying the steps."], reflection: "Who is your first trusted adult?" },
+  ],
 };
 
 /** Default hands on steps for lesson Practice steps by subject. */
@@ -176,63 +373,145 @@ export const LESSON_PRACTICE_STEPS: Record<string, string[]> = {
   "health-wellbeing": ["Move safely for your body.", "Track how you feel before/after.", "Hydrate.", "Discuss with a trusted adult.", "Choose one habit for this week."],
   "digital-skills": ["Work with a parent on accounts/settings.", "Never share passwords.", "Save work with a clear filename.", "Back up if possible.", "Review what you learned."],
   "career-skills": ["Use a real or practice scenario.", "Write bullets before speaking.", "Time yourself briefly.", "Get feedback from a parent.", "Note one improvement."],
+  psychology: ["Write the question in your own words.", "Give one evidence-based reason.", "Avoid labels about people.", "Check your answer with a parent.", "Note one kind insight."],
+  philosophy: ["Clarify key terms first.", "List premises and a conclusion.", "Check whether the conclusion follows.", "Consider one other viewpoint.", "Revise for clarity."],
+  sociology: ["Connect a personal example to a wider pattern.", "Avoid stereotypes.", "Use respectful language.", "Cite where an idea came from.", "Discuss with a parent."],
+  economics: ["Name the trade-off clearly.", "Use simple numbers when helpful.", "State who benefits and who pays.", "Check your units.", "Explain to a parent."],
+  astronomy: ["Use a model or sketch.", "Label Earth, Sun, or Moon carefully.", "Keep scale honest (huge distances).", "Write one observation.", "Share with a parent."],
+  "artificial-intelligence": ["State the AI task clearly.", "Protect private data.", "Verify important answers.", "Rewrite in your own words.", "Ask a parent if unsure."],
+  robotics: ["Think sense, decide, act.", "Keep safety first.", "Change one variable when testing.", "Label diagrams.", "Discuss with a parent."],
+  english: ["Read aloud when helpful.", "Underline key words.", "Write in full sentences.", "Edit once for clarity.", "Share with someone."],
+  geometry: ["Sketch the shape first.", "Label lengths.", "State the formula.", "Include units.", "Check by estimating."],
+  statistics: ["Order data when needed.", "Show working for mean.", "Check chart scales.", "Avoid overclaiming.", "Cite the sample."],
+  biology: ["Use respectful language about bodies.", "Draw and label.", "Link energy ideas.", "Give real examples.", "Ask a trusted adult about health."],
+  chemistry: ["Never mix chemicals unsupervised.", "Use precise words.", "Classify carefully.", "Respect lab rules.", "Check with a parent."],
+  physics: ["Define quantities.", "Include units.", "Draw force or motion diagrams.", "Check if the model fits.", "Estimate before calculating."],
+  computing: ["Separate hardware and software.", "Write steps before details.", "Test with small examples.", "Protect personal data.", "Ask before installing software."],
+  cybersecurity: ["Pause before clicking.", "Work with a parent on accounts.", "Use unique passwords.", "Enable MFA when possible.", "Report problems early."],
 };
 
-/** Multiple videos per subject so each lesson can get a distinct clip. */
+/** Multiple videos per subject so Practice steps can show a related clip. */
 export const LESSON_VIDEO_POOL: Record<string, VideoRef[]> = {
   maths: [
-    { videoId: "Hmwvj9LN4bY", videoTitle: "Number lines" },
-    { videoId: "2tc0QDfWIQU", videoTitle: "Multiplication groups" },
-    { videoId: "3qFFFKKfPCY", videoTitle: "Word problems" },
-    { videoId: "K7s1uZ2b0Z0", videoTitle: "Fractions visualised" },
+    { videoId: "T5Qf0qSSJFI", videoTitle: "Place value" },
+    { videoId: "FJ5qLWP3Fqo", videoTitle: "Multiplication" },
+    { videoId: "Y6M89-6106I", videoTitle: "Subtraction" },
+    { videoId: "52ZlXsFJULI", videoTitle: "Fractions" },
   ],
   reading: [
-    { videoId: "BFrXj9B0L7E", videoTitle: "Reading strategies" },
-    { videoId: "m9Oj2HmQyXs", videoTitle: "Main idea" },
-    { videoId: "BFrXj9B0L7E", videoTitle: "Vocabulary in context" },
-    { videoId: "m9Oj2HmQyXs", videoTitle: "Writing clearly" },
+    { videoId: "saF3-f0XWAY", videoTitle: "Phonics" },
+    { videoId: "pLlv2o6UfTU", videoTitle: "Critical reading" },
+    { videoId: "E7CwqNHn_Ns", videoTitle: "Notes and paragraphs" },
+    { videoId: "HAnw168huqA", videoTitle: "Clear communication" },
   ],
   coding: [
-    { videoId: "ePgZ8KG816g", videoTitle: "Computer science intro" },
-    { videoId: "lkIFF4maKMU", videoTitle: "Loops and logic" },
-    { videoId: "ePgZ8KG816g", videoTitle: "If/else decisions" },
-    { videoId: "lkIFF4maKMU", videoTitle: "Variables explained" },
+    { videoId: "O5nskjZ_GoI", videoTitle: "Computer science intro" },
+    { videoId: "rfscVS0vtbw", videoTitle: "Python basics" },
+    { videoId: "UB1O30fR-EE", videoTitle: "HTML basics" },
+    { videoId: "RGOj5yH7evk", videoTitle: "Git basics" },
   ],
   money: [
-    { videoId: "zo7iGTvDgsw", videoTitle: "Money basics" },
-    { videoId: "zo7iGTvDgsw", videoTitle: "Budgeting" },
-    { videoId: "zo7iGTvDgsw", videoTitle: "Saving habits" },
+    { videoId: "sVKQn2I4HDM", videoTitle: "Money basics" },
+    { videoId: "7GSGA8SVsOs", videoTitle: "Budgeting" },
+    { videoId: "GtaoP0skPWc", videoTitle: "Interest" },
   ],
   "study-skills": [
-    { videoId: "TdWAj5O9k4E", videoTitle: "Study techniques" },
-    { videoId: "TdWAj5O9k4E", videoTitle: "Focus and memory" },
-    { videoId: "TdWAj5O9k4E", videoTitle: "Exam preparation" },
+    { videoId: "IlU-zDU6aQ0", videoTitle: "Study techniques" },
+    { videoId: "E7CwqNHn_Ns", videoTitle: "Note-taking" },
+    { videoId: "SZbdK9e9bxs", videoTitle: "Memory" },
   ],
   science: [
-    { videoId: "lVqUMK0_PL4", videoTitle: "Living things" },
-    { videoId: "00jbG_cfGuQ", videoTitle: "Gravity and forces" },
-    { videoId: "dNiN_k99Ih4", videoTitle: "Photosynthesis" },
-    { videoId: "nq1yq0tuw5s", videoTitle: "Earth and space" },
+    { videoId: "QnQe0xW_JY4", videoTitle: "Living things" },
+    { videoId: "ZM8ECpBuQYE", videoTitle: "Forces and motion" },
+    { videoId: "sQK3Yr4Sc_k", videoTitle: "Photosynthesis" },
+    { videoId: "libKVRa01L8", videoTitle: "Earth and space" },
   ],
   history: [
-    { videoId: "oOg5V7Ruir0", videoTitle: "Timelines and sources" },
-    { videoId: "oOg5V7Ruir0", videoTitle: "Historical evidence" },
+    { videoId: "Yocja_N5s1I", videoTitle: "Timelines and sources" },
+    { videoId: "n7ndRwqJYDM", videoTitle: "Historical evidence" },
   ],
   geography: [
-    { videoId: "al-do-Gq74E", videoTitle: "Water cycle" },
-    { videoId: "al-do-Gq74E", videoTitle: "Maps and climate" },
+    { videoId: "93LLwiMjDko", videoTitle: "What is geography?" },
+    { videoId: "HCDVN7DCzYE", videoTitle: "Earth systems" },
   ],
   "health-wellbeing": [
-    { videoId: "GYQS3pP9HZ8", videoTitle: "Healthy habits" },
-    { videoId: "GYQS3pP9HZ8", videoTitle: "Wellbeing basics" },
+    { videoId: "xyQY8a-ng6g", videoTitle: "Food and the brain" },
+    { videoId: "5MuIMqhT8DM", videoTitle: "Healthy sleep habits" },
+    { videoId: "w6T02g5hnT4", videoTitle: "Wellbeing basics" },
   ],
   "digital-skills": [
-    { videoId: "Awfy3cZjiWk", videoTitle: "Online safety" },
-    { videoId: "Awfy3cZjiWk", videoTitle: "Digital research" },
+    { videoId: "vNpkUyEOa_8", videoTitle: "Online safety" },
+    { videoId: "pLlv2o6UfTU", videoTitle: "Digital research" },
   ],
   "career-skills": [
-    { videoId: "ZadieB50EF0", videoTitle: "Workplace skills" },
-    { videoId: "ZadieB50EF0", videoTitle: "Career development" },
+    { videoId: "HAnw168huqA", videoTitle: "Workplace skills" },
+    { videoId: "Tt08KmFfIYQ", videoTitle: "CV and applications" },
+  ],
+  psychology: [
+    { videoId: "vo4pMVb0R6M", videoTitle: "Psychology intro" },
+    { videoId: "bSycdIx-C48", videoTitle: "Memory" },
+    { videoId: "UGxGDdQnC1Y", videoTitle: "Social influence" },
+  ],
+  philosophy: [
+    { videoId: "1A_CAkYt3GY", videoTitle: "Philosophy intro" },
+    { videoId: "NKEhdsnKKHs", videoTitle: "How to argue" },
+    { videoId: "3_t4obUc51A", videoTitle: "Ethics" },
+  ],
+  sociology: [
+    { videoId: "YnCJU6PaCio", videoTitle: "Sociology intro" },
+    { videoId: "DbTt_ySTjaY", videoTitle: "Sociological paradigms" },
+  ],
+  economics: [
+    { videoId: "3ez10ADR_gM", videoTitle: "Economics intro" },
+    { videoId: "LwLh6ax0zTE", videoTitle: "Supply and demand" },
+  ],
+  astronomy: [
+    { videoId: "0rHUDWjR5gg", videoTitle: "Astronomy intro" },
+    { videoId: "libKVRa01L8", videoTitle: "Solar system" },
+    { videoId: "0fKBhvDjuy0", videoTitle: "Powers of Ten" },
+  ],
+  "artificial-intelligence": [
+    { videoId: "a0_lo_GDcFw", videoTitle: "AI intro" },
+    { videoId: "4qVRBYAdLAo", videoTitle: "Supervised learning" },
+    { videoId: "aircAruvnKk", videoTitle: "Neural networks" },
+  ],
+  robotics: [
+    { videoId: "vVTA-E3G8bQ", videoTitle: "Robots intro" },
+    { videoId: "O5nskjZ_GoI", videoTitle: "Computing foundations" },
+  ],
+  english: [
+    { videoId: "saF3-f0XWAY", videoTitle: "Phonics" },
+    { videoId: "HAnw168huqA", videoTitle: "Communication" },
+    { videoId: "E7CwqNHn_Ns", videoTitle: "Organising ideas" },
+  ],
+  geometry: [
+    { videoId: "AAY1bsazcgM", videoTitle: "Perimeter" },
+    { videoId: "xCdxURXMdFY", videoTitle: "Area" },
+    { videoId: "O-cawByg2aA", videoTitle: "Circles" },
+  ],
+  statistics: [
+    { videoId: "h8EYEJ32oQ8", videoTitle: "Statistics intro" },
+    { videoId: "k3aKKasOmIw", videoTitle: "Mean median mode" },
+  ],
+  biology: [
+    { videoId: "QnQe0xW_JY4", videoTitle: "Biology intro" },
+    { videoId: "sQK3Yr4Sc_k", videoTitle: "Photosynthesis" },
+  ],
+  chemistry: [
+    { videoId: "FSyAehMdpyI", videoTitle: "Chemistry intro" },
+    { videoId: "bka20Q9TN6M", videoTitle: "Chemistry basics" },
+  ],
+  physics: [
+    { videoId: "ZM8ECpBuQYE", videoTitle: "Physics intro" },
+    { videoId: "00jbG_cfGuQ", videoTitle: "Energy in living systems" },
+  ],
+  computing: [
+    { videoId: "O5nskjZ_GoI", videoTitle: "Computing intro" },
+    { videoId: "HXV3zeQKqGY", videoTitle: "Databases" },
+  ],
+  cybersecurity: [
+    { videoId: "inWWhr5tnEA", videoTitle: "Cybersecurity intro" },
+    { videoId: "sdpxddDzXfE", videoTitle: "Protecting data" },
   ],
 };
 
@@ -242,17 +521,19 @@ function hashSlug(slug: string): number {
   return h;
 }
 
-/** Pick a lesson-specific video from the subject pool. */
-export function videoForLesson(subjectSlug: string, lessonSlug: string): VideoRef | undefined {
-  const pool = LESSON_VIDEO_POOL[subjectSlug];
-  if (pool?.length) return pool[hashSlug(lessonSlug) % pool.length];
-  return SUBJECT_OVERVIEW_VIDEO[subjectSlug];
+/** Topic-accurate Learn video for each subject/lesson (including track categories). */
+export function videoForLesson(subjectSlug: string, lessonSlug: string): VideoRef {
+  return resolveLessonVideo(subjectSlug, lessonSlug);
 }
 
-/** Secondary clip for Practice steps (visual walkthrough). */
-export function practiceVideoForLesson(subjectSlug: string, lessonSlug: string): VideoRef | undefined {
+/** Secondary clip for Practice steps (related topic walkthrough). */
+export function practiceVideoForLesson(subjectSlug: string, lessonSlug: string): VideoRef {
+  const learn = resolveLessonVideo(subjectSlug, lessonSlug);
   const pool = LESSON_VIDEO_POOL[subjectSlug];
-  if (!pool?.length) return undefined;
-  return pool[(hashSlug(lessonSlug) + 1) % pool.length];
+  if (pool?.length) {
+    const alt = pool[(hashSlug(lessonSlug) + 1) % pool.length];
+    if (alt && alt.videoId !== learn.videoId) return alt;
+  }
+  return learn;
 }
 

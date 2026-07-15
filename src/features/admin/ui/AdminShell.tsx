@@ -15,14 +15,18 @@ export async function AdminShell({ children }: { children: React.ReactNode }) {
     <div className={styles.shell}>
       <AdminSidebar
         email={user.email ?? "Admin"}
-        nav={<AdminNav />}
-        footer={
-          <div className={[shellStyles.sidebarBottom, shellStyles.sidebarBottomDark].join(" ")}>
+        headerActions={
+          <div className={styles.sidebarQuickActions}>
             <PreferenceIconGroup
-              className={groupStyles.sidebarGroup}
+              className={[groupStyles.sidebarGroup, styles.sidebarPrefs].filter(Boolean).join(" ")}
               hint="Adjust how the admin console looks on this device."
             />
             <AdminAccountMenu />
+          </div>
+        }
+        nav={<AdminNav />}
+        footer={
+          <div className={[shellStyles.sidebarBottom, shellStyles.sidebarBottomDark].join(" ")}>
             <Link href="/" className={[shellStyles.sidebarBackLink, shellStyles.sidebarBackLinkDark].join(" ")}>
               Back to site
             </Link>

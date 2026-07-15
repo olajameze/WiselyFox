@@ -1,22 +1,21 @@
 import { PrismaClient, ConsentType, PlanTier, UserRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { ALL_CURRICULUM_SUBJECTS } from "../src/data/curriculum";
-import { CURRICULUM_EXTRA } from "../src/data/curriculum-extra";
-import { CURRICULUM_YOUNG_ADULT } from "../src/data/curriculum-young-adult";
-import { CURRICULUM_CAREER, CAREER_SKILLS_SUBJECT } from "../src/data/curriculum-career";
-import { CURRICULUM_TRACKS, trackLessonSlug } from "../src/data/curriculum-tracks";
+import {
+  getAllLessonsForSubject,
+  getAllQuestionsForSubject,
+  getResolvedAgeBands,
+} from "../src/data/curriculum-merge";
 import { enhanceLessonStepsForHandsOn } from "../src/data/lesson-hands-on";
 import { enhanceLessonDepth } from "../src/data/lesson-depth";
 import { enrichLessonSteps } from "../src/data/lesson-enrichment";
 import { DEFAULT_SCHEDULE } from "../src/features/parent/services/schedule.service";
+import { DEMO_CHILD_ACCESS_CODE } from "../src/shared/lib/demo-credentials";
 
 const prisma = new PrismaClient();
 
-/** Fixed demo child access code — shown on sign-in page for local testing */
-export const DEMO_CHILD_ACCESS_CODE = "wfox-demo-alex";
-
 async function main() {
-  const adminHash = await bcrypt.hash("admin123456", 12);
+  const adminHash = await bcrypt.hash("admin123456", 10);
   const admin = await prisma.user.upsert({
     where: { email: "admin@wiselyfox.test" },
     update: {},
@@ -29,7 +28,7 @@ async function main() {
     },
   });
 
-  const demoParentHash = await bcrypt.hash("demo123456", 12);
+  const demoParentHash = await bcrypt.hash("demo123456", 10);
   const trialEnds = new Date();
   trialEnds.setDate(trialEnds.getDate() + 12);
 
@@ -70,7 +69,7 @@ async function main() {
     where: { id: parentProfile.id },
     data: { onboardingDone: true },
   });
-  const childPinHash = await bcrypt.hash("1234", 12);
+  const childPinHash = await bcrypt.hash("1234", 10);
   const childUser = await prisma.user.upsert({
     where: { id: "demo-child-user" },
     update: { name: "Alex" },
@@ -142,41 +141,44 @@ async function main() {
     }
   }
 
-  const rewardCount = await prisma.reward.count({ where: { childId: demoChild.id } });
-  if (rewardCount === 0) {
-    await prisma.reward.createMany({
-      data: [
-        {
-          childId: demoChild.id,
-          type: "badge",
-          title: "5-day streak star",
-          description: "Completed learning 5 days in a row",
-          approved: true,
-        },
-        {
-          childId: demoChild.id,
-          type: "milestone",
-          title: "15 minutes extra screen time",
-          description: "Approved leisure time, earned at 100 XP",
-          approved: false,
-        },
-      ],
+  const streakReward = await prisma.reward.findFirst({
+    where: { childId: demoChild.id, title: "5 day streak star" },
+  });
+  if (!streakReward) {
+    await prisma.reward.create({
+      data: {
+        childId: demoChild.id,
+        type: "streak",
+        title: "5 day streak star",
+        description: "Studied five days in a row, pick a small celebration with a parent",
+        approved: true,
+      },
     });
-  } else {
-    const pending = await prisma.reward.findFirst({
-      where: { childId: demoChild.id, approved: false },
+  }
+
+  const pendingXpReward = await prisma.reward.findFirst({
+    where: { childId: demoChild.id, title: "15 minutes extra screen time" },
+  });
+  if (!pendingXpReward) {
+    await prisma.reward.create({
+      data: {
+        childId: demoChild.id,
+        type: "milestone",
+        title: "15 minutes extra screen time",
+        description: "Approved leisure time, earned at 100 XP",
+        approved: false,
+      },
     });
-    if (!pending) {
-      await prisma.reward.create({
-        data: {
-          childId: demoChild.id,
-          type: "milestone",
-          title: "15 minutes extra screen time",
-          description: "Approved leisure time, earned at 100 XP",
-          approved: false,
-        },
-      });
-    }
+  }
+
+  if (demoChild.learningProfile) {
+    await prisma.learningProfile.update({
+      where: { id: demoChild.learningProfile.id },
+      data: {
+        streakDays: 5,
+        lastStudyDate: new Date(),
+      },
+    });
   }
 
   const assessmentCount = await prisma.assessment.count({ where: { childId: demoChild.id } });
@@ -235,7 +237,7 @@ async function main() {
     });
   }
 
-  const flaggedHash = await bcrypt.hash("demo123456", 12);
+  const flaggedHash = await bcrypt.hash("demo123456", 10);
   const flaggedUser = await prisma.user.upsert({
     where: { email: "suspicious@demo.wiselyfox.test" },
     update: {},
@@ -283,18 +285,22 @@ async function main() {
   }
 
   for (const subject of ALL_CURRICULUM_SUBJECTS) {
+    const allLessons = getAllLessonsForSubject(subject);
+    const ageBands = getResolvedAgeBands(subject);
+    const allQuestions = getAllQuestionsForSubject(subject);
+
     const dbSubject = await prisma.subject.upsert({
       where: { slug: subject.slug },
       update: {
         title: subject.title,
         description: subject.description,
-        ageBands: JSON.stringify(subject.ageBands),
+        ageBands: JSON.stringify(ageBands),
       },
       create: {
         slug: subject.slug,
         title: subject.title,
         description: subject.description,
-        ageBands: JSON.stringify(subject.ageBands),
+        ageBands: JSON.stringify(ageBands),
       },
     });
 
@@ -309,54 +315,7 @@ async function main() {
       },
     });
 
-    for (const lesson of subject.lessons) {
-      const steps = enhanceLessonStepsForHandsOn(
-        subject.slug,
-        lesson,
-        enhanceLessonDepth(subject.slug, lesson.slug, enrichLessonSteps(subject.slug, lesson)),
-      );
-      await prisma.lesson.upsert({
-        where: { subjectId_slug: { subjectId: dbSubject.id, slug: lesson.slug } },
-        update: {
-          title: lesson.title,
-          content: JSON.stringify({ steps }),
-          ageBand: lesson.ageBand,
-          difficulty: lesson.difficulty,
-          durationMinutes: lesson.durationMinutes,
-          accommodationTags: JSON.stringify(["short-text", "step-by-step"]),
-        },
-        create: {
-          subjectId: dbSubject.id,
-          slug: lesson.slug,
-          title: lesson.title,
-          content: JSON.stringify({ steps }),
-          ageBand: lesson.ageBand,
-          difficulty: lesson.difficulty,
-          durationMinutes: lesson.durationMinutes,
-          accommodationTags: JSON.stringify(["short-text", "step-by-step"]),
-        },
-      });
-    }
-
-    const extra = CURRICULUM_EXTRA[subject.slug];
-    const youngAdult = CURRICULUM_YOUNG_ADULT[subject.slug];
-    const career = CURRICULUM_CAREER[subject.slug];
-    const tracks = CURRICULUM_TRACKS[subject.slug];
-    const trackLessons =
-      tracks?.flatMap((track) =>
-        track.lessons.map((lesson) => ({
-          ...lesson,
-          slug: trackLessonSlug(track.slug, lesson.slug),
-          title: `${track.title}: ${lesson.title}`,
-        })),
-      ) ?? [];
-    const supplementalLessons = [
-      ...(extra?.lessons ?? []),
-      ...(youngAdult?.lessons ?? []),
-      ...(career?.lessons ?? []),
-      ...trackLessons,
-    ];
-    for (const lesson of supplementalLessons) {
+    for (const lesson of allLessons) {
       const steps = enhanceLessonStepsForHandsOn(
         subject.slug,
         lesson,
@@ -386,14 +345,6 @@ async function main() {
     }
 
     await prisma.question.deleteMany({ where: { skillId: skill.id } });
-    const trackQuestions = tracks?.flatMap((t) => t.questions) ?? [];
-    const allQuestions = [
-      ...subject.questions,
-      ...(extra?.questions ?? []),
-      ...(youngAdult?.questions ?? []),
-      ...(career?.questions ?? []),
-      ...trackQuestions,
-    ];
     for (const q of allQuestions) {
       await prisma.question.create({
         data: {

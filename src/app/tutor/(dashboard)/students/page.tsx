@@ -34,7 +34,7 @@ export default async function TutorStudentsPage() {
                 <tr key={s.id}>
                   <td>{s.learnerAlias}</td>
                   <td>{s.ageBand}</td>
-                  <td>{s.grantedAt?.toLocaleDateString("en-GB") ?? "—"}</td>
+                  <td>{s.grantedAt?.toLocaleDateString("en-GB") ?? "Not set"}</td>
                   <td>
                     <Link href={`/tutor/students/${s.id}/progress`}>View progress</Link>
                   </td>

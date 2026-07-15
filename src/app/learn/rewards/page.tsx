@@ -26,7 +26,8 @@ export default async function LearnRewardsPage() {
       <header className={styles.pageHeader}>
         <h1>Your rewards</h1>
         <p className={styles.pageSubtitle}>
-          Finish weekly quests to collect stickers. Earn XP from lessons, quizzes, and focus time.
+          Keep a daily study streak for rewards. Finish weekly quests for stickers. Earn XP from
+          lessons, quizzes, and focus time.
         </p>
       </header>
 
@@ -41,7 +42,7 @@ export default async function LearnRewardsPage() {
             <p className={styles.meta}>Coins</p>
           </div>
           <div>
-            <strong>{profile?.streakDays ?? 0} days</strong>
+            <strong>{dashboard.streakDays} days</strong>
             <p className={styles.meta}>Study streak</p>
           </div>
           <div>
@@ -49,15 +50,48 @@ export default async function LearnRewardsPage() {
             <p className={styles.meta}>Stickers collected</p>
           </div>
         </div>
+        {dashboard.nextStreakReward && (
+          <div className={styles.mtLg}>
+            <ProgressBar
+              value={Math.min(
+                100,
+                Math.round((dashboard.streakDays / dashboard.nextStreakReward.days) * 100),
+              )}
+              label={`Next streak reward: ${dashboard.nextStreakReward.title} (${dashboard.nextStreakReward.days} days)`}
+            />
+            <p className={styles.meta}>{dashboard.nextStreakReward.description}</p>
+          </div>
+        )}
         {dashboard.nextMilestone && (
           <div className={styles.mtLg}>
             <ProgressBar
               value={progressToNext}
-              label={`Next parent reward: ${dashboard.nextMilestone.title} (${dashboard.nextMilestoneXp} XP)`}
+              label={`Next XP reward: ${dashboard.nextMilestone.title} (${dashboard.nextMilestoneXp} XP)`}
             />
             <p className={styles.meta}>{dashboard.nextMilestone.description}</p>
           </div>
         )}
+      </Card>
+
+      <Card header={<h2>Daily streak rewards</h2>} className={styles.cardSpaced}>
+        <Alert variant="info" title="Study every day">
+          Complete a lesson, quiz, or focus session once per day to grow your streak. Miss a day and
+          it resets to 1.
+        </Alert>
+        <div className={styles.milestoneList}>
+          {dashboard.streakMilestones.map((m) => {
+            const earned = dashboard.streakDays >= m.days;
+            return (
+              <div key={m.days} className={styles.milestoneItem}>
+                <div>
+                  <strong>{m.title}</strong>
+                  <p className={styles.meta}>{m.description}</p>
+                </div>
+                <Badge variant={earned ? "success" : undefined}>{m.days} days</Badge>
+              </div>
+            );
+          })}
+        </div>
       </Card>
 
       <Card header={<h2>Weekly quests</h2>} className={styles.cardSpaced}>
@@ -119,7 +153,7 @@ export default async function LearnRewardsPage() {
             <div key={r.id} className={styles.rewardItem}>
               <span>
                 <strong>{r.title}</strong>
-                {r.description && <span className={styles.meta}> — {r.description}</span>}
+                {r.description && <span className={styles.meta}>: {r.description}</span>}
               </span>
               <Badge variant="success">Claimed</Badge>
             </div>

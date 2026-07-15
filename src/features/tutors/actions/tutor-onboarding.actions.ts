@@ -38,7 +38,7 @@ export async function signUpTutor(
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) return fail("An account with this email already exists");
 
-  const passwordHash = await bcrypt.hash(password, 12);
+  const passwordHash = await bcrypt.hash(password, 10);
   const now = new Date();
 
   const user = await prisma.user.create({

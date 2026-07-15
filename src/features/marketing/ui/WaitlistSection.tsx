@@ -54,15 +54,15 @@ export function WaitlistSection() {
         as="h2"
         className={`${styles.sectionTitle} ${styles.sectionTitleTrust}`}
         startWhenVisible
-        speed={55}
+        speed={22}
       />
       <WritingText
         text="Get an email when WiselyFox launches publicly. No account required today."
         as="p"
         className={styles.sectionSubtitle}
         startWhenVisible
-        speed={28}
-        delay={200}
+        speed={12}
+        delay={60}
       />
 
       <Card className={styles.waitlistCard}>

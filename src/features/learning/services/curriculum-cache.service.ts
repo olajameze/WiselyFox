@@ -16,7 +16,7 @@ export const getPublishedSubjects = unstable_cache(
       orderBy: { title: "asc" },
     }),
   ["published-subjects"],
-  { revalidate: 120 },
+  { revalidate: 30 },
 );
 
 export function getSubjectWithLessons(slug: string) {

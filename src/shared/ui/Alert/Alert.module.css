@@ -1,7 +1,15 @@
 .alert {
-  padding: var(--space-md) var(--space-lg);
+  padding: var(--space-md);
   border-radius: var(--radius-md);
   border-left: 4px solid;
+  margin-bottom: var(--space-md);
+  word-wrap: break-word;
+}
+
+@media (min-width: 640px) {
+  .alert {
+    padding: var(--space-md) var(--space-lg);
+  }
 }
 
 .info {

@@ -5,11 +5,19 @@ import {
   computeStudyRewards,
   getNextXpMilestone,
 } from "@/features/gamification/services/rewards.service";
-import { REWARD_MILESTONES } from "@/features/gamification/services/reward-offers.service";
+import {
+  REWARD_MILESTONES,
+  STREAK_REWARDS,
+  getNextStreakReward,
+} from "@/features/gamification/services/reward-offers.service";
 
 describe("rewards", () => {
   it("calculates XP with streak bonus", () => {
     expect(calculateXp(10, 7, false)).toBeGreaterThan(10);
+  });
+
+  it("adds a bonus at the 5 day streak", () => {
+    expect(calculateXp(10, 5, false)).toBeGreaterThan(calculateXp(10, 3, false));
   });
 
   it("adds perfect quiz bonus", () => {
@@ -42,5 +50,12 @@ describe("rewards", () => {
   it("finds next XP milestone", () => {
     expect(getNextXpMilestone(30, REWARD_MILESTONES)).toBe(50);
     expect(getNextXpMilestone(400, REWARD_MILESTONES)).toBeNull();
+  });
+
+  it("finds next streak reward", () => {
+    expect(getNextStreakReward(0)?.days).toBe(5);
+    expect(getNextStreakReward(5)?.days).toBe(7);
+    expect(getNextStreakReward(14)).toBeNull();
+    expect(STREAK_REWARDS[0]?.days).toBe(5);
   });
 });

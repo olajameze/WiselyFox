@@ -57,7 +57,7 @@ export function TutorAccessManager({ childId, tutors, existingAccess }: Props) {
       <form className={styles.form} onSubmit={handleGrant}>
         <h3>Grant tutor access</h3>
         <p className={styles.meta}>
-          Tutors see learning progress only — never your child&apos;s profile, PIN, or access code.
+          Tutors see learning progress only, never your child&apos;s profile, PIN, or access code.
         </p>
         <div className={styles.field}>
           <label htmlFor="tutorId">Verified tutor</label>

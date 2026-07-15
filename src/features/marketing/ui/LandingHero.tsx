@@ -10,12 +10,13 @@ const TITLE = "Learning that understands every mind";
 const SUBTITLE =
   "WiselyFox teaches subjects, study skills, and future-ready skills, with calm design, parent visibility, and inclusive support built in from day one.";
 
-const EYEBROW_DELAY = 500;
-const EYEBROW_SPEED = 38;
-const TITLE_DELAY = EYEBROW_DELAY + EYEBROW.length * EYEBROW_SPEED + 350;
-const TITLE_SPEED = 48;
-const SUBTITLE_DELAY = TITLE_DELAY + TITLE.length * TITLE_SPEED + 400;
-const SUBTITLE_SPEED = 22;
+/** Keep hero typing under ~1s so CTAs feel ready quickly. */
+const EYEBROW_DELAY = 40;
+const EYEBROW_SPEED = 12;
+const TITLE_DELAY = 120;
+const TITLE_SPEED = 14;
+const SUBTITLE_DELAY = 280;
+const SUBTITLE_SPEED = 6;
 
 export function LandingHero() {
   return (

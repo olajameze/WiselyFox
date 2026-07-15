@@ -2,6 +2,7 @@ export function calculateXp(base: number, streak: number, perfect: boolean): num
   let xp = base;
   if (perfect) xp += Math.round(base * 0.5);
   if (streak >= 3) xp += Math.round(base * 0.2);
+  if (streak >= 5) xp += Math.round(base * 0.15);
   if (streak >= 7) xp += Math.round(base * 0.3);
   return xp;
 }

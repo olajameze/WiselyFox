@@ -246,3 +246,62 @@
 .tutorSignUpCard {
   padding: var(--space-xl);
 }
+
+/* Compact child sign-in: shorter card and field widths */
+.childAuthCard {
+  max-width: 360px !important;
+  margin-inline: auto;
+}
+
+.childAuthCard.authCard > div {
+  padding: var(--space-lg) var(--space-lg) var(--space-md)
+    calc(var(--space-lg) + 20px) !important;
+}
+
+.childForm {
+  gap: var(--space-sm);
+  align-items: center;
+  max-width: 260px;
+  width: 100%;
+  margin-inline: auto;
+}
+
+.fieldAccessCode {
+  width: 100%;
+  max-width: 260px;
+}
+
+.fieldPin {
+  width: 100%;
+  max-width: 9rem;
+  margin-inline: auto;
+}
+
+.childForm :global(input) {
+  min-height: 40px;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.childForm :global(label) {
+  text-align: center;
+  display: block;
+  width: 100%;
+}
+
+.childAuthCard .formActions {
+  margin-top: var(--space-xs);
+  justify-content: center;
+  width: 100%;
+}
+
+.childAuthCard .authSubtitle {
+  margin-bottom: var(--space-md);
+  font-size: 1rem;
+}
+
+.childAuthCard .link {
+  margin-top: var(--space-sm);
+}

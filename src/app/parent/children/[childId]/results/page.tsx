@@ -175,7 +175,7 @@ export default async function ChildResultsPage({
                       <td>
                         {r.title}
                         {r.description && (
-                          <span className={styles.meta}> — {r.description}</span>
+                          <span className={styles.meta}>: {r.description}</span>
                         )}
                       </td>
                       <td>

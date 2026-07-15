@@ -6,7 +6,11 @@ import { prisma } from "@/shared/lib/prisma";
 import { requireChild } from "@/shared/lib/permissions";
 import { fail, ok, type ActionResult } from "@/shared/lib/errors";
 import { calculateMastery, nextReviewDate } from "@/features/learning/services/learning-engine.service";
-import { maybeOfferReward, maybeOfferQuizReward } from "@/features/gamification/services/reward-offers.service";
+import {
+  maybeOfferReward,
+  maybeOfferQuizReward,
+  maybeOfferStreakReward,
+} from "@/features/gamification/services/reward-offers.service";
 import { computeStudyRewards } from "@/features/gamification/services/rewards.service";
 import { incrementQuest } from "@/features/gamification/services/quest-progress.service";
 import { recordLessonCompletion } from "@/features/learning/services/lesson-progress.service";
@@ -19,7 +23,7 @@ import { logAudit } from "@/server/services/audit.service";
 
 async function applyStudyRewards(childId: string, profileId: string, baseXp: number, perfect = false) {
   const profile = await prisma.learningProfile.findUnique({ where: { id: profileId } });
-  if (!profile) return { xpGain: baseXp, prevXp: 0 };
+  if (!profile) return { xpGain: baseXp, prevXp: 0, streakDays: 0 };
 
   const { xp, coins, streakDays } = computeStudyRewards({
     baseXp,
@@ -41,7 +45,8 @@ async function applyStudyRewards(childId: string, profileId: string, baseXp: num
   });
 
   await maybeOfferReward(childId, prevXp + xp, prevXp);
-  return { xpGain: xp, prevXp };
+  await maybeOfferStreakReward(childId, streakDays);
+  return { xpGain: xp, prevXp, streakDays };
 }
 
 export async function completeLesson(input: {

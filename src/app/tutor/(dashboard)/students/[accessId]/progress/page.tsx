@@ -100,7 +100,7 @@ export default async function TutorStudentProgressPage({ params }: Props) {
         <ul>
           {progress.subjectsCompleted.map((s) => (
             <li key={s.subjectTitle}>
-              {s.subjectTitle} — {new Date(s.completedAt).toLocaleDateString("en-GB")}
+              {s.subjectTitle}: {new Date(s.completedAt).toLocaleDateString("en-GB")}
             </li>
           ))}
         </ul>
@@ -110,7 +110,7 @@ export default async function TutorStudentProgressPage({ params }: Props) {
         <ul>
           {progress.recommendations.map((r) => (
             <li key={r.lessonTitle}>
-              <strong>{r.lessonTitle}</strong> — {r.reason}
+              <strong>{r.lessonTitle}</strong>: {r.reason}
             </li>
           ))}
         </ul>

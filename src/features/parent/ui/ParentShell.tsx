@@ -15,19 +15,25 @@ export async function ParentShell({ children }: { children: React.ReactNode }) {
     <div className={styles.shell}>
       <AppSkipLinks mainId="parent-main" />
       <aside className={styles.sidebar} id="app-nav" aria-label="Parent dashboard navigation">
-        <div className={styles.sidebarTop}>
-          <Link href="/parent" className={styles.sidebarBrand}>
-            WiselyFox
-          </Link>
+        <div className={styles.sidebarChrome}>
+          <div className={styles.sidebarBrandRow}>
+            <Link href="/parent" className={styles.sidebarBrand}>
+              WiselyFox
+            </Link>
+            <div className={styles.sidebarQuickActions}>
+              <PreferenceIconGroup
+                className={[groupStyles.sidebarGroup, styles.sidebarPrefs].filter(Boolean).join(" ")}
+                hint="Adjust how the parent dashboard looks on this device."
+              />
+              <AccountMenu />
+            </div>
+          </div>
           <p className={styles.sidebarUser}>{user.name ?? user.email ?? "Parent account"}</p>
+        </div>
+        <div className={styles.sidebarTop}>
           <ParentNav />
         </div>
-        <div className={[shellStyles.sidebarBottom].join(" ")}>
-          <PreferenceIconGroup
-            className={groupStyles.sidebarGroup}
-            hint="Adjust how the parent dashboard looks on this device."
-          />
-          <AccountMenu />
+        <div className={shellStyles.sidebarBottom}>
           <Link href="/" className={shellStyles.sidebarBackLink}>
             Back to site
           </Link>

@@ -1,8 +1,16 @@
+import type { Metadata } from "next";
 import { Header } from "@/shared/ui/Header/Header";
 import { Footer } from "@/shared/ui/Footer/Footer";
 import { getPublishedTutors } from "@/features/tutors/services/tutor-profile.service";
 import { TutorDirectoryCard } from "@/features/tutors/ui/TutorPublicProfileView";
 import styles from "@/features/tutors/ui/tutor.module.css";
+
+export const metadata: Metadata = {
+  title: "Find a verified tutor",
+  description:
+    "Browse WiselyFox tutor profiles for free. No learning plan required. Sign in as a parent to contact or hire.",
+  alternates: { canonical: "/tutors" },
+};
 
 export default async function PublicTutorsPage() {
   const tutors = await getPublishedTutors();
@@ -14,7 +22,8 @@ export default async function PublicTutorsPage() {
         <header className={styles.pageHeader}>
           <h1>Find a verified tutor</h1>
           <p className={styles.pageSubtitle}>
-            Browse tutor profiles for free — no WiselyFox learning plan required. Sign in as a parent to contact or hire.
+            Browse tutor profiles for free. No WiselyFox learning plan required. Sign in as a parent to
+            contact or hire.
           </p>
         </header>
 

@@ -7,18 +7,26 @@
 }
 
 .header {
-  padding: var(--space-lg);
+  padding: var(--space-md);
   border-bottom: 1px dashed rgba(44, 36, 22, 0.14);
 }
 
 .body {
-  padding: var(--space-lg);
+  padding: var(--space-md);
 }
 
 .footer {
-  padding: var(--space-lg);
+  padding: var(--space-md);
   border-top: 1px dashed rgba(44, 36, 22, 0.14);
   background: rgba(255, 255, 255, 0.35);
+}
+
+@media (min-width: 640px) {
+  .header,
+  .body,
+  .footer {
+    padding: var(--space-lg);
+  }
 }
 
 .elevated {

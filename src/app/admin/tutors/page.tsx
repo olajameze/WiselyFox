@@ -21,8 +21,8 @@ export default async function AdminTutorsPage() {
         tutors.map((tutor) => (
           <Card key={tutor.id} header={<h2>{tutor.user.name ?? tutor.user.email}</h2>}>
             <p>Status: {tutor.verificationStatus}</p>
-            <p>Headline: {tutor.headline || "—"}</p>
-            <p>DOB: {tutor.dateOfBirth?.toLocaleDateString("en-GB") ?? "—"}</p>
+            <p>Headline: {tutor.headline || "Not set"}</p>
+            <p>DOB: {tutor.dateOfBirth?.toLocaleDateString("en-GB") ?? "Not set"}</p>
             <p>Photo: {tutor.profilePhotoUrl ? "Uploaded" : "Missing"}</p>
             {tutor.profilePhotoUrl && (
               // eslint-disable-next-line @next/next/no-img-element

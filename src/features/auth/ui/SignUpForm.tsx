@@ -2,17 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Input, Card, Alert } from "@/shared/ui";
 import { signUpParent } from "@/features/auth/actions/auth.actions";
 import styles from "./auth.module.css";
 
-export function SignUpForm() {
-  const router = useRouter();
-  const params = useSearchParams();
+export function SignUpForm({ plan = "essential" }: { plan?: string }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const plan = params.get("plan") ?? "essential";
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,12 +23,12 @@ export function SignUpForm() {
       termsAccepted: fd.get("terms") === "on",
       privacyAccepted: fd.get("privacy") === "on",
     });
-    setLoading(false);
     if (!result.success) {
+      setLoading(false);
       setError(result.error);
       return;
     }
-    router.push(`/sign-in?registered=1&plan=${plan}`);
+    window.location.assign(`/sign-in?registered=1&plan=${encodeURIComponent(plan)}`);
   }
 
   return (
@@ -94,10 +90,16 @@ export function SignUpForm() {
             </div>
           </form>
           <p className={styles.link}>
-            Already have an account? <Link href="/sign-in">Sign in</Link>
+            Already have an account?{" "}
+            <Link href="/sign-in" prefetch>
+              Sign in
+            </Link>
           </p>
           <p className={styles.link}>
-            Want to tutor instead? <Link href="/tutor/sign-up">Create free tutor account</Link>
+            Want to tutor instead?{" "}
+            <Link href="/tutor/sign-up" prefetch>
+              Create free tutor account
+            </Link>
           </p>
         </Card>
       </div>

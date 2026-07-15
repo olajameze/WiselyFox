@@ -52,7 +52,7 @@ export async function createChildProfile(
     );
   }
 
-  const pinHash = await bcrypt.hash(parsed.data.pin, 12);
+  const pinHash = await bcrypt.hash(parsed.data.pin, 10);
   const accessibility = mergeAccessibilityFromOnboarding(parsed.data.learningNeeds, {
     reducedMotion: parsed.data.reducedMotion,
     calmColors: parsed.data.calmColors,

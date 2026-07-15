@@ -45,6 +45,42 @@ export default async function LearnHomePage() {
 
       <DailyFactCard childId={child.id} fact={dailyFact} />
 
+      <Card className={styles.cardSpaced}>
+        <div className={styles.statsGrid}>
+          <div>
+            <strong>{profile.streakDays} day streak</strong>
+            <p className={styles.meta}>Study a little each day to keep it going</p>
+          </div>
+          <div>
+            <strong>
+              {rewardsDashboard.nextStreakReward
+                ? `${rewardsDashboard.nextStreakReward.days} day reward`
+                : "Streak legend"}
+            </strong>
+            <p className={styles.meta}>
+              {rewardsDashboard.nextStreakReward
+                ? `${Math.max(0, rewardsDashboard.nextStreakReward.days - profile.streakDays)} day(s) to ${rewardsDashboard.nextStreakReward.title}`
+                : "You have unlocked the biggest streak rewards"}
+            </p>
+          </div>
+        </div>
+        {rewardsDashboard.nextStreakReward && (
+          <ProgressBar
+            value={Math.min(
+              100,
+              Math.round((profile.streakDays / rewardsDashboard.nextStreakReward.days) * 100),
+            )}
+            label={`Next streak reward: ${rewardsDashboard.nextStreakReward.title}`}
+            calm={calm}
+          />
+        )}
+        <Link href="/learn/rewards">
+          <Button variant="ghost" size="sm" className={styles.mtSm}>
+            View streak rewards
+          </Button>
+        </Link>
+      </Card>
+
       {recommendations.length > 0 && (
         <Card>
           <h2>Picked for you</h2>

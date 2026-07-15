@@ -275,7 +275,7 @@ export const CURRICULUM: CurriculumSubject[] = [
     slug: "coding",
     title: "Coding Basics",
     description: "Logic, sequences, patterns, and computational thinking.",
-    ageBands: ["8-10", "11-13", "14-16", "17-19", "20-23"],
+    ageBands: ["5-7", "8-10", "11-13", "14-16", "17-19", "20-23"],
     studyGuide: {
       intro:
         "Coding is structured problem solving. Start unplugged with puzzles and sequences before screens.",
@@ -371,7 +371,7 @@ export const CURRICULUM: CurriculumSubject[] = [
     slug: "money",
     title: "Money Literacy",
     description: "Coins, budgeting, saving, and smart spending.",
-    ageBands: ["8-10", "11-13", "14-16", "17-19", "20-23"],
+    ageBands: ["5-7", "8-10", "11-13", "14-16", "17-19", "20-23"],
     studyGuide: {
       intro:
         "Money skills start early. Use real examples, pocket money, and saving goals your child chooses.",
@@ -467,7 +467,7 @@ export const CURRICULUM: CurriculumSubject[] = [
     slug: "study-skills",
     title: "Study Skills",
     description: "Focus, memory, organisation, and learning how to learn.",
-    ageBands: ["8-10", "11-13", "14-16", "17-19", "20-23"],
+    ageBands: ["5-7", "8-10", "11-13", "14-16", "17-19", "20-23"],
     studyGuide: {
       intro:
         "Study skills help every subject. Your brain learns through focus, spacing, sleep, and practice, not just cramming. Build routines, breaks, and reflection.",
@@ -568,16 +568,33 @@ export const CURRICULUM: CurriculumSubject[] = [
 import { enrichStudyGuideSections } from "./study-guide-enrichment";
 import { CAREER_SKILLS_SUBJECT } from "./curriculum-career";
 import { ADDITIONAL_SUBJECTS } from "./curriculum-subjects";
+import { EXTENDED_SUBJECTS } from "./curriculum-extended";
+import { STEM_SUBJECTS } from "./curriculum-stem";
 import { enhanceStudyGuideWithMedia } from "@/data/lesson-hands-on";
+import {
+  getAllLessonsForSubject,
+  getAllQuestionsForSubject,
+  getResolvedAgeBands,
+} from "./curriculum-merge";
 
-export const ALL_CURRICULUM_SUBJECTS = [...CURRICULUM, ...ADDITIONAL_SUBJECTS, CAREER_SKILLS_SUBJECT];
+export const ALL_CURRICULUM_SUBJECTS = [
+  ...CURRICULUM,
+  ...ADDITIONAL_SUBJECTS,
+  ...EXTENDED_SUBJECTS,
+  ...STEM_SUBJECTS,
+  CAREER_SKILLS_SUBJECT,
+];
 
 export function getSubject(slug: string) {
   const subject = ALL_CURRICULUM_SUBJECTS.find((s) => s.slug === slug);
   if (!subject) return undefined;
+  const lessons = getAllLessonsForSubject(subject);
   const enrichedSections = enrichStudyGuideSections(subject.slug, subject.studyGuide.sections);
   return {
     ...subject,
+    ageBands: getResolvedAgeBands(subject),
+    lessons,
+    questions: getAllQuestionsForSubject(subject),
     studyGuide: {
       ...subject.studyGuide,
       sections: enhanceStudyGuideWithMedia(subject.slug, enrichedSections),
@@ -586,5 +603,10 @@ export function getSubject(slug: string) {
 }
 
 export function getAllSubjects() {
-  return ALL_CURRICULUM_SUBJECTS;
+  return ALL_CURRICULUM_SUBJECTS.map((subject) => ({
+    ...subject,
+    ageBands: getResolvedAgeBands(subject),
+    lessons: getAllLessonsForSubject(subject),
+    questions: getAllQuestionsForSubject(subject),
+  }));
 }

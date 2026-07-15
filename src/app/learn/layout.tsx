@@ -20,18 +20,21 @@ export default async function LearnLayout({ children }: { children: React.ReactN
   const child = await getLearnChildByUserId(user.id);
   if (!child?.learningProfile) redirect("/child-sign-in");
 
-  const parent = await prisma.parentProfile.findFirst({
-    where: { children: { some: { id: child.id } } },
-    include: { consents: true },
-  });
+  const profile = child.learningProfile;
+  const rules = getAccommodationRules(profile);
+  const calm = profile.calmColors || profile.reducedMotion;
+
+  const [parent, todaySchedule] = await Promise.all([
+    prisma.parentProfile.findFirst({
+      where: { children: { some: { id: child.id } } },
+      include: { consents: true },
+    }),
+    getTodaySchedule(child.id),
+  ]);
   if (!parent || !isConsentGranted(parent.consents, ConsentType.CHILD_DATA)) {
     redirect("/child-sign-in?error=consent");
   }
 
-  const profile = child.learningProfile;
-  const rules = getAccommodationRules(profile);
-  const calm = profile.calmColors || profile.reducedMotion;
-  const todaySchedule = await getTodaySchedule(child.id);
   const showSchedule = rules.showVisualSchedule || todaySchedule.length > 0;
 
   return (
@@ -47,7 +50,7 @@ export default async function LearnLayout({ children }: { children: React.ReactN
         <header
           className={[styles.learnHeader, calm ? styles.calm : ""].filter(Boolean).join(" ")}
         >
-          <span>Hi, {child.displayName}!</span>
+          <span className={styles.learnGreeting}>Hi, {child.displayName}!</span>
           <div className={styles.learnHeaderActions}>
             {rules.calmMode && <Badge>Calm mode</Badge>}
             {profile.streakDays > 0 && (
@@ -58,13 +61,17 @@ export default async function LearnLayout({ children }: { children: React.ReactN
           </div>
         </header>
         {showSchedule && (
-          <VisualScheduleBar
-            items={todaySchedule}
-            showDefault={rules.showVisualSchedule}
-          />
+          <div className={styles.learnScheduleWrap}>
+            <VisualScheduleBar
+              items={todaySchedule}
+              showDefault={rules.showVisualSchedule}
+            />
+          </div>
         )}
+        <main id="learn-main" className={styles.learnMain}>
+          {children}
+        </main>
         <LearnNav showFocusLink={rules.showTimer} />
-        <main id="learn-main" className={styles.learnMain}>{children}</main>
       </div>
     </LearnAccessibilityShell>
   );

@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Button, Card, Alert, Badge } from "@/shared/ui";
-import { SUBJECT_OVERVIEW_VIDEO } from "@/data/subject-media";
-import { LessonVideoEmbed } from "@/features/learning/ui/LessonVideoEmbed";
+import { Button, Card, Alert } from "@/shared/ui";
 import styles from "./learnActivity.module.css";
 
 type StepCheck = {
@@ -137,8 +135,6 @@ export function StudyGuideViewer({
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [passed, setPassed] = useState<Record<number, boolean>>({});
 
-  const overviewVideo = SUBJECT_OVERVIEW_VIDEO[subjectSlug];
-
   function answer(sectionIndex: number, option: string, section: Section) {
     if (!section.check || passed[sectionIndex]) return;
     setAnswers((prev) => ({ ...prev, [sectionIndex]: option }));
@@ -155,14 +151,10 @@ export function StudyGuideViewer({
     <>
       <Alert variant="info">{intro}</Alert>
 
-      {overviewVideo && (
-        <Card className={styles.lessonCard}>
-          <Badge>Watch first</Badge>
-          <h3 className={styles.lessonHeading}>Visual overview, {subjectTitle}</h3>
-          <p className={styles.learnMeta}>For visual learners: watch, then practise each section below.</p>
-          <LessonVideoEmbed videoId={overviewVideo.videoId} title={overviewVideo.videoTitle} />
-        </Card>
-      )}
+      <Alert variant="info" title="Videos are on a separate page">
+        Watch curated {subjectTitle} clips on the Videos page. This guide stays focused on reading, practice, and
+        checks.
+      </Alert>
 
       <p className={styles.learnMeta}>
         Quick checks: {completedChecks}/{totalChecks}, Hands on sections: {practiceCount}
@@ -187,13 +179,6 @@ export function StudyGuideViewer({
             {isOpen && (
               <div id={panelId} className={styles.guideBody}>
                 <p>{section.content}</p>
-
-                {section.videoId && (
-                  <LessonVideoEmbed
-                    videoId={section.videoId}
-                    title={section.videoTitle ?? `${section.title} video`}
-                  />
-                )}
 
                 {section.keyPoints && section.keyPoints.length > 0 && (
                   <div className={styles.keyFacts}>
@@ -252,11 +237,16 @@ export function StudyGuideViewer({
       })}
 
       <div className={styles.btnGroup}>
+        <Link href={`/learn/videos/${subjectSlug}`}>
+          <Button variant="secondary" size="sm">
+            {subjectTitle} videos
+          </Button>
+        </Link>
         <Link href={`/learn/subjects/${subjectSlug}`}>
           <Button size="sm">Start {subjectTitle} lessons</Button>
         </Link>
         <Link href={`/learn/quiz/${subjectSlug}`}>
-          <Button variant="secondary" size="sm">
+          <Button variant="ghost" size="sm">
             Take {subjectTitle} quiz
           </Button>
         </Link>

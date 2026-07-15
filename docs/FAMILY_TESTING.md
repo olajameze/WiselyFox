@@ -22,7 +22,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | Role | How to sign in | Credentials |
 |------|----------------|-------------|
 | **Parent** | [Sign in](http://localhost:3000/sign-in) | `parent@demo.wiselyfox.test` / `demo123456` |
-| **Child** | [Child sign-in](http://localhost:3000/child-sign-in) | Access code `wfox demo alex` / PIN `1234` |
+| **Child** | [Child sign-in](http://localhost:3000/child-sign-in) | Access code `wfox-demo-alex` / PIN `1234` |
 | **Admin** | [Sign in](http://localhost:3000/sign-in) | `admin@wiselyfox.test` / `admin123456` |
 
 New families can also **create their own parent account** at `/sign-up`, no payment required during the pilot.
@@ -97,7 +97,7 @@ Leave `STRIPE_*`, `RESEND_API_KEY`, `OPENAI_API_KEY`, and `SENTRY_DSN` empty for
 | Variable | Cost | Needed for pilot? |
 |----------|------|-----------------|
 | `CRON_SECRET` | Free (you generate it) | No, only for deployed cron jobs |
-| `TURNSTILE_*` | Free (Cloudflare) | No, optional bot protection at sign-up |
+| `TURNSTILE_*` | Free (Cloudflare) | No, deferred (keys accepted; widget not wired yet) |
 | `SENTRY_DSN` | Free tier available | No, optional error monitoring in prod |
 | `SUPERADMIN_EMAILS` | Free | **Yes in production** — comma-separated emails promoted to admin on login |
 | `INSIGHTS_MIN_COHORT` | Free (app setting) | No, defaults to 30 |
@@ -120,6 +120,7 @@ Leave `STRIPE_*`, `RESEND_API_KEY`, `OPENAI_API_KEY`, and `SENTRY_DSN` empty for
 | No adaptive picks | Complete entrance **Assessment** for the child |
 | Rewards not appearing | Complete lessons/quizzes to earn XP milestones |
 | Build fails on Windows with dev server running | Stop `npm run dev`, then `npm run build` |
+| "Too many attempts" on sign-in or child PIN | Auth is rate limited (10 tries / 15 min). Wait a few minutes, or restart the dev server to clear the in-memory limiter. |
 
 ## Support contacts
 

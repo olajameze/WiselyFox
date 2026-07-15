@@ -6,7 +6,7 @@ export const TUTOR_FEE_BPS = 500; // 5%
 export const TUTOR_FEE_COPY = {
   title: "Platform fee disclosure",
   body:
-    "Joining WiselyFox as a tutor is free. WiselyFox deducts a 5% platform fee only when you receive payment through the marketplace — from the full session price, or from the deposit if you take deposits. Stripe card processing fees are additional.",
+    "Joining WiselyFox as a tutor is free. WiselyFox deducts a 5% platform fee only when you receive payment through the marketplace, from the full session price, or from the deposit if you take deposits. Stripe card processing fees are additional.",
   example: "Example: a £40 session means you receive £38.00; £2.00 is the WiselyFox platform fee.",
 } as const;
 

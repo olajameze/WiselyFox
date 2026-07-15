@@ -61,7 +61,7 @@
   --motion-fast: 150ms;
   --motion-base: 250ms;
   --motion-slow: 400ms;
-  --motion-page-turn: 980ms;
+  --motion-page-turn: 280ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-page-turn: cubic-bezier(0.28, 0.72, 0.38, 1);
 }
@@ -173,6 +173,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -197,6 +198,8 @@ body {
     ),
     var(--color-bg);
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  min-height: 100dvh;
 }
 
 .learn-accessibility-root {

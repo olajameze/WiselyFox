@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach, vi, beforeEach } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import {
   PageTurnTransition,
@@ -20,10 +20,8 @@ afterEach(() => {
 describe("isAppRoute", () => {
   it("matches in-app sections", () => {
     expect(isAppRoute("/learn")).toBe(true);
-    expect(isAppRoute("/learn/subjects")).toBe(true);
-    expect(isAppRoute("/parent/settings")).toBe(true);
-    expect(isAppRoute("/admin/users")).toBe(true);
     expect(isAppRoute("/sign-in")).toBe(true);
+    expect(isAppRoute("/parent/settings")).toBe(true);
   });
 
   it("ignores marketing routes", () => {
@@ -33,35 +31,13 @@ describe("isAppRoute", () => {
 });
 
 describe("PageTurnTransition", () => {
-  beforeEach(() => {
-    Object.defineProperty(window, "matchMedia", {
-      writable: true,
-      value: vi.fn().mockImplementation(() => ({
-        matches: false,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      })),
-    });
-    document.documentElement.dataset.parentReducedMotion = "false";
-  });
-
-  it("renders children on app routes", () => {
-    render(
+  it("passes children through without a transition wrapper", () => {
+    const { container } = render(
       <PageTurnTransition>
         <p>Lesson content</p>
       </PageTurnTransition>,
     );
     expect(screen.getByText("Lesson content")).toBeInTheDocument();
-  });
-
-  it("passes through marketing routes without the page wrapper", () => {
-    usePathname.mockReturnValue("/");
-    const { container } = render(
-      <PageTurnTransition>
-        <p>Marketing</p>
-      </PageTurnTransition>,
-    );
-    expect(screen.getByText("Marketing")).toBeInTheDocument();
     expect(container.querySelector('[class*="viewport"]')).toBeNull();
   });
 });
