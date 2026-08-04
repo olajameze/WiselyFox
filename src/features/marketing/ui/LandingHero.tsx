@@ -29,13 +29,18 @@ export function LandingHero() {
             <span>WiselyFox learning journal</span>
           </div>
 
-          <WritingText
-            text={EYEBROW}
-            as="span"
-            className={styles.eyebrow}
-            delay={EYEBROW_DELAY}
-            speed={EYEBROW_SPEED}
-          />
+          <span className={styles.eyebrowWrap}>
+            <svg viewBox="0 0 320 32" aria-hidden="true">
+              <path d="M12 18 C 48 2, 96 2, 124 18 S 208 30, 266 14 S 296 8, 308 14" />
+            </svg>
+            <WritingText
+              text={EYEBROW}
+              as="span"
+              className={styles.eyebrow}
+              delay={EYEBROW_DELAY}
+              speed={EYEBROW_SPEED}
+            />
+          </span>
           <WritingText
             text={TITLE}
             as="h1"

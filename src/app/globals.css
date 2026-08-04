@@ -2,20 +2,26 @@
 
 :root {
   /* Notebook study-book palette */
-  --notebook-paper: #faf6ed;
+  --bg-paper-cream: #faf6ed;
+  --bg-desk-wood: #2b1d13;
+  --accent-blue-trust: #0f53c9;
+  --accent-orange-warm: #f97316;
+  --accent-green-calm: #1f8f59;
+
+  --notebook-paper: var(--bg-paper-cream);
   --notebook-paper-shadow: #ebe4d4;
   --notebook-line: rgba(168, 192, 216, 0.55);
   --notebook-margin: #d4847a;
   --notebook-ink: #2c2416;
   --notebook-ink-muted: #4a4034;
-  --notebook-desk: #3d2e22;
+  --notebook-desk: var(--bg-desk-wood);
   --notebook-desk-light: #5c4632;
   --notebook-spine: #8b6914;
   --notebook-spine-dark: #5a4208;
-  --notebook-trust: #0f2d6b;
+  --notebook-trust: var(--accent-blue-trust);
   --notebook-learn: #1746a0;
-  --notebook-warm: #c2410c;
-  --notebook-calm: #2d6a4f;
+  --notebook-warm: var(--accent-orange-warm);
+  --notebook-calm: var(--accent-green-calm);
   --notebook-line-height: 2rem;
 
   /* App tokens mapped to notebook theme */
@@ -188,6 +194,7 @@ body {
   font-size: 1rem;
   line-height: 1.65;
   color: var(--color-text);
+  letter-spacing: -0.01em;
   background:
     repeating-linear-gradient(
       to bottom,
@@ -200,6 +207,16 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
   min-height: 100dvh;
+}
+
+small,
+label,
+button,
+a[role="button"],
+input,
+select,
+textarea {
+  letter-spacing: -0.02em;
 }
 
 .learn-accessibility-root {
