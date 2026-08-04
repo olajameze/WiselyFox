@@ -1,8 +1,9 @@
 .footer:not(.footerNotebook) {
   background: var(--color-footer);
-  color: rgba(255, 255, 255, 0.85);
-  padding: var(--space-2xl) 0 var(--space-xl);
+  color: var(--color-text-muted);
+  padding: var(--space-2xl) 0;
   margin-top: var(--space-2xl);
+  border-top: 1px solid var(--color-border);
 }
 
 .footerNotebook {
@@ -19,6 +20,15 @@
     radial-gradient(ellipse 100% 60% at 50% 100%, var(--notebook-desk-light) 0%, transparent 55%),
     linear-gradient(165deg, var(--notebook-desk) 0%, var(--notebook-spine-dark) 100%);
   color: var(--notebook-ink-muted);
+  position: relative;
+}
+
+.footerNotebook::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 42%);
+  pointer-events: none;
 }
 
 .grid {
@@ -27,57 +37,90 @@
   grid-template-columns: 1fr;
 }
 
+.gridNotebook {
+  gap: var(--space-lg);
+}
+
+.section {
+  min-width: 0;
+}
+
 .footer:not(.footerNotebook) .brand {
   font-family: var(--font-display);
-  font-size: 1.5rem;
-  color: white;
+  font-size: 1.75rem;
+  color: var(--color-text);
   margin-bottom: var(--space-sm);
 }
 
-.tagline {
-  font-size: 0.9375rem;
-  line-height: 1.6;
+.footer:not(.footerNotebook) .tagline {
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 35ch;
 }
 
 .footer:not(.footerNotebook) .section h3 {
-  color: white;
+  color: var(--color-text);
   font-family: var(--font-sans);
-  font-size: 0.875rem;
+  font-size: 0.9rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-lg);
 }
 
-.links {
+.footer:not(.footerNotebook) .links {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  gap: var(--space-md);
 }
 
 .footer:not(.footerNotebook) .links a {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-muted);
   text-decoration: none;
-  font-size: 0.9375rem;
+  font-size: 1rem;
+  transition: color var(--motion-base);
 }
 
 .footer:not(.footerNotebook) .links a:hover {
-  color: white;
-}
-
-.bottom {
-  margin-top: var(--space-xl);
-  padding-top: var(--space-lg);
-  font-size: 0.8125rem;
-  text-align: center;
+  color: var(--color-accent);
 }
 
 .footer:not(.footerNotebook) .bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-xl);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  border-top: 1px solid var(--color-border);
 }
 
 @media (min-width: 768px) {
   .grid {
     grid-template-columns: 2fr 1fr 1fr 1fr;
+  }
+
+  .gridNotebook {
+    align-items: start;
+  }
+}
+
+@media (max-width: 767px) {
+  .footerNotebook {
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+  }
+
+  .notebookWrap {
+    padding: var(--space-lg) var(--space-md) var(--space-lg) calc(var(--space-md) + 20px);
+    transform: none;
+  }
+
+  .brandNotebook {
+    font-size: 1.75rem;
+  }
+
+  .taglineNotebook {
+    max-width: none;
   }
 }
 
@@ -99,11 +142,11 @@
     var(--notebook-paper);
   border-radius: 2px 8px 8px 2px;
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.28),
+    0 12px 34px rgba(17, 19, 24, 0.24),
     inset 48px 0 0 0 var(--notebook-paper),
     inset 50px 0 0 0 var(--notebook-margin);
   position: relative;
-  transform: rotate(0.25deg);
+  transform: rotate(0.18deg);
 }
 
 .notebookWrap::before {
@@ -190,7 +233,7 @@
 }
 
 .linksNotebook {
-  gap: 0;
+  gap: 0.25rem;
 }
 
 .linksNotebook a {
@@ -198,12 +241,12 @@
   font-size: 1rem;
   font-weight: 600;
   color: var(--notebook-ink-muted);
-  min-height: var(--line-height);
+  min-height: 2rem;
   display: inline-flex;
   align-items: center;
   position: relative;
   width: fit-content;
-  padding-bottom: 1px;
+  padding: 0.125rem 0;
 }
 
 .linksNotebook a::after {

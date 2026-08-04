@@ -19,7 +19,7 @@
 }
 
 .success {
-  background: #e8f5ee;
+  background: var(--color-success-soft);
   border-color: var(--color-success);
   color: var(--color-success);
 }
@@ -27,7 +27,7 @@
 .warning {
   background: var(--color-reward-soft);
   border-color: var(--color-reward);
-  color: #92400e;
+  color: var(--color-reward-dark);
 }
 
 .error {

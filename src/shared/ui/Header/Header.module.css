@@ -3,8 +3,8 @@
   top: 0;
   z-index: 100;
   height: var(--header-height);
-  background: color-mix(in srgb, var(--color-surface) 95%, transparent);
-  backdrop-filter: blur(8px);
+  background: var(--color-surface);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -178,8 +178,10 @@
   flex-direction: column;
   gap: var(--space-md);
   padding: var(--space-lg);
-  border-top: 1px solid var(--color-border);
-  background: var(--color-surface);
+  border-top: 1px solid rgba(18, 62, 145, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 253, 248, 0.98) 0%, rgba(246, 239, 227, 0.98) 100%);
+  backdrop-filter: blur(10px);
 }
 
 .mobileNav a {
@@ -260,6 +262,7 @@
     linear-gradient(165deg, var(--notebook-desk) 0%, var(--notebook-spine-dark) 100%);
   border-bottom: none;
   padding: var(--space-sm) var(--space-lg) 0;
+  box-shadow: 0 8px 26px rgba(17, 19, 24, 0.2);
 }
 
 .headerNotebook .inner {
@@ -283,7 +286,7 @@
     var(--notebook-paper);
   border-radius: 8px 8px 2px 2px;
   box-shadow:
-    0 6px 20px rgba(0, 0, 0, 0.28),
+    0 6px 20px rgba(17, 19, 24, 0.24),
     inset 44px 0 0 0 var(--notebook-paper),
     inset 46px 0 0 0 var(--notebook-margin);
   color: var(--notebook-ink);

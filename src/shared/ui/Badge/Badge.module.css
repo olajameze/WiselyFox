@@ -14,13 +14,13 @@
 }
 
 .success {
-  background: #e8f5ee;
+  background: var(--color-success-soft);
   color: var(--color-success);
 }
 
 .warning {
   background: var(--color-reward-soft);
-  color: #92400e;
+  color: var(--color-reward-dark);
 }
 
 .danger {

@@ -36,11 +36,11 @@ export default async function HomePage() {
       <a href="#main" className="skip-link">
         Skip to content
       </a>
-      <Header signedIn={!!session?.user} variant="notebook" />
+      <Header signedIn={!!session?.user} />
       <main id="main">
         <LandingPage />
       </main>
-      <Footer variant="notebook" />
+      <Footer />
     </>
   );
 }
