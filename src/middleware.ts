@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { auth } from "@/features/auth/auth";
+import { shouldBlockCrossRoleMutation } from "@/shared/lib/rbac";
 
 const parentRoutes = ["/parent", "/app"];
 const childRoutes = ["/child", "/learn"];
@@ -9,6 +10,7 @@ const publicTutorPaths = ["/tutor/sign-up", "/tutor/sign-in"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const method = request.method.toUpperCase();
 
   if (publicTutorPaths.some((p) => pathname.startsWith(p))) {
     return NextResponse.next();
@@ -26,6 +28,13 @@ export async function middleware(request: NextRequest) {
     tutorRoutes.some((r) => pathname.startsWith(r));
 
   if (!isProtected) return NextResponse.next();
+
+  if (shouldBlockCrossRoleMutation({ role, method, pathname })) {
+    return NextResponse.json(
+      { error: "Forbidden: role boundary violation" },
+      { status: 403 },
+    );
+  }
 
   if (!session?.user) {
     const isTutorRoute = tutorRoutes.some((r) => pathname.startsWith(r));

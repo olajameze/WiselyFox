@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { confirmTutorBooking } from "@/features/tutors/actions/tutor-booking.actions";
 import { TutorFeeDisclosure } from "./TutorFeeDisclosure";
+import { StripeBookingCheckout } from "./StripeBookingCheckout";
 import { Button, Alert } from "@/shared/ui";
 import styles from "./tutor.module.css";
 
@@ -26,6 +27,7 @@ export function TutorBookingForm({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [feeAccepted, setFeeAccepted] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -55,10 +57,11 @@ export function TutorBookingForm({
     }
     router.refresh();
     if (result.data.clientSecret) {
-      alert("Booking confirmed. Complete payment in Stripe when checkout is wired.");
-    } else {
-      alert("Booking confirmed.");
+      setClientSecret(result.data.clientSecret);
+      return;
     }
+
+    alert("Booking confirmed.");
   }
 
   return (
@@ -110,6 +113,7 @@ export function TutorBookingForm({
       <Button type="submit" disabled={loading || !feeAccepted}>
         {loading ? "Confirming…" : "Confirm booking"}
       </Button>
+      {clientSecret && <StripeBookingCheckout clientSecret={clientSecret} />}
     </form>
   );
 }
