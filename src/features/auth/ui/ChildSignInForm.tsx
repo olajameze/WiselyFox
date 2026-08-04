@@ -35,7 +35,10 @@ export function ChildSignInForm({ consentError = false }: { consentError?: boole
     <div className={styles.authPage}>
       <Card className={`${styles.authCard} ${styles.childAuthCard}`}>
         <h1 className={styles.authTitle}>Hi there!</h1>
-        <p className={styles.authSubtitle}>Enter your access code and PIN from your parent</p>
+        <p className={styles.authSubtitle}>No email needed. Use your family access code and PIN.</p>
+        <p className={styles.childHelperText}>
+          Family access code + your secret PIN gives you quick, child-friendly sign in.
+        </p>
         {consentError && (
           <Alert variant="warning" title="Learning paused">
             A parent must renew child data consent in Settings before learning can continue.
@@ -47,7 +50,7 @@ export function ChildSignInForm({ consentError = false }: { consentError?: boole
         </Alert>
         <form className={`${styles.form} ${styles.childForm}`} onSubmit={handleSubmit}>
           <div className={styles.fieldAccessCode}>
-            <Input name="accessCode" label="Access code" required autoComplete="off" />
+            <Input name="accessCode" label="Family access code" required autoComplete="off" />
           </div>
           <div className={styles.fieldPin}>
             <Input

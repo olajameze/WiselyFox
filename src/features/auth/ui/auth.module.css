@@ -298,8 +298,17 @@
 }
 
 .childAuthCard .authSubtitle {
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-xs);
   font-size: 1rem;
+}
+
+.childHelperText {
+  margin: 0 0 var(--space-md);
+  text-align: center;
+  font-family: var(--font-notebook);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--notebook-ink-muted);
 }
 
 .childAuthCard .link {
