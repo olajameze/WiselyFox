@@ -19,7 +19,8 @@
 ## Bot / abuse signals
 
 - Disposable-email screening on parent sign-up (`fraud-detection.service.ts`)
-- Cloudflare Turnstile on sign-up is deferred (env keys accepted; widget not wired yet)
+- Cloudflare Turnstile on the landing page waitlist is wired end-to-end (`turnstile.service.ts` server-side siteverify + `TurnstileWidget`). When `TURNSTILE_SECRET_KEY` is unset (local dev / preview) tokens bypass verification; in any environment with the secret set, missing/invalid tokens are rejected server-side before any DB write or Resend send.
+- Per-IP + email rate limiting on the `waitlist` action (10 / 15 min) plus waitlist email deduplication via the unique `WaitlistLead.email` index.
 
 ## Secrets
 

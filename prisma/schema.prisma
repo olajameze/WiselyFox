@@ -531,10 +531,11 @@ model DataExportJob {
   createdAt DateTime @default(now())
 }
 
-model WaitlistSignup {
+model WaitlistLead {
   id             String    @id @default(cuid())
   email          String    @unique
   name           String?
+  ageBands       String    @default("[]")
   marketingOptIn Boolean   @default(false)
   source         String    @default("landing")
   notifiedAt     DateTime?

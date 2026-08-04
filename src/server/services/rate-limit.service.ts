@@ -1,6 +1,6 @@
 /** In-memory sliding-window rate limiter for auth actions (per process). */
 
-export type RateLimitAction = "sign-up" | "sign-in" | "child-pin";
+export type RateLimitAction = "sign-up" | "sign-in" | "child-pin" | "waitlist";
 
 const WINDOW_MS = 15 * 60 * 1000;
 const MAX_ATTEMPTS = 10;

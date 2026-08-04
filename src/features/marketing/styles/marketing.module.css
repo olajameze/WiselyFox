@@ -686,3 +686,99 @@
   justify-content: center;
   width: 100%;
 }
+
+/* ── Waitlist: age-band chips ─────────────────────────────────────── */
+
+.waitlistFieldset {
+  border: 1px solid rgba(44, 36, 22, 0.14);
+  border-radius: 10px;
+  padding: var(--space-md);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.waitlistLegend {
+  font-family: var(--font-handwriting);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--notebook-trust);
+  padding: 0 var(--space-xs);
+}
+
+.waitlistChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.waitlistChip {
+  position: relative;
+  cursor: pointer;
+}
+
+.waitlistChip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.waitlistChip span {
+  display: inline-block;
+  padding: calc(var(--space-xs) + 2px) var(--space-md);
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(44, 36, 22, 0.18);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--notebook-ink);
+  font-family: var(--font-notebook);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.waitlistChip input:checked + span {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  box-shadow: 2px 3px 0 rgba(44, 36, 22, 0.16);
+}
+
+.waitlistChip input:focus-visible + span {
+  outline: 3px solid var(--color-primary-soft);
+  outline-offset: 2px;
+}
+
+/* ── Waitlist: Cloudflare Turnstile ───────────────────────────────── */
+
+.turnstileWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 72px;
+}
+
+.turnstileSlot {
+  min-height: 65px;
+}
+
+.turnstileError {
+  font-family: var(--font-notebook);
+  font-size: 0.8125rem;
+  color: var(--color-danger);
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .waitlistChip span {
+    width: 100%;
+    text-align: center;
+  }
+}
