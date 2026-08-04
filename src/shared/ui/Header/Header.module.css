@@ -257,7 +257,7 @@
   height: auto;
   background:
     radial-gradient(ellipse 120% 80% at 50% 0%, var(--notebook-desk-light) 0%, transparent 55%),
-    linear-gradient(165deg, var(--notebook-desk) 0%, #2a1f16 100%);
+    linear-gradient(165deg, var(--notebook-desk) 0%, var(--notebook-spine-dark) 100%);
   border-bottom: none;
   padding: var(--space-sm) var(--space-lg) 0;
 }

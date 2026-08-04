@@ -5,7 +5,7 @@
 
   background:
     radial-gradient(ellipse 120% 80% at 50% 0%, var(--notebook-desk-light) 0%, transparent 55%),
-    linear-gradient(165deg, var(--notebook-desk) 0%, #2a1f16 100%);
+    linear-gradient(165deg, var(--notebook-desk) 0%, var(--notebook-spine-dark) 100%);
   padding: 0 0 var(--space-2xl);
 }
 
@@ -52,7 +52,7 @@
 .bookSpine {
   display: none;
   background:
-    linear-gradient(90deg, var(--notebook-spine-dark) 0%, var(--notebook-spine) 35%, #c9a227 50%, var(--notebook-spine) 65%, var(--notebook-spine-dark) 100%);
+    linear-gradient(90deg, var(--notebook-spine-dark) 0%, var(--notebook-spine) 35%, var(--notebook-spine) 50%, var(--notebook-spine) 65%, var(--notebook-spine-dark) 100%);
   border-radius: 6px 0 0 6px;
   position: relative;
   transform-origin: center right;

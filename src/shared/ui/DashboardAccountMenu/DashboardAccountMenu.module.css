@@ -99,7 +99,7 @@
 }
 
 .accountPanelDark {
-  background: #2a1f16;
+  background: var(--notebook-spine-dark);
   border-color: rgba(250, 246, 237, 0.2);
 }
 

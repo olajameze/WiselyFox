@@ -16,8 +16,8 @@
   margin-top: 0;
   padding: var(--space-lg) var(--space-lg) var(--space-2xl);
   background:
-    radial-gradient(ellipse 100% 60% at 50% 100%, #5c4632 0%, transparent 55%),
-    linear-gradient(165deg, #3d2e22 0%, #2a1f16 100%);
+    radial-gradient(ellipse 100% 60% at 50% 100%, var(--notebook-desk-light) 0%, transparent 55%),
+    linear-gradient(165deg, var(--notebook-desk) 0%, var(--notebook-spine-dark) 100%);
   color: var(--notebook-ink-muted);
 }
 

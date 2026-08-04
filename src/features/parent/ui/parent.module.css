@@ -9,7 +9,7 @@
   grid-template-columns: 1fr;
   background:
     radial-gradient(ellipse 100% 60% at 50% 0%, var(--notebook-desk-light) 0%, transparent 55%),
-    linear-gradient(165deg, var(--notebook-desk) 0%, #2a1f16 100%);
+    linear-gradient(165deg, var(--notebook-desk) 0%, var(--notebook-spine-dark) 100%);
 }
 
 @media (min-width: 960px) {
@@ -525,7 +525,7 @@
   margin: 0 auto;
   background:
     radial-gradient(ellipse 100% 60% at 50% 0%, var(--notebook-desk-light) 0%, transparent 55%),
-    linear-gradient(165deg, var(--notebook-desk) 0%, #2a1f16 100%);
+    linear-gradient(165deg, var(--notebook-desk) 0%, var(--notebook-spine-dark) 100%);
 }
 
 @media (display-mode: standalone) {

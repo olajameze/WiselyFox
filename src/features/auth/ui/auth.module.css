@@ -10,7 +10,7 @@
   padding: var(--space-lg);
   background:
     radial-gradient(ellipse 120% 80% at 50% 0%, var(--notebook-desk-light) 0%, transparent 55%),
-    linear-gradient(165deg, var(--notebook-desk) 0%, #2a1f16 100%);
+    linear-gradient(165deg, var(--notebook-desk) 0%, var(--notebook-spine-dark) 100%);
 }
 
 .notebookOpen {
@@ -35,7 +35,7 @@
       90deg,
       var(--notebook-spine-dark) 0%,
       var(--notebook-spine) 35%,
-      #c9a227 50%,
+      var(--notebook-spine) 50%,
       var(--notebook-spine) 65%,
       var(--notebook-spine-dark) 100%
     );

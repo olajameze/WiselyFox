@@ -5,7 +5,7 @@
   grid-template-columns: 1fr;
   background:
     radial-gradient(ellipse 100% 60% at 50% 0%, var(--notebook-desk-light) 0%, transparent 55%),
-    linear-gradient(165deg, var(--notebook-desk) 0%, #2a1f16 100%);
+    linear-gradient(165deg, var(--notebook-desk) 0%, var(--notebook-spine-dark) 100%);
 }
 
 @media (display-mode: standalone) {
@@ -31,7 +31,7 @@
       165deg,
       var(--notebook-spine-dark) 0%,
       var(--notebook-spine) 45%,
-      #c9a227 55%,
+      var(--notebook-spine) 55%,
       var(--notebook-spine) 100%
     );
   color: var(--notebook-paper);
@@ -111,7 +111,7 @@
       165deg,
       var(--notebook-spine-dark) 0%,
       var(--notebook-spine) 45%,
-      #c9a227 55%,
+      var(--notebook-spine) 55%,
       var(--notebook-spine) 100%
     );
   color: var(--notebook-paper);
