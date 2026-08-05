@@ -2,8 +2,7 @@ import Link from "next/link";
 import { requireParentOwner } from "@/shared/lib/permissions";
 import { ParentNav } from "./ParentNav";
 import { AccountMenu } from "./AccountMenu";
-import { PreferenceIconGroup } from "@/shared/ui/PreferenceIconGroup/PreferenceIconGroup";
-import groupStyles from "@/shared/ui/PreferenceIconGroup/PreferenceIconGroup.module.css";
+import { SidebarSignOut } from "@/shared/ui/DashboardAccountMenu/SidebarSignOut";
 import { AppSkipLinks } from "@/shared/ui/AppSkipLinks/AppSkipLinks";
 import shellStyles from "@/shared/ui/DashboardAccountMenu/DashboardAccountMenu.module.css";
 import styles from "./parent.module.css";
@@ -21,10 +20,6 @@ export async function ParentShell({ children }: { children: React.ReactNode }) {
               WiselyFox
             </Link>
             <div className={styles.sidebarQuickActions}>
-              <PreferenceIconGroup
-                className={[groupStyles.sidebarGroup, styles.sidebarPrefs].filter(Boolean).join(" ")}
-                hint="Adjust how the parent dashboard looks on this device."
-              />
               <AccountMenu />
             </div>
           </div>
@@ -34,6 +29,7 @@ export async function ParentShell({ children }: { children: React.ReactNode }) {
           <ParentNav />
         </div>
         <div className={shellStyles.sidebarBottom}>
+          <SidebarSignOut />
           <Link href="/" className={shellStyles.sidebarBackLink}>
             Back to site
           </Link>

@@ -22,11 +22,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
-  if (event.type === "customer.subscription.updated" || event.type === "customer.subscription.deleted") {
+  if (
+    event.type === "customer.subscription.created" ||
+    event.type === "customer.subscription.updated" ||
+    event.type === "customer.subscription.deleted"
+  ) {
     const sub = event.data.object as Stripe.Subscription & { current_period_end?: number };
-    const dbSub = await prisma.subscription.findFirst({
-      where: { stripeSubscriptionId: sub.id },
-    });
+    const metadataParentId = sub.metadata?.parentId as string | undefined;
+    const dbSub = metadataParentId
+      ? await prisma.subscription.findFirst({ where: { parentId: metadataParentId } })
+      : await prisma.subscription.findFirst({ where: { stripeSubscriptionId: sub.id } });
+
     if (dbSub) {
       const statusMap: Record<string, "ACTIVE" | "CANCELED" | "PAST_DUE" | "TRIALING"> = {
         active: "ACTIVE",
@@ -37,10 +43,34 @@ export async function POST(request: Request) {
       await prisma.subscription.update({
         where: { id: dbSub.id },
         data: {
+          plan: sub.metadata?.plan === "FAMILY" ? "FAMILY" : "ESSENTIAL",
           status: statusMap[sub.status] ?? "ACTIVE",
+          stripeSubscriptionId: sub.id,
+          billingInterval:
+            sub.metadata?.interval === "ANNUAL" ? "ANNUAL" : "MONTHLY",
           currentPeriodEnd: sub.current_period_end
             ? new Date(sub.current_period_end * 1000)
             : undefined,
+        },
+      });
+    }
+  }
+
+  if (event.type === "invoice.payment_succeeded") {
+    const invoice = event.data.object as Stripe.Invoice & {
+      subscription?: string | Stripe.Subscription | null;
+      period_start?: number;
+      period_end?: number;
+    };
+    if (invoice.subscription) {
+      await prisma.subscription.updateMany({
+        where: { stripeSubscriptionId: String(invoice.subscription) },
+        data: {
+          status: "ACTIVE",
+          currentPeriodEnd: invoice.period_end
+            ? new Date(invoice.period_end * 1000)
+            : undefined,
+          trialEndsAt: null,
         },
       });
     }

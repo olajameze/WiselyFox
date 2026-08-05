@@ -5,6 +5,7 @@ import { PwaProvider } from "@/features/pwa/ui/PwaProvider";
 import { ThemeProvider } from "@/shared/ui/ThemeProvider/ThemeProvider";
 import { PageTurnTransition } from "@/shared/ui/PageTurn/PageTurnTransition";
 import { NavigationProgress } from "@/shared/ui/NavigationProgress/NavigationProgress";
+import { GlobalDisplayControls } from "./GlobalDisplayControls";
 import { THEME_STORAGE_KEY } from "@/shared/lib/theme";
 import { getSiteUrl } from "@/shared/lib/site-config";
 
@@ -87,6 +88,7 @@ export default function RootLayout({
           <PwaProvider>
             <NavigationProgress />
             <PageTurnTransition>{children}</PageTurnTransition>
+            <GlobalDisplayControls />
           </PwaProvider>
         </ThemeProvider>
       </body>

@@ -1,0 +1,143 @@
+/* ── EPIC 1 — Multi-step Notebook Login Portal (flow shell) ───────── */
+
+.loginPage {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% 0%, var(--notebook-desk-light) 0%, transparent 55%),
+    linear-gradient(165deg, var(--notebook-desk) 0%, var(--notebook-spine-dark) 100%);
+}
+
+/* Geometric fine-line technical crosshairs on Indigo Ink backdrop */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(to right, var(--notebook-line), transparent 1px),
+    linear-gradient(to bottom, var(--notebook-line), transparent 1px),
+    radial-gradient(circle at 50% 50%, transparent 0, transparent 40px, var(--notebook-line) 41px, var(--notebook-line) 42px, transparent 43px);
+  background-size: 44px 44px, 44px 44px, 220px 220px;
+  background-position: center;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, #000 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, #000 40%, transparent 100%);
+}
+
+.notebookOpen {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  max-width: 480px;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.35));
+  z-index: 1;
+}
+
+@media (min-width: 768px) {
+  .notebookOpen {
+    grid-template-columns: 44px 1fr;
+    max-width: 560px;
+  }
+}
+
+.bookSpine {
+  display: none;
+  background:
+    linear-gradient(
+      90deg,
+      var(--notebook-spine-dark) 0%,
+      var(--notebook-spine) 35%,
+      var(--notebook-spine) 50%,
+      var(--notebook-spine) 65%,
+      var(--notebook-spine-dark) 100%
+    );
+  border-radius: 6px 0 0 6px;
+}
+
+@media (min-width: 768px) {
+  .bookSpine {
+    display: block;
+  }
+}
+
+.page {
+  position: relative;
+  width: 100%;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(var(--notebook-line-height) - 1px),
+      var(--notebook-line) calc(var(--notebook-line-height) - 1px),
+      var(--notebook-line) var(--notebook-line-height)
+    ),
+    var(--notebook-paper);
+  border-radius: 2px 10px 10px 2px;
+  box-shadow:
+    inset 48px 0 0 0 var(--notebook-paper),
+    inset 50px 0 0 0 var(--notebook-margin),
+    0 2px 0 rgba(44, 36, 22, 0.06);
+  overflow: hidden;
+}
+
+.page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 18px;
+  bottom: 0;
+  width: 14px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 26px,
+    rgba(44, 36, 22, 0.08) 26px,
+    rgba(44, 36, 22, 0.08) 30px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.stepWrap {
+  position: relative;
+  z-index: 1;
+  padding: calc(var(--space-xl) + 8px) var(--space-xl) var(--space-xl)
+    calc(var(--space-xl) + 24px);
+  animation: stepFade var(--motion-base) var(--ease-out) forwards;
+}
+
+/* Slide-in transition between steps, obeying prefers-reduced-motion */
+@keyframes stepFade {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepWrap {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .notebookOpen {
+    filter: none;
+  }
+}
+
+@media (max-width: 479px) {
+  .stepWrap {
+    padding: var(--space-lg) var(--space-lg) var(--space-lg) calc(var(--space-lg) + 20px);
+  }
+}

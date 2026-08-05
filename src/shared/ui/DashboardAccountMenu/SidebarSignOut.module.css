@@ -1,0 +1,50 @@
+.form {
+  margin: 0;
+}
+
+.signOut {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  border-radius: var(--radius-sm);
+  background: rgba(220, 38, 38, 0.06);
+  color: var(--color-danger);
+  font-family: var(--font-notebook);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--ease-out),
+    color var(--motion-fast) var(--ease-out);
+}
+
+.signOut:hover {
+  background: rgba(220, 38, 38, 0.14);
+  color: var(--color-danger);
+}
+
+.signOut:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Dark variant (admin sidebar) */
+.signOutDark {
+  border-color: rgba(250, 246, 237, 0.35);
+  background: rgba(0, 0, 0, 0.15);
+  color: rgba(250, 246, 237, 0.92);
+}
+
+.signOutDark:hover {
+  background: rgba(250, 246, 237, 0.12);
+  color: var(--notebook-paper);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signOut {
+    transition: none;
+  }
+}

@@ -1,4 +1,4 @@
-import { SignInForm } from "@/features/auth/ui/SignInForm";
+import { LoginFlow } from "@/features/auth/ui/LoginFlow";
 
 export default async function TutorSignInPage({
   searchParams,
@@ -6,5 +6,5 @@ export default async function TutorSignInPage({
   searchParams: Promise<{ callbackUrl?: string }>;
 }) {
   const params = await searchParams;
-  return <SignInForm variant="tutor" callbackUrl={params.callbackUrl} />;
+  return <LoginFlow defaultRole="tutor" callbackUrl={params.callbackUrl} />;
 }

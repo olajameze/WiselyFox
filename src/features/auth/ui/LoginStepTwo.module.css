@@ -1,0 +1,305 @@
+/* ── EPIC 1 · Task 1.2 — Personalized Login Form Card ────────────── */
+
+.stepTwo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+.back {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-notebook);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--notebook-trust);
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.back:hover {
+  color: var(--notebook-warm);
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.brandMark {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+}
+
+.brandName {
+  font-family: var(--font-handwriting);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--notebook-trust);
+  line-height: 1.1;
+}
+
+.tagline {
+  font-family: var(--font-notebook);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.rolePill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  align-self: flex-start;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  background: var(--color-primary-soft);
+  color: var(--notebook-trust);
+  font-family: var(--font-notebook);
+  font-size: 0.9375rem;
+}
+
+.roleDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.error {
+  margin: 0;
+  color: var(--color-danger);
+  font-family: var(--font-notebook);
+  font-size: 0.9375rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.credBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Large, soft, rounded inputs (border-radius 1rem ≈ rounded-2xl) */
+.credBlock :global(input) {
+  border-radius: 1rem;
+  min-height: 52px;
+  font-size: 1.0625rem;
+}
+
+.oauthRow {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.oauthButton {
+  flex: 1 1 10rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 46px;
+  padding: 0 var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  cursor: pointer;
+  font-family: var(--font-notebook);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text);
+  box-shadow: 0 3px 0 var(--color-border);
+  transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.oauthButton:hover {
+  transform: translate3d(0, -1px, 0);
+  background: var(--color-bg);
+}
+
+.oauthButton:active {
+  transform: translate3d(0, 2px, 0);
+  box-shadow: 0 1px 0 var(--color-border);
+}
+
+/* Student PIN block */
+.studentBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.fieldLabel {
+  font-family: var(--font-handwriting);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--notebook-trust);
+  align-self: flex-start;
+}
+
+.accessCodeInput {
+  width: 100%;
+  text-align: center;
+  border-radius: 1rem;
+  min-height: 52px;
+  font-size: 1.0625rem;
+}
+
+.pinRow {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+}
+
+.pinSlot {
+  width: 52px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-handwriting);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--notebook-trust);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.pinPad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+  width: 100%;
+  max-width: 240px;
+}
+
+.pinKey {
+  min-height: 56px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-family: var(--font-handwriting);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--color-border);
+  transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.pinKey:hover {
+  transform: translate3d(0, -1px, 0);
+  background: var(--color-primary-soft);
+}
+
+.pinKey:active {
+  transform: translate3d(0, 2px, 0);
+  box-shadow: 0 1px 0 var(--color-border);
+}
+
+.pinPadSpacer {
+  min-height: 56px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-xs);
+}
+
+.submit {
+  width: 100%;
+  max-width: 340px;
+  min-height: 52px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: white;
+  font-family: var(--font-handwriting);
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--color-primary-dark);
+  transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 180ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    background var(--motion-fast) var(--ease-out);
+}
+
+.submit:hover:not(:disabled) {
+  transform: translate3d(0, -1px, 0);
+  background: var(--color-primary-dark);
+}
+
+.submit:active:not(:disabled) {
+  transform: translate3d(0, 2px, 0);
+  box-shadow: 0 1px 0 var(--color-primary-dark);
+}
+
+.submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  align-items: center;
+  text-align: center;
+}
+
+.forgotLink {
+  font-family: var(--font-notebook);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--notebook-trust);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.forgotLink:hover {
+  color: var(--notebook-warm);
+}
+
+.legalNote {
+  font-family: var(--font-notebook);
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 40ch;
+}
+
+.legalNote a {
+  color: var(--notebook-trust);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oauthButton,
+  .pinKey,
+  .submit {
+    transition: none;
+    transform: none;
+  }
+}

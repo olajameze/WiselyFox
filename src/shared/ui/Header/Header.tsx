@@ -3,8 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/shared/ui/Button/Button";
-import { PreferenceIconGroup } from "@/shared/ui/PreferenceIconGroup/PreferenceIconGroup";
-import groupStyles from "@/shared/ui/PreferenceIconGroup/PreferenceIconGroup.module.css";
 import styles from "./Header.module.css";
 
 interface HeaderProps {
@@ -85,14 +83,7 @@ export function Header({ signedIn, variant = "default" }: HeaderProps) {
                 <Button size="sm">Join free</Button>
               </Link>
             </>
-          )}
-          {isNotebook && (
-            <PreferenceIconGroup
-              variant="notebook"
-              className={[groupStyles.headerGroup, styles.headerPrefs, styles.headerPrefsDesktop].join(" ")}
-              hint="Adjust how the landing page looks on this device."
-            />
-          )}
+)}
           {menuOpen ? (
             <button
               type="button"
@@ -132,16 +123,9 @@ export function Header({ signedIn, variant = "default" }: HeaderProps) {
               {item.label}
             </Link>
           ))}
-          <Link href="/#inclusive" onClick={() => setMenuOpen(false)}>
+<Link href="/#inclusive" onClick={() => setMenuOpen(false)}>
             Inclusive learning
           </Link>
-          {isNotebook && (
-            <PreferenceIconGroup
-              variant="notebook"
-              className={[groupStyles.headerGroup, styles.mobilePrefs].join(" ")}
-              hint="Adjust how the landing page looks on this device."
-            />
-          )}
           <div className={styles.mobileAuth}>
             <Link href="/sign-in" onClick={() => setMenuOpen(false)}>
               Sign in (parent)

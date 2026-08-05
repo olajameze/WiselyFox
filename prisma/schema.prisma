@@ -123,6 +123,10 @@ model User {
   tutorProfile  TutorProfile?
   auditLogs     AuditLog[] @relation("AuditActor")
   pushSubscriptions PushSubscription[]
+  studentProposals TutorProposal[] @relation("StudentProposals")
+  tutorProposals   TutorProposal[] @relation("TutorProposals")
+  studentAssignments LessonAssignment[] @relation("StudentAssignments")
+  tutorAssignments   LessonAssignment[] @relation("TutorAssignments")
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -649,4 +653,44 @@ model TutorStudentAccess {
   updatedAt       DateTime                 @updatedAt
 
   @@unique([tutorProfileId, childId])
+}
+
+enum ProposalStatus {
+  PENDING_PARENT_APPROVAL
+  APPROVED_AND_PAID
+  DECLINED
+}
+
+model TutorProposal {
+  id        String         @id @default(cuid())
+  studentId String
+  student   User           @relation("StudentProposals", fields: [studentId], references: [id])
+  tutorId   String
+  tutor     User           @relation("TutorProposals", fields: [tutorId], references: [id])
+  parentId  String // Links back to the student's managing parent
+  status    ProposalStatus @default(PENDING_PARENT_APPROVAL)
+  notes     String? // Student note explaining interest
+  createdAt DateTime       @default(now())
+}
+
+enum AssignmentStatus {
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  REVIEWED
+}
+
+model LessonAssignment {
+  id                String           @id @default(cuid())
+  studentId         String
+  student           User             @relation("StudentAssignments", fields: [studentId], references: [id])
+  tutorId           String
+  tutor             User             @relation("TutorAssignments", fields: [tutorId], references: [id])
+  parentId          String // Tracks the parent who manages the account
+  lessonTitle       String
+  tutorNotes        String // Written instructions or review comments
+  status            AssignmentStatus @default(ASSIGNED)
+  isFlaggedByParent Boolean          @default(false)
+  parentFlagReason  String?
+  createdAt         DateTime         @default(now())
 }

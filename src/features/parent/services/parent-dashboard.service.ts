@@ -64,6 +64,33 @@ export async function getParentNotifications(userId: string) {
   });
 }
 
+export async function getLessonAssignmentsForParent(parentId: string, childIds: string[]) {
+  const links = await prisma.tutorStudentAccess.findMany({
+    where: { childId: { in: childIds } },
+    select: {
+      childId: true,
+      tutorProfile: { select: { user: { select: { name: true } } } },
+    },
+  });
+  const tutorByChild = new Map(links.map((l) => [l.childId, l.tutorProfile.user.name]));
+
+  const assignments = await prisma.lessonAssignment.findMany({
+    where: { parentId },
+    orderBy: { createdAt: "desc" },
+    take: 25,
+  });
+
+  return assignments.map((a) => ({
+    id: a.id,
+    lessonTitle: a.lessonTitle,
+    tutorNotes: a.tutorNotes,
+    status: a.status,
+    isFlaggedByParent: a.isFlaggedByParent,
+    createdAt: a.createdAt.toISOString(),
+    tutorName: tutorByChild.get(a.studentId) ?? null,
+  }));
+}
+
 export async function getRecentActivity(childIds: string[]) {
   const [sessions, rewards] = await Promise.all([
     prisma.studySession.findMany({

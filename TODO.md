@@ -1,17 +1,24 @@
-# TODO — Waitlist CTA Production Pipeline
+# WiselyFox Build — Implementation TODO
 
-- [x] Explore repo, gather context, get plan approved
-- [x] Task 1: Rename/migrate Prisma model to `WaitlistLead` + `ageBands`
-- [x] Task 2a: Add `turnstile.service.ts` (Cloudflare siteverify)
-- [x] Task 2b: Extend rate limiter with `waitlist` action
-- [x] Task 2c: Rewrite `waitlist.actions.ts` with `joinWaitlistAction` (Zod + Turnstile + upsert)
-- [x] Task 2d: Add `TurnstileWidget.tsx` client component
-- [x] Task 2e: Update `WaitlistSection.tsx` (age-band chips + widget + graceful errors)
-- [x] Task 2f: Add waitlist chip + turnstile styles to `marketing.module.css`
-- [x] Task 3: Rework `sendWaitlistConfirmationEmail` (typography-optimized Resend email)
-- [x] Tests: turnstile (5), waitlist email (3), waitlist action/schema (5) — all green
-- [x] Run `prisma migrate dev` + `prisma generate`
-- [x] Verify waitlist unit tests pass (13/13)
-- [x] Fix stray `r` at top of `marketing.module.css` (CSS corruption)
-- [x] Fix waitlist migration (PostgreSQL auto-renames constraints on table rename)
-- [x] Verify migration status (schema up to date) + typecheck (`npx tsc --noEmit`)
+## EPIC 1: Multi-step Notebook Login Portal ✅ (COMPLETE)
+- [x] LoginFlow, LoginStepOne/Two, FoxMascot, CSS modules
+- [x] Wire `/sign-in` and `/tutor/sign-in` to LoginFlow
+- [x] Lint, typecheck, E2E login-flow tests pass
+
+## EPIC 2: Production Stripe Subscription Infrastructure ✅ (COMPLETE)
+- [x] billing.service.ts, billing.actions.ts, Stripe webhook
+
+## EPIC 3: Governance & Proposal Pipelines ✅ (COMPLETE)
+- [x] Prisma TutorProposal, proposal actions, ObserverLedger
+
+## EPIC 4: Tutor Assignment & Parent Monitoring ✅ (COMPLETE)
+- [x] Prisma LessonAssignment, assignment actions, ParentWorkspaceMonitor
+
+## QA / Final
+- [x] Unit tests (billing, proposals, assignments, RBAC) — 17 passing
+- [x] `npm run lint`, `npm run test` (unit)
+- [ ] Global ThemeToggle + Accessibility on all pages
+- [ ] Test login details + super-admin note on login form
+- [ ] Standalone Sign out button on all dashboards
+- [ ] `npm run test:e2e`
+- [ ] Update `docs/CHANGELOG.md`
