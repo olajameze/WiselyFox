@@ -17,8 +17,8 @@
 ## QA / Final
 - [x] Unit tests (billing, proposals, assignments, RBAC) — 17 passing
 - [x] `npm run lint`, `npm run test` (unit)
-- [ ] Global ThemeToggle + Accessibility on all pages
-- [ ] Test login details + super-admin note on login form
-- [ ] Standalone Sign out button on all dashboards
-- [ ] `npm run test:e2e`
-- [ ] Update `docs/CHANGELOG.md`
+- [x] Global ThemeToggle + Accessibility on all pages
+- [x] Test login details + super-admin note on login form
+- [x] Standalone Sign out button on all dashboards
+- [x] `npm run test:e2e`
+- [x] Update `docs/CHANGELOG.md`

@@ -62,11 +62,6 @@ export function SignInForm({
             </Alert>
           )}
           {error && <Alert variant="error">{error}</Alert>}
-          {!isTutor && (
-            <Alert variant="info" title="Demo accounts">
-              Parent: parent@demo.wiselyfox.test / demo123456, Admin: admin@wiselyfox.test / admin123456
-            </Alert>
-          )}
           <form className={styles.form} onSubmit={handleSubmit}>
             <Input name="email" type="email" label="Email" required autoComplete="email" />
             <Input name="password" type="password" label="Password" required autoComplete="current-password" />
