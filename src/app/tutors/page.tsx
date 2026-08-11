@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tutors" },
 };
 
+// This line prevents Next.js from trying to fetch data at build time.
+export const dynamic = "force-dynamic";
+
 export default async function PublicTutorsPage() {
   const tutors = await getPublishedTutors();
 
