@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { TutorCardGrid } from "@/shared/lib/TutorCardGrid";
 import type { TutorCardData } from "@/features/tutors/actions/getTutors";
 import { getAllSubjects } from "@/data/curriculum";
@@ -15,8 +15,7 @@ export default function TutorsPage() {
   const [selectedSubject, setSelectedSubject] = useState<string>("");
   const [selectedAgeBand, setSelectedAgeBand] = useState<string>("");
 
-  // Fetch initial data on component mount
-  useState(() => {
+  useEffect(() => {
     // We need to create an async function inside here to call the server action
     const fetchTutors = async () => {
       // Because getTutors is a server action, we need to import it differently
@@ -27,7 +26,7 @@ export default function TutorsPage() {
       setLoading(false);
     };
     fetchTutors();
-  }, []);
+  }, []); // Empty dependency array means this effect runs once on mount
 
   const allSubjects = useMemo(() => getAllSubjects().map(s => s.title).sort(), []);
 
