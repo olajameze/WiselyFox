@@ -1,0 +1,141 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative; /* For the vertical line */
+}
+
+/* Subtle vertical layout path line */
+.gridContainer::before {
+  content: '';
+  position: absolute;
+  left: 1rem; /* Adjust as needed to align with left track */
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: rgba(var(--color-accent-fox-amber), 0.15); /* Using Accent Fox Amber with transparency */
+  z-index: -1; /* Ensure it's behind content */
+}
+
+@media (max-width: 768px) {
+  .gridContainer {
+    grid-template-columns: 1fr; /* Single column on mobile */
+    padding: 1rem;
+  }
+
+  .gridContainer::before {
+    left: 0.5rem; /* Adjust for mobile */
+  }
+}
+
+.card {
+  background-color: var(--color-neutral-card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.profileHeader {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.profilePicture {
+  border-radius: 50%;
+  border: 3px solid var(--color-primary-navy);
+  object-fit: cover;
+}
+
+.verifiedBadge {
+  position: absolute;
+  bottom: 0;
+  right: -10px;
+  background-color: #E6F4F1; /* Soft teal background */
+  color: var(--color-supporting-teal);
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px; /* Pill shape */
+  font-size: 0.75rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.badgeIcon {
+  width: 1em;
+  height: 1em;
+}
+
+.tutorName {
+  color: var(--color-primary-navy);
+  margin-bottom: 0.5rem;
+}
+
+.subjectTags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.subjectTag {
+  background-color: var(--color-neutral-background-canvas);
+  color: var(--color-neutral-muted-text);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.tutorBio {
+  font-size: 0.9rem;
+  color: var(--color-neutral-main-text);
+  margin-bottom: 1rem;
+  min-height: 60px; /* Ensure consistent card height */
+}
+
+.hourlyRate {
+  font-weight: bold;
+  color: var(--color-primary-navy);
+  margin-bottom: 1.5rem;
+}
+
+.bookButton {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--color-primary-action-button);
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--button-shadow-color); /* Duolingo-style 3D tactility */
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+  will-change: transform, box-shadow; /* Optimize for animation */
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .bookButton {
+    transition: none;
+  }
+}
+
+.bookButton:active {
+  transform: translateY(4px); /* Move button down */
+  box-shadow: 0 0 0 var(--button-shadow-color); /* Clear shadow */
+}

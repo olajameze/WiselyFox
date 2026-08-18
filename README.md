@@ -12,7 +12,8 @@ Child-safe, parent-guided adaptive learning platform.
 ```bash
 npm install
 cp .env.example .env
-# Edit .env — set AUTH_SECRET (min 16 chars)
+# Edit .env — ensure DATABASE_URL matches the Docker config below.
+# Set AUTH_SECRET to a random string (32+ chars recommended).
 
 docker compose up -d postgres
 npm run db:migrate:deploy
@@ -34,15 +35,15 @@ See **[docs/FAMILY_TESTING.md](docs/FAMILY_TESTING.md)** for demo credentials, a
 ## Scripts
 
 | Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Production build |
-| `npm run test` | Vitest unit/component tests |
-| `npm run test:e2e` | Playwright E2E tests |
+| ------- | ----------- |
+| `npm run dev` | Start development server      |
+| `npm run build` | Production build              |
+| `npm run test` | Vitest unit/component tests   |
+| `npm run test:e2e` | Playwright E2E tests          |
 | `npm run db:migrate` | Create/apply migrations in development |
 | `npm run db:migrate:deploy` | Apply migrations in production/CI |
 | `npm run db:setup` | Start local Postgres (Docker), migrate, and seed |
-| `npm run db:seed` | Seed subjects and admin user |
+| `npm run db:seed` | Seed subjects and admin user  |
 
 ## Default super admin (seed)
 

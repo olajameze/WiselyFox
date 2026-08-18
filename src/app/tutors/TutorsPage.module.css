@@ -1,0 +1,41 @@
+.filters {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterGroup label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.filterSelect {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  min-width: 200px;
+}
+
+.filterSelect:disabled {
+  background-color: #eee;
+  cursor: not-allowed;
+}
+
+.loadingState {
+  text-align: center;
+  padding: 4rem 0;
+  font-size: 1.2rem;
+  color: #555;
+}

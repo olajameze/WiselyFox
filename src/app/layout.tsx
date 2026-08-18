@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { GlobalDisplayControls } from "./GlobalDisplayControls";
+import { Header } from "@/shared/ui/Header/Header";
+import { Footer } from "@/shared/ui/Footer/Footer";
 
 /**
  * This is the root layout for the entire application. It applies global
@@ -20,8 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        {children}
+      <body className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-grow">{children}</main>
+        <Footer />
         <GlobalDisplayControls />
       </body>
     </html>

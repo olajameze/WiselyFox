@@ -1,0 +1,88 @@
+.card {
+  background-color: var(--bg-paper-cream);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 0 var(--spine-accent-dark);
+  border: 1px solid var(--color-border);
+}
+
+.velocityLedger {
+  margin-top: 2rem;
+  color: var(--text-main-ink);
+}
+
+.velocityLedger h3 {
+  font-family: var(--font-sans);
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-main-ink);
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.section h4 {
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-main-ink);
+}
+
+.contributionGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 days a week */
+  gap: 4px;
+  padding: 10px;
+  background-color: #e2e8f0; /* Light background for the grid */
+  border-radius: 0.5rem;
+}
+
+.contributionCell {
+  width: 20px; /* Fixed size for cells */
+  height: 20px;
+  background-color: var(--accent-green-calm); /* Brand leaf green */
+  border-radius: 2px;
+  /* Opacity will be set inline based on intensity */
+}
+
+.leaderboardTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+}
+
+.leaderboardTable th,
+.leaderboardTable td {
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.leaderboardTable th {
+  background-color: #f0f4f8; /* Light background for headers */
+  font-weight: 600;
+  color: var(--text-main-ink);
+}
+
+.leaderboardTable td {
+  color: var(--text-main-ink);
+}
+
+.leaderboardTable tr:last-child td {
+  border-bottom: none;
+}
+
+.currentUserRow {
+  background-color: rgba(25, 136, 78, 0.1); /* Light green background for current user */
+  font-weight: 600;
+}
+
+/* Accessibility: High contrast for text */
+.velocityLedger h3, .velocityLedger h4, .leaderboardTable th, .leaderboardTable td {
+  /* Ensure these elements have sufficient contrast */
+  color: var(--text-main-ink); /* Should resolve to a high-contrast color */
+}

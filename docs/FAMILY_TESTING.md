@@ -7,7 +7,8 @@ WiselyFox is ready for **guided family beta testing**. Billing is disabled in pi
 ```bash
 npm install
 cp .env.example .env
-# Set AUTH_SECRET to any random string (32+ chars recommended)
+# Ensure DATABASE_URL is correct for the local Docker setup.
+# Set AUTH_SECRET to a random string (32+ chars recommended).
 
 docker compose up -d postgres
 npm run db:migrate:deploy
@@ -62,18 +63,18 @@ New families can also **create their own parent account** at `/sign-up`, no paym
 
 ## What works in pilot mode
 
-| Feature | Status |
-|---------|--------|
-| Parent & child dashboards | Ready |
-| 6 lessons per subject (pilot curriculum) | Ready |
-| Quizzes & study guides | Ready |
-| Adaptive lesson recommendations | Ready |
-| Parent reward approval | Ready |
-| Weekly learning schedules | Ready |
-| Plan upgrade/downgrade (no Stripe) | Ready |
-| Accessibility settings → child UI | Ready |
-| Data export | Ready |
-| Account delete (cascade children) | Ready |
+| Feature                                | Status |
+| -------------------------------------- | ------ |
+| Parent & child dashboards              | Ready  |
+| 6 lessons per subject (pilot curriculum) | Ready  |
+| Quizzes & study guides                 | Ready  |
+| Adaptive lesson recommendations        | Ready  |
+| Parent reward approval                 | Ready  |
+| Weekly learning schedules              | Ready  |
+| Plan upgrade/downgrade (no Stripe)     | Ready  |
+| Accessibility settings → child UI      | Ready  |
+| Data export                            | Ready  |
+| Account delete (cascade children)      | Ready  |
 
 ## What is NOT enabled yet
 

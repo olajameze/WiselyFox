@@ -58,7 +58,9 @@ export function SignInForm({
           </p>
           {registered && (
             <Alert variant="success" title="Account created">
-              You can sign in with your new parent account.
+              {isTutor
+                ? "You can sign in with your new tutor account."
+                : "You can sign in with your new parent account."}
             </Alert>
           )}
           {error && <Alert variant="error">{error}</Alert>}

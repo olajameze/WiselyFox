@@ -1,0 +1,72 @@
+.labLog {
+  background-color: var(--bg-desk-wood); /* Deep slate background */
+  color: #e2e8f0; /* Light text for contrast */
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 0 var(--spine-shadow-deep);
+  margin-bottom: 2rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.breadcrumbs {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: #a0aec0;
+}
+
+.moduleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.moduleCard {
+  background-color: #111318; /* Darker slate for code blocks */
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid #2d3340;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.moduleCard h3 {
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--accent-blue-primary);
+  margin: 0;
+}
+
+.moduleStats {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  color: #a0aec0;
+}
+
+.runLessonButton {
+  background-color: var(--accent-green-calm);
+  color: var(--bg-desk-wood); /* Dark text on green */
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #136b3d; /* Darker green for tactile effect */
+  transition: transform var(--motion-fast) var(--ease-out), box-shadow var(--motion-fast) var(--ease-out);
+}
+.runLessonButton:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 #136b3d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .runLessonButton {
+    transition: none;
+  }
+}

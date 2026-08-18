@@ -495,3 +495,28 @@ html[data-parent-reduced-motion="true"] *::after {
     background: white !important;
   }
 }
+
+/* Styles moved from TutorCardGrid.module.css */
+:root {
+  --color-primary-navy: #1E293B;
+  --color-accent-fox-amber: #E05638;
+  --color-supporting-teal: #0D9488;
+  --color-neutral-background-canvas: #FAF9F6;
+  --color-neutral-card-background: #FFFFFF;
+  --color-neutral-main-text: #0F172A;
+  --color-neutral-muted-text: #64748B;
+
+  /* Default age-band specific overrides (for 11-23) */
+  --color-primary-action-button: #D94E28;
+  --color-canvas-background: #F8FAFC;
+  --card-border-radius: 8px;
+  --button-shadow-color: #c8472b; /* Darker shade of D94E28 */
+}
+
+/* Adaptive Age Band Rules */
+[data-age-band="5-10"] {
+  --color-primary-action-button: #FF6B4A;
+  --color-canvas-background: #FFFDFA;
+  --card-border-radius: 16px;
+  --button-shadow-color: #E65A3D; /* Darker shade of FF6B4A */
+}

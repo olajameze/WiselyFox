@@ -1,0 +1,57 @@
+.introCard {
+  background-color: var(--bg-paper-cream);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 0 var(--spine-accent-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.bookArt {
+  width: 100%;
+  max-width: 300px;
+}
+
+.bookSvg {
+  width: 100%;
+  height: auto;
+}
+
+.content h2 {
+  font-family: var(--font-handwriting);
+  color: var(--text-main-ink);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.content p {
+  color: var(--text-muted-ink);
+  margin-bottom: 1.5rem;
+}
+
+.tactileButton {
+  background-color: var(--accent-orange-warm);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--spine-accent-dark);
+  transition: transform var(--motion-fast) var(--ease-out), box-shadow var(--motion-fast) var(--ease-out);
+}
+.tactileButton:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 var(--spine-accent-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tactileButton {
+    transition: none;
+  }
+}

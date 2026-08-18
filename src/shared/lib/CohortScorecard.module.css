@@ -1,0 +1,141 @@
+.card {
+  background-color: var(--bg-paper-cream);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 0 var(--spine-accent-dark);
+  border: 1px solid var(--color-border);
+}
+
+.scorecard {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.scorecard h3 {
+  font-family: var(--font-sans);
+  color: var(--text-main-ink);
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+}
+
+.podium {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  height: 180px; /* Fixed height for visual consistency */
+}
+
+.podiumPillar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: var(--bg-desk-wood); /* Studio Slate */
+  color: white;
+  border-radius: 0.5rem 0.5rem 0 0;
+  padding-top: 1rem;
+  position: relative;
+}
+
+.rank1 {
+  height: 100%; /* Tallest */
+  width: 80px;
+  background-color: var(--spine-accent-dark);
+}
+.rank2 {
+  height: 80%;
+  width: 70px;
+  background-color: #3a4760; /* Slightly lighter slate */
+}
+.rank3 {
+  height: 60%;
+  width: 60px;
+  background-color: #4a5568; /* Even lighter slate */
+}
+
+.podiumPillar .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--accent-orange-warm); /* Placeholder for vector avatar */
+  margin-bottom: 0.5rem;
+}
+
+.podiumPillar .nickname {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.podiumPillar .focusPoints {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-orange-warm);
+  margin-bottom: 0.5rem;
+}
+
+.rankList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.rankItem {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed var(--color-border);
+  color: var(--text-main-ink);
+}
+.rankItem:last-child {
+  border-bottom: none;
+}
+
+.rankNumber {
+  font-weight: 600;
+  width: 30px;
+  flex-shrink: 0;
+}
+
+.nickname {
+  flex-grow: 1;
+}
+
+.focusPoints {
+  font-weight: 600;
+  color: var(--accent-orange-warm);
+}
+
+.trendArrow {
+  width: 16px;
+  height: 16px;
+  margin-left: 0.5rem;
+  /* Placeholder for actual SVG arrows */
+}
+.trendup::before { content: "▲"; color: var(--color-success); }
+.trenddown::before { content: "▼"; color: var(--color-danger); }
+.trendflat::before { content: "—"; color: var(--text-muted-ink); }
+
+.currentUser {
+  background-color: rgba(242, 98, 0, 0.1); /* Light accent background for current user */
+  border-radius: 0.5rem;
+  padding-left: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.calmModeCard {
+  text-align: left;
+}
+.calmModeCard h3 {
+  font-family: var(--font-sans);
+  color: var(--text-main-ink);
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+.calmModeCard p {
+  color: var(--text-muted-ink);
+  margin-bottom: 0.5rem;
+}
