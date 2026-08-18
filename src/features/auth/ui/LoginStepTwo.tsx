@@ -2,11 +2,21 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Input } from "@/shared/ui";
+import { Input, Alert } from "@/shared/ui";
 import {
-  signInParent,
+  signInWithEmail,
   signInChild,
 } from "@/features/auth/actions/auth.actions";
+import {
+  DEMO_CHILD_ACCESS_CODE,
+  DEMO_CHILD_PIN,
+  DEMO_PARENT_EMAIL,
+  DEMO_PARENT_PASSWORD,
+  DEMO_TUTOR_EMAIL,
+  DEMO_TUTOR_PASSWORD,
+  DEMO_SUPERADMIN_EMAIL,
+  DEMO_SUPERADMIN_PASSWORD,
+} from "@/shared/lib/demo-credentials";
 import type { LoginRole } from "./LoginStepOne";
 import styles from "./LoginStepTwo.module.css";
 
@@ -23,6 +33,35 @@ const ROLE_LABEL: Record<LoginRole, string> = {
 };
 
 const PIN_DIGITS = 4;
+
+function DemoCredentials({ role }: { role: LoginRole }) {
+  if (process.env.NODE_ENV !== 'development') {
+    return null;
+  }
+
+  switch (role) {
+    case "student":
+      return (
+        <Alert variant="info" title="Demo Learner">
+          Access code: {DEMO_CHILD_ACCESS_CODE}, PIN: {DEMO_CHILD_PIN}
+        </Alert>
+      );
+    case "parent":
+      return (
+        <Alert variant="info" title="Demo Parent">
+          Email: {DEMO_PARENT_EMAIL}, Password: {DEMO_PARENT_PASSWORD}
+        </Alert>
+      );
+    case "tutor":
+      return (
+        <Alert variant="info" title="Demo Tutor">
+          Email: {DEMO_TUTOR_EMAIL}, Password: {DEMO_TUTOR_PASSWORD}
+        </Alert>
+      );
+    default:
+      return null;
+  }
+}
 
 export function LoginStepTwo({ role, callbackUrl, onBack }: LoginStepTwoProps) {
   const [error, setError] = useState("");
@@ -50,14 +89,15 @@ export function LoginStepTwo({ role, callbackUrl, onBack }: LoginStepTwoProps) {
         setError(result.error);
         return;
       }
-      window.location.assign("/learn");
+      window.location.assign(result.data.redirectTo);
       return;
     }
 
     const fd = new FormData(e.currentTarget);
-    const result = await signInParent({
+    const result = await signInWithEmail({
       email: fd.get("email") as string,
       password: fd.get("password") as string,
+      role,
     });
     if (!result.success) {
       setLoading(false);
@@ -103,6 +143,8 @@ export function LoginStepTwo({ role, callbackUrl, onBack }: LoginStepTwoProps) {
           {error}
         </p>
       )}
+
+      <DemoCredentials role={role} />
 
       <form className={styles.form} onSubmit={handleSubmit}>
         {isStudent ? (

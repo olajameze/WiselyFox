@@ -3,7 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button, Input, Card, Alert } from "@/shared/ui";
-import { signInParent } from "@/features/auth/actions/auth.actions";
+import { signInWithEmail } from "@/features/auth/actions/auth.actions";
+import {
+  DEMO_PARENT_EMAIL,
+  DEMO_PARENT_PASSWORD,
+  DEMO_TUTOR_EMAIL,
+  DEMO_TUTOR_PASSWORD,
+  DEMO_SUPERADMIN_EMAIL,
+  DEMO_SUPERADMIN_PASSWORD,
+} from "@/shared/lib/demo-credentials";
 import styles from "./auth.module.css";
 
 type SignInFormProps = {
@@ -11,6 +19,25 @@ type SignInFormProps = {
   callbackUrl?: string;
   registered?: boolean;
 };
+
+function DemoCredentials({ variant }: { variant: "parent" | "tutor" }) {
+  if (process.env.NODE_ENV !== "development") {
+    return null;
+  }
+
+  const isTutor = variant === "tutor";
+  const email = isTutor ? DEMO_TUTOR_EMAIL : DEMO_PARENT_EMAIL;
+  const password = isTutor ? DEMO_TUTOR_PASSWORD : DEMO_PARENT_PASSWORD;
+
+  return (
+    <Alert variant="info" title={isTutor ? "Demo Tutor" : "Demo Parent"}>
+      Email: {email}, Password: {password}
+      <br />
+      <hr style={{ margin: "8px 0" }} />
+      <strong>Super-admin:</strong> {DEMO_SUPERADMIN_EMAIL} (same password)
+    </Alert>
+  );
+}
 
 export function SignInForm({
   variant = "parent",
@@ -26,9 +53,10 @@ export function SignInForm({
     setLoading(true);
     setError("");
     const fd = new FormData(e.currentTarget);
-    const result = await signInParent({
+    const result = await signInWithEmail({
       email: fd.get("email") as string,
       password: fd.get("password") as string,
+      role: variant,
     });
     if (!result.success) {
       setLoading(false);
@@ -64,6 +92,7 @@ export function SignInForm({
             </Alert>
           )}
           {error && <Alert variant="error">{error}</Alert>}
+          <DemoCredentials variant={variant} />
           <form className={styles.form} onSubmit={handleSubmit}>
             <Input name="email" type="email" label="Email" required autoComplete="email" />
             <Input name="password" type="password" label="Password" required autoComplete="current-password" />

@@ -115,9 +115,10 @@ export async function signUpParent(
 const signInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
+  role: z.enum(["parent", "tutor"]),
 });
 
-export async function signInParent(
+export async function signInWithEmail(
   input: z.infer<typeof signInSchema>,
 ): Promise<ActionResult<{ redirectTo: string }>> {
   const parsed = signInSchema.safeParse(input);
@@ -127,8 +128,10 @@ export async function signInParent(
   const limited = checkRateLimit("sign-in", `${ip}:${parsed.data.email}`);
   if (!limited.ok) return fail(limited.message);
 
+  const provider = parsed.data.role === "tutor" ? "tutor-credentials" : "parent-credentials";
+
   try {
-    const result = await signIn("parent-credentials", {
+    const result = await signIn(provider, {
       email: parsed.data.email,
       password: parsed.data.password,
       redirect: false,
@@ -141,7 +144,7 @@ export async function signInParent(
     });
     const redirectTo = account
       ? await resolvePostLoginRedirect(account.id, account.role)
-      : "/parent";
+      : (parsed.data.role === "tutor" ? "/tutor" : "/parent");
     return ok({ redirectTo });
   } catch {
     return fail("Invalid email or password");
@@ -155,7 +158,7 @@ const childPinSchema = z.object({
 
 export async function signInChild(
   input: z.infer<typeof childPinSchema>,
-): Promise<ActionResult<null>> {
+): Promise<ActionResult<{ redirectTo: string }>> {
   const parsed = childPinSchema.safeParse(input);
   if (!parsed.success) return fail("Invalid access code or PIN");
 
@@ -171,7 +174,18 @@ export async function signInChild(
       redirect: false,
     });
     if (result?.error) return fail("Invalid access code or PIN");
-    return ok(null);
+    
+    // On success, find the user and resolve their post-login destination
+    const childProfile = await prisma.childProfile.findUnique({
+      where: { accessCode: normalizeAccessCodeInput(parsed.data.accessCode) },
+      select: { userId: true },
+    });
+
+    if (!childProfile?.userId) return fail("Child profile not found after login");
+
+    const redirectTo = await resolvePostLoginRedirect(childProfile.userId, "CHILD");
+    return ok({ redirectTo });
+
   } catch {
     return fail("Invalid access code or PIN");
   }

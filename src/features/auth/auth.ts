@@ -111,6 +111,39 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
     Credentials({
+      id: "tutor-credentials",
+      name: "Tutor",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials: Partial<Record<"email" | "password", unknown>>) {
+        const email = credentials?.email as string | undefined;
+        const password = credentials?.password as string | undefined;
+        if (!email || !password) return null;
+
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (!user?.passwordHash) return null;
+
+        const valid = await bcrypt.compare(password, user.passwordHash);
+        if (!valid) return null;
+
+        const [role, flags] = await Promise.all([
+          syncSuperAdminRole(user.id, user.email),
+          loadProfileFlags(user.id),
+        ]);
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role,
+          hasParentProfile: flags.hasParentProfile,
+          hasTutorProfile: flags.hasTutorProfile,
+        };
+      },
+    }),
+    Credentials({
       id: "child-pin",
       name: "Child PIN",
       credentials: {

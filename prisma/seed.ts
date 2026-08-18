@@ -10,17 +10,27 @@ import { enhanceLessonStepsForHandsOn } from "../src/data/lesson-hands-on";
 import { enhanceLessonDepth } from "../src/data/lesson-depth";
 import { enrichLessonSteps } from "../src/data/lesson-enrichment";
 import { DEFAULT_SCHEDULE } from "../src/features/parent/services/schedule.service";
-import { DEMO_CHILD_ACCESS_CODE } from "../src/shared/lib/demo-credentials";
+import { 
+  DEMO_CHILD_ACCESS_CODE, 
+  DEMO_CHILD_PIN,
+  DEMO_PARENT_EMAIL,
+  DEMO_PARENT_PASSWORD,
+  DEMO_TUTOR_EMAIL,
+  DEMO_TUTOR_PASSWORD,
+  DEMO_SUPERADMIN_EMAIL,
+  DEMO_SUPERADMIN_PASSWORD,
+} from "../src/shared/lib/demo-credentials";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const adminHash = await bcrypt.hash("admin123456", 10);
-  const admin = await prisma.user.upsert({
-    where: { email: "admin@wiselyfox.test" },
-    update: {},
+  // Super Admin
+  const adminHash = await bcrypt.hash(DEMO_SUPERADMIN_PASSWORD, 10);
+  await prisma.user.upsert({
+    where: { email: DEMO_SUPERADMIN_EMAIL },
+    update: { passwordHash: adminHash },
     create: {
-      email: "admin@wiselyfox.test",
+      email: DEMO_SUPERADMIN_EMAIL,
       name: "Super Admin",
       passwordHash: adminHash,
       role: UserRole.SUPERADMIN,
@@ -28,15 +38,16 @@ async function main() {
     },
   });
 
-  const demoParentHash = await bcrypt.hash("demo123456", 10);
+  // Demo Parent
+  const demoParentHash = await bcrypt.hash(DEMO_PARENT_PASSWORD, 10);
   const trialEnds = new Date();
   trialEnds.setDate(trialEnds.getDate() + 12);
 
   const demoParent = await prisma.user.upsert({
-    where: { email: "parent@demo.wiselyfox.test" },
-    update: { name: "Demo Parent" },
+    where: { email: DEMO_PARENT_EMAIL },
+    update: { name: "Demo Parent", passwordHash: demoParentHash },
     create: {
-      email: "parent@demo.wiselyfox.test",
+      email: DEMO_PARENT_EMAIL,
       name: "Demo Parent",
       passwordHash: demoParentHash,
       role: UserRole.PARENT,
@@ -63,13 +74,39 @@ async function main() {
     },
     include: { parentProfile: true },
   });
+  
+  // Demo Tutor
+  const demoTutorHash = await bcrypt.hash(DEMO_TUTOR_PASSWORD, 10);
+  await prisma.user.upsert({
+      where: { email: DEMO_TUTOR_EMAIL },
+      update: { name: "Demo Tutor", passwordHash: demoTutorHash },
+      create: {
+          email: DEMO_TUTOR_EMAIL,
+          name: "Demo Tutor",
+          passwordHash: demoTutorHash,
+          role: UserRole.ADMIN, // Tutors are admin role to access tutor dashboard
+          tutorProfile: {
+              create: {
+                  headline: "Experienced STEM Tutor",
+                  bio: "I help students of all ages find a passion for science and technology. My lessons are hands-on and engaging.",
+                  subjects: JSON.stringify(["Maths", "Science", "Coding"]),
+                  ageBands: JSON.stringify(["8-10", "11-13", "14-16"]),
+                  published: true,
+                  verificationStatus: "VERIFIED",
+                  hourlyRatePence: 3500,
+              }
+          }
+      }
+  });
 
   const parentProfile = demoParent.parentProfile!;
   await prisma.parentProfile.update({
     where: { id: parentProfile.id },
     data: { onboardingDone: true },
   });
-  const childPinHash = await bcrypt.hash("1234", 10);
+
+  // Demo Child
+  const childPinHash = await bcrypt.hash(DEMO_CHILD_PIN, 10);
   const childUser = await prisma.user.upsert({
     where: { id: "demo-child-user" },
     update: { name: "Alex" },
@@ -361,9 +398,10 @@ async function main() {
     }
   }
 
-  console.log("Seeded admin:", admin.email, "/ admin123456");
-  console.log("Seeded demo parent:", demoParent.email, "/ demo123456");
-  console.log("Seeded demo child access code:", DEMO_CHILD_ACCESS_CODE, "/ PIN 1234");
+  console.log("Seeded Super Admin:", DEMO_SUPERADMIN_EMAIL, "/", DEMO_SUPERADMIN_PASSWORD);
+  console.log("Seeded Demo Parent:", DEMO_PARENT_EMAIL, "/", DEMO_PARENT_PASSWORD);
+  console.log("Seeded Demo Tutor:", DEMO_TUTOR_EMAIL, "/", DEMO_TUTOR_PASSWORD);
+  console.log("Seeded Demo Child access code:", DEMO_CHILD_ACCESS_CODE, "/ PIN", DEMO_CHILD_PIN);
 }
 
 main()

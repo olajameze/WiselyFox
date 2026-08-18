@@ -52,7 +52,7 @@ export const authConfig = {
 
       if (pathname.startsWith("/tutor")) {
         // This protects the tutor's own dashboard/settings area.
-        return !!hasTutorProfile;
+        return userRole === "ADMIN" || !!hasTutorProfile;
       }
 
       // If a logged-in user tries to access a public-only route like sign-in,
@@ -66,7 +66,7 @@ export const authConfig = {
         let redirectUrl = "/";
         if (userRole === "PARENT") redirectUrl = "/parent";
         if (userRole === "CHILD") redirectUrl = "/learn";
-        if (hasTutorProfile) redirectUrl = "/tutor/dashboard"; // Assuming a tutor dashboard exists
+        if (hasTutorProfile) redirectUrl = "/tutor";
 
         return Response.redirect(new URL(redirectUrl, nextUrl));
       }
