@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/shared/ui/Button/Button";
+import { PreferenceIconGroup } from "@/shared/ui/PreferenceIconGroup/PreferenceIconGroup";
 import styles from "./Header.module.css";
 
 interface HeaderProps {
@@ -82,9 +83,10 @@ export function Header({ signedIn, variant = "default" }: HeaderProps) {
               <Link href="/sign-up" className={styles.joinCta}>
                 <Button size="sm">Join free</Button>
               </Link>
-            </>
-)}
-          {menuOpen ? (
+              </>
+            )}
+            <PreferenceIconGroup className={styles.headerPrefsDesktop} placement="bottom" />
+            {menuOpen ? (
             <button
               type="button"
               className={styles.menuBtn}
@@ -118,6 +120,9 @@ export function Header({ signedIn, variant = "default" }: HeaderProps) {
             .join(" ")}
           aria-label="Mobile"
         >
+          <div className={styles.mobilePrefs}>
+            <PreferenceIconGroup placement="bottom" />
+          </div>
           {mainNav.map((item) => (
             <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
               {item.label}

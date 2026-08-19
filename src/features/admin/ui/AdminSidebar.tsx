@@ -79,13 +79,20 @@ export function AdminSidebar({
         <div className={styles.sidebarChrome}>
           <div className={styles.sidebarBrandRow}>
             <Link href="/admin" className={styles.sidebarBrand} onClick={closeNav}>
-              WiselyFox Admin
+              <span className={styles.brandIconFox} aria-hidden="true">
+                🦊
+              </span>
+              <span className={styles.brandTextStack}>
+                <span className={styles.brandTitleText}>WiselyFox</span>
+                <span className={styles.brandSubtitleText}>Super Admin</span>
+              </span>
             </Link>
-            {headerActions}
           </div>
-          <p className={styles.sidebarUser} title={email}>
-            {email}
-          </p>
+          {email && (
+            <div className={styles.sidebarEmailNote} title={email}>
+              {email}
+            </div>
+          )}
         </div>
         <div className={styles.sidebarNavWrap}>{nav}</div>
         <div className={styles.sidebarFooter}>{footer}</div>

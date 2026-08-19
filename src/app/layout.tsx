@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { GlobalDisplayControls } from "./GlobalDisplayControls";
 import { Header } from "@/shared/ui/Header/Header";
 import { Footer } from "@/shared/ui/Footer/Footer";
 
@@ -26,7 +25,6 @@ export default function RootLayout({
         <Header />
         <main className="flex-grow">{children}</main>
         <Footer />
-        <GlobalDisplayControls />
       </body>
     </html>
   );

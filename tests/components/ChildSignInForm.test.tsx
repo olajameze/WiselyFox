@@ -16,7 +16,7 @@ afterEach(() => {
 
 describe("ChildSignInForm", () => {
   it("shows a kid-friendly helper message that explains the login flow", async () => {
-    signInChildMock.mockResolvedValue({ success: true, data: null });
+    signInChildMock.mockResolvedValue({ success: true, data: { redirectTo: "/learn" } });
 
     const user = userEvent.setup();
     render(<ChildSignInForm />);

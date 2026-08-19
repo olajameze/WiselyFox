@@ -46,10 +46,12 @@ export function applyDashboardA11yPrefs(prefs: DashboardA11yPrefs) {
 
 type Props = {
   hint?: string;
+  placement?: "top" | "bottom";
 };
 
 export function AccessibilityToolbar({
   hint = "Adjust display for easier reading. These settings apply to this device only.",
+  placement = "bottom",
 }: Props) {
   const [prefs, setPrefs] = useState<DashboardA11yPrefs>(() => readPrefs());
 
@@ -85,7 +87,10 @@ export function AccessibilityToolbar({
           ♿
         </span>
       </summary>
-      <div className={styles.panel} aria-label="Accessibility options">
+      <div
+        className={[styles.panel, placement === "top" ? styles.panelTop : ""].filter(Boolean).join(" ")}
+        aria-label="Accessibility options"
+      >
         <p className={styles.hint}>{hint}</p>
         <div className={styles.presetRow}>
           <button type="button" className={styles.presetBtn} onClick={enableCalmMode}>

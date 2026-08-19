@@ -13,7 +13,7 @@ export function TutorCardGrid({ tutors }: TutorCardGridProps) {
     return (
       <div className={styles.emptyState}>
         <h2>No Tutors Found</h2>
-        <p>We couldn't find any tutors matching your criteria. Please check back later.</p>
+        <p>We couldn&apos;t find any tutors matching your criteria. Please check back later.</p>
       </div>
     );
   }

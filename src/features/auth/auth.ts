@@ -11,6 +11,7 @@ import {
 } from "@/shared/lib/access-code";
 import type { UserRole } from "@prisma/client";
 import type {} from "next-auth/jwt";
+import { authConfig } from "./auth.config";
 
 declare module "next-auth" {
   interface Session {
@@ -72,10 +73,7 @@ async function findChildByAccessCode(raw: string) {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  session: { strategy: "jwt" },
-  pages: {
-    signIn: "/sign-in",
-  },
+  ...authConfig,
   providers: [
     Credentials({
       id: "parent-credentials",

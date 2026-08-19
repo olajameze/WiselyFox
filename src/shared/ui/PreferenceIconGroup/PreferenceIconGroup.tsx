@@ -8,12 +8,14 @@ type Props = {
   hint?: string;
   className?: string;
   variant?: "default" | "notebook";
+  placement?: "top" | "bottom";
 };
 
 export function PreferenceIconGroup({
   hint = "Adjust display for easier reading. These settings apply to this device only.",
   className,
   variant = "default",
+  placement = "bottom",
 }: Props) {
   return (
     <div
@@ -28,7 +30,7 @@ export function PreferenceIconGroup({
       aria-label="Display preferences"
     >
       <ThemeToggle compact />
-      <AccessibilityToolbar hint={hint} />
+      <AccessibilityToolbar hint={hint} placement={placement} />
     </div>
   );
 }

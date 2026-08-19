@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { requireSuperAdmin } from "@/shared/lib/permissions";
 import { AdminNav } from "./AdminNav";
-import { AdminAccountMenu } from "./AdminAccountMenu";
 import { AdminSidebar } from "./AdminSidebar";
+import { AdminTopHeader } from "./AdminTopHeader";
 import { SidebarSignOut } from "@/shared/ui/DashboardAccountMenu/SidebarSignOut";
 import shellStyles from "@/shared/ui/DashboardAccountMenu/DashboardAccountMenu.module.css";
 import styles from "./admin.module.css";
@@ -14,11 +14,6 @@ export async function AdminShell({ children }: { children: React.ReactNode }) {
     <div className={styles.shell}>
       <AdminSidebar
         email={user.email ?? "Admin"}
-        headerActions={
-          <div className={styles.sidebarQuickActions}>
-            <AdminAccountMenu />
-          </div>
-        }
         nav={<AdminNav />}
         footer={
           <div className={[shellStyles.sidebarBottom, shellStyles.sidebarBottomDark].join(" ")}>
@@ -29,7 +24,13 @@ export async function AdminShell({ children }: { children: React.ReactNode }) {
           </div>
         }
       />
-      <main className={styles.shellMain}>{children}</main>
+      <div className={styles.mainCanvasColumn}>
+        <AdminTopHeader
+          email={user.email ?? "admin@wiselyfox.app"}
+          name={user.name ?? "Super Admin"}
+        />
+        <main className={styles.shellMain}>{children}</main>
+      </div>
     </div>
   );
 }

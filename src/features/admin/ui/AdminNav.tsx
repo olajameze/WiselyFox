@@ -6,13 +6,13 @@ import { useAdminNavClose } from "./AdminSidebar";
 import styles from "./admin.module.css";
 
 const nav = [
-  { href: "/admin", label: "Overview", exact: true },
-  { href: "/admin/tutors", label: "Tutors" },
-  { href: "/admin/fraud", label: "Fraud queue" },
-  { href: "/admin/users", label: "Users" },
-  { href: "/admin/insights", label: "Insights" },
-  { href: "/admin/audit", label: "Audit log" },
-  { href: "/admin/system", label: "System" },
+  { href: "/admin", label: "Dashboard", icon: "📊", exact: true },
+  { href: "/admin/tutors", label: "Tutors", icon: "🎓" },
+  { href: "/admin/users", label: "Users & Roles", icon: "👥" },
+  { href: "/admin/fraud", label: "Fraud Queue", icon: "🛡️" },
+  { href: "/admin/insights", label: "Insights", icon: "📈" },
+  { href: "/admin/audit", label: "Audit Log", icon: "📋" },
+  { href: "/admin/system", label: "System Health", icon: "⚙️" },
 ];
 
 export function AdminNav() {
@@ -34,7 +34,10 @@ export function AdminNav() {
               .join(" ")}
             aria-current={active ? "page" : undefined}
           >
-            {item.label}
+            <span className={styles.navIcon} aria-hidden="true">
+              {item.icon}
+            </span>
+            <span className={styles.navLabel}>{item.label}</span>
           </Link>
         );
       })}

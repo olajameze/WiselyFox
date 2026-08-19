@@ -34,7 +34,7 @@ function DemoCredentials({ variant }: { variant: "parent" | "tutor" }) {
       Email: {email}, Password: {password}
       <br />
       <hr style={{ margin: "8px 0" }} />
-      <strong>Super-admin:</strong> {DEMO_SUPERADMIN_EMAIL} (same password)
+      <strong>Super Admin:</strong> Email: {DEMO_SUPERADMIN_EMAIL}, Password: {DEMO_SUPERADMIN_PASSWORD}
     </Alert>
   );
 }

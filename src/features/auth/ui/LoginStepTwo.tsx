@@ -48,8 +48,14 @@ function DemoCredentials({ role }: { role: LoginRole }) {
       );
     case "parent":
       return (
-        <Alert variant="info" title="Demo Parent">
-          Email: {DEMO_PARENT_EMAIL}, Password: {DEMO_PARENT_PASSWORD}
+        <Alert variant="info" title="Demo Parent & Super Admin">
+          <div>
+            <strong>Parent:</strong> Email: {DEMO_PARENT_EMAIL}, Password: {DEMO_PARENT_PASSWORD}
+          </div>
+          <hr style={{ margin: "8px 0", borderColor: "rgba(0,0,0,0.12)" }} />
+          <div>
+            <strong>Super Admin:</strong> Email: {DEMO_SUPERADMIN_EMAIL}, Password: {DEMO_SUPERADMIN_PASSWORD}
+          </div>
         </Alert>
       );
     case "tutor":

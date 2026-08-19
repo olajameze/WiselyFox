@@ -40,14 +40,22 @@
   right: 0;
   z-index: 200;
   width: min(18rem, calc(100vw - 2rem));
+  max-height: min(28rem, calc(100vh - 4rem));
+  overflow-y: auto;
   padding: var(--space-md);
   background: var(--color-surface);
+  color: var(--color-text);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
+}
+
+.panelTop {
+  top: auto;
+  bottom: calc(100% + 0.5rem);
 }
 
 .hint {

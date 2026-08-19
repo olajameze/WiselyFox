@@ -8,6 +8,10 @@
   border-bottom: 1px solid var(--color-border);
 }
 
+.header.open {
+  height: auto;
+}
+
 .inner {
   display: flex;
   align-items: center;
@@ -176,11 +180,12 @@
 .mobileNav {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
-  padding: var(--space-lg);
-  border-top: 1px solid rgba(18, 62, 145, 0.16);
-  background:
-    linear-gradient(180deg, rgba(255, 253, 248, 0.98) 0%, rgba(246, 239, 227, 0.98) 100%);
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-md);
   backdrop-filter: blur(10px);
 }
 

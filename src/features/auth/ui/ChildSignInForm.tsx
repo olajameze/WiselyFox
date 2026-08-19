@@ -28,7 +28,9 @@ export function ChildSignInForm({ consentError = false }: { consentError?: boole
       setError(result.error);
       return;
     }
-    window.location.assign(result.data.redirectTo);
+    if (result.data?.redirectTo) {
+      window.location.assign(result.data.redirectTo);
+    }
   }
 
   return (

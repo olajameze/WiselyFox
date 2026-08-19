@@ -6,7 +6,7 @@ import styles from "./parent.module.css";
 
 const nav = [
   { href: "/parent", label: "Overview", exact: true },
-  { href: "/tutors", label: "Tutors" },
+  { href: "/parent/tutors", label: "Tutors" },
   { href: "/parent/children", label: "Children" },
   { href: "/parent/progress", label: "Progress" },
   { href: "/parent/rewards", label: "Rewards" },

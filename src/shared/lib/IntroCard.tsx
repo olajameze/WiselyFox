@@ -14,7 +14,7 @@ export function IntroCard() {
       </div>
       <div className={styles.content}>
         <h2>Welcome, young learner!</h2>
-        <p>Let's start your adventure. Ready for a new challenge?</p>
+        <p>Let&apos;s start your adventure. Ready for a new challenge?</p>
         <button className={styles.tactileButton}>Start Learning</button>
       </div>
     </div>
