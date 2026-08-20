@@ -23,43 +23,36 @@ function isIos() {
   return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
 }
 
-function isIosSafari() {
-  if (!isIos()) return false;
-  return !(window.navigator as Navigator & { standalone?: boolean }).standalone;
-}
-
 export function PwaProvider({ children }: { children: React.ReactNode }) {
   const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [installed, setInstalled] = useState(false);
-  const [dismissed, setDismissed] = useState(true);
-  const [showIosHint, setShowIosHint] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [showGuideModal, setShowGuideModal] = useState(false);
+  const [activeGuideTab, setActiveGuideTab] = useState<"ios" | "android" | "desktop">("ios");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const standalone = isStandalone();
     setInstalled(standalone);
 
-    const isDismissed = window.sessionStorage.getItem(DISMISS_KEY) === "1" || window.localStorage.getItem(DISMISS_KEY) === "1";
+    const isDismissed =
+      window.sessionStorage.getItem(DISMISS_KEY) === "1" ||
+      window.localStorage.getItem(DISMISS_KEY) === "1";
     setDismissed(isDismissed);
 
-    const iosSafari = isIosSafari() && !standalone;
-    setShowIosHint(iosSafari);
+    if (isIos()) setActiveGuideTab("ios");
+    else if (/android/i.test(navigator.userAgent)) setActiveGuideTab("android");
+    else setActiveGuideTab("desktop");
 
     if (!standalone && !isDismissed) {
-      // Delay initial popup slightly for smooth entrance
+      // Show install prompt smoothly after brief delay
       const showTimer = setTimeout(() => {
         setShowPopup(true);
-      }, 1500);
-
-      // Auto dismiss after 30 seconds
-      const autoDismissTimer = setTimeout(() => {
-        setShowPopup(false);
-      }, 31500);
+      }, 1200);
 
       return () => {
         clearTimeout(showTimer);
-        clearTimeout(autoDismissTimer);
       };
     }
 
@@ -86,8 +79,8 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
     const onInstalled = () => {
       setInstalled(true);
       setInstallEvent(null);
-      setShowIosHint(false);
       setShowPopup(false);
+      setShowGuideModal(false);
     };
 
     window.addEventListener("beforeinstallprompt", onInstall);
@@ -102,17 +95,25 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
   function dismissPrompt() {
     setShowPopup(false);
     setDismissed(true);
-    setShowIosHint(false);
     window.sessionStorage.setItem(DISMISS_KEY, "1");
   }
 
   async function handleInstall() {
     if (installEvent) {
-      await installEvent.prompt();
-      const choice = await installEvent.userChoice;
-      if (choice.outcome === "accepted") setInstallEvent(null);
+      try {
+        await installEvent.prompt();
+        const choice = await installEvent.userChoice;
+        if (choice.outcome === "accepted") {
+          setInstallEvent(null);
+          dismissPrompt();
+          return;
+        }
+      } catch {
+        /* fallback to guide modal */
+      }
     }
-    dismissPrompt();
+    // If native prompt is unavailable (iOS, Safari, Firefox, or unprompted Android), show the visual guide modal
+    setShowGuideModal(true);
   }
 
   const shouldRender = showPopup && !installed && !dismissed;
@@ -131,8 +132,8 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
                 🦊
               </span>
               <div className={styles.pwaAppMeta}>
-                <strong className={styles.pwaAppTitle}>Install WiselyFox App</strong>
-                <span className={styles.pwaAppBadge}>Free • No store needed</span>
+                <strong className={styles.pwaAppTitle}>Install WiselyFox</strong>
+                <span className={styles.pwaAppBadge}>Instant app • No store needed</span>
               </div>
             </div>
             <button
@@ -146,15 +147,9 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className={styles.pwaPopupBody}>
-            {showIosHint ? (
-              <p className={styles.pwaPopupText}>
-                To install on iPhone or iPad: tap <span className={styles.shareIcon}>⎋ Share</span> in Safari, then select <strong>Add to Home Screen</strong>.
-              </p>
-            ) : (
-              <p className={styles.pwaPopupText}>
-                Get the full-screen app on your phone, tablet, or desktop with instant access and offline practice.
-              </p>
-            )}
+            <p className={styles.pwaPopupText}>
+              Install on your phone, tablet, or desktop for a fast full-screen app experience, study streaks, and offline practice.
+            </p>
           </div>
 
           <div className={styles.pwaPopupActions}>
@@ -163,7 +158,7 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
               className={styles.pwaInstallActionBtn}
               onClick={() => void handleInstall()}
             >
-              {showIosHint ? "Got it" : "Install App"}
+              Install App
             </button>
             <button
               type="button"
@@ -175,6 +170,133 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
           </div>
         </aside>
       )}
+
+      {/* Step-by-Step Installation Modal Guide */}
+      {showGuideModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowGuideModal(false)}>
+          <div
+            className={styles.guideModalCard}
+            role="dialog"
+            aria-modal="true"
+            aria-label="How to install WiselyFox"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.guideModalHeader}>
+              <div className={styles.guideBrandHeader}>
+                <span className={styles.guideFoxEmoji}>🦊</span>
+                <div>
+                  <h3 className={styles.guideModalHeading}>How to Install WiselyFox</h3>
+                  <p className={styles.guideModalSub}>Add to your home screen in seconds</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                className={styles.guideCloseBtn}
+                onClick={() => setShowGuideModal(false)}
+                aria-label="Close installation guide"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Device Switcher Tabs */}
+            <div className={styles.guideDeviceTabs} role="tablist">
+              <button
+                type="button"
+                className={`${styles.guideTabBtn} ${activeGuideTab === "ios" ? styles.guideTabActive : ""}`}
+                role="tab"
+                aria-selected={activeGuideTab === "ios"}
+                onClick={() => setActiveGuideTab("ios")}
+              >
+                🍎 iPhone / iPad
+              </button>
+              <button
+                type="button"
+                className={`${styles.guideTabBtn} ${activeGuideTab === "android" ? styles.guideTabActive : ""}`}
+                role="tab"
+                aria-selected={activeGuideTab === "android"}
+                onClick={() => setActiveGuideTab("android")}
+              >
+                🤖 Android
+              </button>
+              <button
+                type="button"
+                className={`${styles.guideTabBtn} ${activeGuideTab === "desktop" ? styles.guideTabActive : ""}`}
+                role="tab"
+                aria-selected={activeGuideTab === "desktop"}
+                onClick={() => setActiveGuideTab("desktop")}
+              >
+                💻 Desktop / PC
+              </button>
+            </div>
+
+            {/* Tab Instructions Content */}
+            <div className={styles.guideStepsContent}>
+              {activeGuideTab === "ios" && (
+                <ol className={styles.guideStepsList}>
+                  <li>
+                    In <strong>Safari</strong> on your iPhone or iPad, tap the <strong>Share button</strong> <span className={styles.stepBadge}>⎋</span> in the bottom toolbar.
+                  </li>
+                  <li>
+                    Scroll down and tap <strong>&quot;Add to Home Screen&quot;</strong> <span className={styles.stepBadge}>⊞</span>.
+                  </li>
+                  <li>
+                    Tap <strong>&quot;Add&quot;</strong> in the top right corner.
+                  </li>
+                  <li>
+                    WiselyFox will appear on your home screen with its own app icon and full-screen learning space!
+                  </li>
+                </ol>
+              )}
+
+              {activeGuideTab === "android" && (
+                <ol className={styles.guideStepsList}>
+                  <li>
+                    In <strong>Chrome</strong>, tap the <strong>menu button</strong> <span className={styles.stepBadge}>⋮</span> in the top right corner.
+                  </li>
+                  <li>
+                    Tap <strong>&quot;Install app&quot;</strong> or <strong>&quot;Add to Home screen&quot;</strong>.
+                  </li>
+                  <li>
+                    Confirm by tapping <strong>&quot;Install&quot;</strong>.
+                  </li>
+                  <li>
+                    Launch WiselyFox straight from your app drawer or home screen!
+                  </li>
+                </ol>
+              )}
+
+              {activeGuideTab === "desktop" && (
+                <ol className={styles.guideStepsList}>
+                  <li>
+                    In <strong>Chrome</strong> or <strong>Edge</strong>, look at the address bar on the right.
+                  </li>
+                  <li>
+                    Click the <strong>Install icon</strong> <span className={styles.stepBadge}>⊕</span> or open the browser menu <span className={styles.stepBadge}>⋮</span> and click <strong>&quot;Install WiselyFox&quot;</strong>.
+                  </li>
+                  <li>
+                    Click <strong>Install</strong> to add WiselyFox as a standalone desktop app.
+                  </li>
+                </ol>
+              )}
+            </div>
+
+            <div className={styles.guideModalFooter}>
+              <button
+                type="button"
+                className={styles.guidePrimaryActionBtn}
+                onClick={() => {
+                  setShowGuideModal(false);
+                  dismissPrompt();
+                }}
+              >
+                Done / Got it
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {children}
     </>
   );

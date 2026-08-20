@@ -167,6 +167,186 @@
   color: var(--color-text, #202224);
 }
 
+/* ── Step-by-Step PWA Installation Guide Modal ────────────────────── */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeInModal 0.25s ease-out forwards;
+}
+
+@keyframes fadeInModal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.guideModalCard {
+  width: 100%;
+  max-width: 480px;
+  background: var(--color-surface, #ffffff);
+  color: var(--color-text, #202224);
+  border-radius: 20px;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--color-border, rgba(44, 36, 22, 0.14));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scaleInModal {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.guideModalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--color-border, #f0f2f7);
+  background: var(--color-bg, #faf8f3);
+}
+
+.guideBrandHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.guideFoxEmoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.guideModalHeading {
+  font-family: var(--font-display, sans-serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-text, #202224);
+  margin: 0;
+}
+
+.guideModalSub {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted, #737791);
+  margin: 0.15rem 0 0;
+}
+
+.guideCloseBtn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--color-text-muted, #737791);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 6px;
+  line-height: 1;
+}
+
+.guideCloseBtn:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.guideDeviceTabs {
+  display: flex;
+  padding: 0.75rem 1.25rem 0;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--color-border, #f0f2f7);
+  background: var(--color-surface, #ffffff);
+  overflow-x: auto;
+}
+
+.guideTabBtn {
+  padding: 0.6rem 0.85rem;
+  border: none;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-muted, #737791);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+}
+
+.guideTabActive {
+  color: var(--color-primary, #2563eb);
+  border-bottom-color: var(--color-primary, #2563eb);
+  font-weight: 700;
+}
+
+.guideStepsContent {
+  padding: 1.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.guideStepsList {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.guideStepsList li {
+  color: var(--color-text, #202224);
+}
+
+.stepBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  padding: 0.1rem 0.45rem;
+  background: var(--color-primary-soft, #e8f0fe);
+  color: var(--color-primary, #2563eb);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  margin: 0 0.2rem;
+}
+
+.guideModalFooter {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--color-border, #f0f2f7);
+  background: var(--color-bg, #faf8f3);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.guidePrimaryActionBtn {
+  min-height: 44px;
+  padding: 0.5rem 1.5rem;
+  background: var(--color-primary, #2563eb);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.guidePrimaryActionBtn:hover {
+  opacity: 0.92;
+}
+
 .installBanner {
   position: sticky;
   top: 0;
