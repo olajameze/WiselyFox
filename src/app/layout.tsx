@@ -48,6 +48,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.__pwaPrompt = null;
+              window.addEventListener('beforeinstallprompt', function(e) {
+                e.preventDefault();
+                window.__pwaPrompt = e;
+                window.dispatchEvent(new CustomEvent('pwa-prompt-captured'));
+              });
+            `,
+          }}
+        />
+      </head>
       <body className="flex flex-col min-h-screen">
         <PwaProvider>
           <Header />
