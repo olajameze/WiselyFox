@@ -31,14 +31,37 @@ function isIosSafari() {
 export function PwaProvider({ children }: { children: React.ReactNode }) {
   const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [installed, setInstalled] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed, setDismissed] = useState(true);
   const [showIosHint, setShowIosHint] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    setInstalled(isStandalone());
-    setDismissed(window.localStorage.getItem(DISMISS_KEY) === "1");
-    setShowIosHint(isIosSafari() && !isStandalone());
+    const standalone = isStandalone();
+    setInstalled(standalone);
+
+    const isDismissed = window.sessionStorage.getItem(DISMISS_KEY) === "1" || window.localStorage.getItem(DISMISS_KEY) === "1";
+    setDismissed(isDismissed);
+
+    const iosSafari = isIosSafari() && !standalone;
+    setShowIosHint(iosSafari);
+
+    if (!standalone && !isDismissed) {
+      // Delay initial popup slightly for smooth entrance
+      const showTimer = setTimeout(() => {
+        setShowPopup(true);
+      }, 1500);
+
+      // Auto dismiss after 30 seconds
+      const autoDismissTimer = setTimeout(() => {
+        setShowPopup(false);
+      }, 31500);
+
+      return () => {
+        clearTimeout(showTimer);
+        clearTimeout(autoDismissTimer);
+      };
+    }
 
     if ("serviceWorker" in navigator) {
       const enableDevPwa = process.env.NEXT_PUBLIC_ENABLE_PWA_DEV === "true";
@@ -64,6 +87,7 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
       setInstalled(true);
       setInstallEvent(null);
       setShowIosHint(false);
+      setShowPopup(false);
     };
 
     window.addEventListener("beforeinstallprompt", onInstall);
@@ -76,49 +100,75 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   function dismissPrompt() {
+    setShowPopup(false);
     setDismissed(true);
     setShowIosHint(false);
-    window.localStorage.setItem(DISMISS_KEY, "1");
+    window.sessionStorage.setItem(DISMISS_KEY, "1");
   }
 
   async function handleInstall() {
-    if (!installEvent) return;
-    await installEvent.prompt();
-    const choice = await installEvent.userChoice;
-    if (choice.outcome === "accepted") setInstallEvent(null);
+    if (installEvent) {
+      await installEvent.prompt();
+      const choice = await installEvent.userChoice;
+      if (choice.outcome === "accepted") setInstallEvent(null);
+    }
     dismissPrompt();
   }
 
-  const showChromiumBanner = Boolean(installEvent) && !installed && !dismissed;
-  const showBanner = (showChromiumBanner || showIosHint) && !installed && !dismissed;
+  const shouldRender = showPopup && !installed && !dismissed;
 
   return (
     <>
-      {showBanner && (
-        <aside className={styles.installBanner} role="region" aria-label="Install WiselyFox app">
-          <div>
-            <strong>Install WiselyFox</strong>
+      {shouldRender && (
+        <aside
+          className={styles.pwaCookiePopup}
+          role="dialog"
+          aria-label="Install WiselyFox app"
+        >
+          <div className={styles.pwaPopupHeader}>
+            <div className={styles.pwaAppBrand}>
+              <span className={styles.pwaAppIcon} aria-hidden="true">
+                🦊
+              </span>
+              <div className={styles.pwaAppMeta}>
+                <strong className={styles.pwaAppTitle}>Install WiselyFox App</strong>
+                <span className={styles.pwaAppBadge}>Free • No store needed</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              className={styles.pwaCloseBtn}
+              onClick={dismissPrompt}
+              aria-label="Close install prompt"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className={styles.pwaPopupBody}>
             {showIosHint ? (
-              <p>
-                On iPhone or iPad: tap Share, then <strong>Add to Home Screen</strong> to use WiselyFox like an app.
+              <p className={styles.pwaPopupText}>
+                To install on iPhone or iPad: tap <span className={styles.shareIcon}>⎋ Share</span> in Safari, then select <strong>Add to Home Screen</strong>.
               </p>
             ) : (
-              <p>
-                Install on phone, tablet, or desktop for full-screen learning, parent tools, and admin access.
+              <p className={styles.pwaPopupText}>
+                Get the full-screen app on your phone, tablet, or desktop with instant access and offline practice.
               </p>
             )}
           </div>
-          <div className={styles.installActions}>
-            {showChromiumBanner && (
-              <button type="button" className={styles.installBtn} onClick={() => void handleInstall()}>
-                Install app
-              </button>
-            )}
+
+          <div className={styles.pwaPopupActions}>
             <button
               type="button"
-              className={styles.dismissBtn}
+              className={styles.pwaInstallActionBtn}
+              onClick={() => void handleInstall()}
+            >
+              {showIosHint ? "Got it" : "Install App"}
+            </button>
+            <button
+              type="button"
+              className={styles.pwaDismissActionBtn}
               onClick={dismissPrompt}
-              aria-label="Dismiss install prompt"
             >
               Not now
             </button>

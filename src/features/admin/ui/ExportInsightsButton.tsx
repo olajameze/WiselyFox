@@ -17,7 +17,15 @@ export function ExportInsightsButton() {
     const result = await triggerInsightsExport();
     setLoading(false);
     if (result.success) {
-      setMessage(`Export job ${result.data.jobId} completed.`);
+      const blob = new Blob([result.data.jsonPayload], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `wiselyfox-b2b-insights-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      setMessage(`Export job ${result.data.jobId} completed & downloaded.`);
       router.refresh();
     } else {
       setMessage(result.error);

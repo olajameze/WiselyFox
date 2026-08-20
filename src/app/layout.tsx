@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/shared/ui/Header/Header";
 import { Footer } from "@/shared/ui/Footer/Footer";
+import { PwaProvider } from "@/features/pwa/ui/PwaProvider";
 
 /**
  * This is the root layout for the entire application. It applies global
@@ -22,9 +23,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <PwaProvider>
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </PwaProvider>
       </body>
     </html>
   );

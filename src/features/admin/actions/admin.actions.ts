@@ -142,8 +142,15 @@ export async function reviewFraudSignal(
   return ok(null);
 }
 
-export async function triggerInsightsExport(): Promise<ActionResult<{ jobId: string }>> {
+export async function triggerInsightsExport(): Promise<
+  ActionResult<{ jobId: string; jsonPayload: string }>
+> {
   const user = await requireSuperAdmin();
+  const { generateB2BInsightsPayload } = await import(
+    "@/server/services/b2b-insights.service"
+  );
+  const payloadData = await generateB2BInsightsPayload();
+  const jsonPayload = JSON.stringify(payloadData, null, 2);
 
   const job = await prisma.dataExportJob.create({
     data: {
@@ -162,5 +169,5 @@ export async function triggerInsightsExport(): Promise<ActionResult<{ jobId: str
   });
 
   revalidatePath("/admin/insights");
-  return ok({ jobId: job.id });
+  return ok({ jobId: job.id, jsonPayload });
 }
