@@ -1,15 +1,19 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
+import Facebook from "next-auth/providers/facebook";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/shared/lib/prisma";
 import { env } from "@/shared/lib/env";
 import { syncSuperAdminRole } from "@/server/services/super-admin.service";
 import { getUserCapabilities } from "@/shared/lib/user-capabilities";
+import { logAudit } from "@/server/services/audit.service";
+import { CONSENT_VERSION } from "@/shared/lib/consent";
 import {
   accessCodeCompactKey,
   normalizeAccessCodeInput,
 } from "@/shared/lib/access-code";
-import type { UserRole } from "@prisma/client";
+import { UserRole, ConsentType } from "@prisma/client";
 import type {} from "next-auth/jwt";
 import { authConfig } from "./auth.config";
 
@@ -75,6 +79,16 @@ async function findChildByAccessCode(raw: string) {
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID ?? process.env.GOOGLE_CLIENT_ID ?? "google-client-id",
+      clientSecret: process.env.AUTH_GOOGLE_SECRET ?? process.env.GOOGLE_CLIENT_SECRET ?? "google-client-secret",
+      allowDangerousEmailAccountLinking: true,
+    }),
+    Facebook({
+      clientId: process.env.AUTH_FACEBOOK_ID ?? process.env.FACEBOOK_CLIENT_ID ?? "facebook-client-id",
+      clientSecret: process.env.AUTH_FACEBOOK_SECRET ?? process.env.FACEBOOK_CLIENT_SECRET ?? "facebook-client-secret",
+      allowDangerousEmailAccountLinking: true,
+    }),
     Credentials({
       id: "parent-credentials",
       name: "Parent",
@@ -171,6 +185,67 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    ...authConfig.callbacks,
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "google" || account?.provider === "facebook") {
+        if (!user.email) return false;
+
+        const email = user.email.toLowerCase();
+        let dbUser = await prisma.user.findUnique({
+          where: { email },
+          include: { parentProfile: true },
+        });
+
+        if (!dbUser) {
+          const trialDays = env.TRIAL_PERIOD_DAYS || 14;
+          const trialEnds = new Date();
+          trialEnds.setDate(trialEnds.getDate() + trialDays);
+
+          dbUser = await prisma.user.create({
+            data: {
+              email,
+              name: user.name ?? (profile?.name as string) ?? "Parent",
+              image: user.image ?? (profile?.picture as string) ?? null,
+              role: UserRole.PARENT,
+              parentProfile: {
+                create: {
+                  onboardingDone: false,
+                  subscription: {
+                    create: {
+                      plan: "ESSENTIAL",
+                      status: "TRIALING",
+                      trialStartsAt: new Date(),
+                      trialEndsAt: trialEnds,
+                    },
+                  },
+                  consents: {
+                    create: [
+                      { type: ConsentType.TERMS, granted: true, version: CONSENT_VERSION },
+                      { type: ConsentType.PRIVACY, granted: true, version: CONSENT_VERSION },
+                      { type: ConsentType.MARKETING, granted: false, version: CONSENT_VERSION },
+                    ],
+                  },
+                },
+              },
+            },
+            include: { parentProfile: true },
+          });
+
+          await logAudit({
+            actorId: dbUser.id,
+            action: `parent.signup.${account.provider}`,
+            resource: "User",
+            resourceId: dbUser.id,
+          });
+        }
+
+        await syncSuperAdminRole(dbUser.id, dbUser.email);
+        user.id = dbUser.id;
+        user.role = dbUser.role;
+        user.hasParentProfile = true;
+      }
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;

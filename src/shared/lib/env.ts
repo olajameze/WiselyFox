@@ -41,6 +41,14 @@ const envSchema = z.object({
   VAPID_SUBJECT: optionalString,
   NEXT_PUBLIC_VAPID_PUBLIC_KEY: optionalString,
   NEXT_PUBLIC_ENABLE_PWA_DEV: optionalString,
+  AUTH_GOOGLE_ID: optionalString,
+  AUTH_GOOGLE_SECRET: optionalString,
+  GOOGLE_CLIENT_ID: optionalString,
+  GOOGLE_CLIENT_SECRET: optionalString,
+  AUTH_FACEBOOK_ID: optionalString,
+  AUTH_FACEBOOK_SECRET: optionalString,
+  FACEBOOK_CLIENT_ID: optionalString,
+  FACEBOOK_CLIENT_SECRET: optionalString,
 });
 
 export type Env = z.infer<typeof envSchema>;

@@ -8,16 +8,25 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 420px;
+  max-width: 260px;
   margin: 0 auto;
 }
 
 .mascotSvg {
   width: 100%;
   height: auto;
-  max-height: 380px;
+  max-height: 240px;
   overflow: visible;
-  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.22));
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.18));
+}
+
+@media (max-width: 640px) {
+  .mascotWrapper {
+    max-width: 200px;
+  }
+  .mascotSvg {
+    max-height: 190px;
+  }
 }
 
 /* ── Hero Character Floating & Breathing ─────────────────────────── */

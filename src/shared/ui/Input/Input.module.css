@@ -14,13 +14,20 @@
 .input {
   min-height: 44px;
   padding: var(--space-sm) var(--space-md);
-  border: 1px solid rgba(44, 36, 22, 0.18);
-  border-bottom: 2px solid rgba(44, 36, 22, 0.28);
+  border: 1.5px solid var(--color-border, rgba(44, 36, 22, 0.2));
+  border-bottom: 2.5px solid rgba(44, 36, 22, 0.32);
   border-radius: var(--radius-sm);
   font-family: var(--font-notebook);
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.55);
+  color: var(--color-text, #1e1710);
+  background: var(--color-surface, #ffffff);
   transition: border-color var(--motion-fast);
+  width: 100%;
+}
+
+.input::placeholder {
+  color: var(--color-text-muted, #786f66);
+  opacity: 0.85;
 }
 
 .input:focus {

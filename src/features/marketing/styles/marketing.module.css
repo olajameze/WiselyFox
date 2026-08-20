@@ -886,14 +886,20 @@
 }
 
 .waitlistCard {
-  max-width: 520px;
+  max-width: 440px;
   margin: 0 auto;
+  background: var(--color-surface, #ffffff) !important;
+  border: 1.5px solid rgba(44, 36, 22, 0.16) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 24px rgba(44, 36, 22, 0.1) !important;
+  padding: var(--space-xl) !important;
 }
 
 .waitlistForm {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+  width: 100%;
 }
 
 .waitlistCheckbox {

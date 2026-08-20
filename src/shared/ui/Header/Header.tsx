@@ -33,17 +33,11 @@ export function Header({ signedIn, variant = "default" }: HeaderProps) {
         .join(" ")}
     >
       <div className={styles.inner}>
-        <Link href="/" className={[styles.logo, isNotebook ? styles.logoNotebook : ""].filter(Boolean).join(" ")}>
-          {isNotebook ? (
-            <>
-              <span className={styles.logoMark} aria-hidden="true">
-                📖
-              </span>
-              WiselyFox
-            </>
-          ) : (
-            "WiselyFox"
-          )}
+        <Link href="/" className={styles.logo}>
+          <span className={styles.logoMark} aria-hidden="true">
+            🦊
+          </span>
+          <span className={styles.logoText}>WiselyFox</span>
         </Link>
 
         <nav
