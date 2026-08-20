@@ -116,8 +116,10 @@ export function WaitlistSection() {
             autoComplete="email"
           />
 
-          <fieldset className={styles.waitlistFieldset}>
-            <legend className={styles.waitlistLegend}>Age bands that interest you</legend>
+          <div className={styles.waitlistFieldset} role="group" aria-labelledby="age-bands-legend">
+            <span id="age-bands-legend" className={styles.waitlistLegend}>
+              Age bands that interest you
+            </span>
             <div className={styles.waitlistChips}>
               {AGE_BANDS.map((band) => (
                 <label key={band} className={styles.waitlistChip}>
@@ -132,7 +134,7 @@ export function WaitlistSection() {
                 </label>
               ))}
             </div>
-          </fieldset>
+          </div>
 
           <label className={styles.waitlistCheckbox}>
             <input

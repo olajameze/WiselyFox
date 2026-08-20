@@ -23,11 +23,16 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
   const [installed, setInstalled] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [isIosDevice, setIsIosDevice] = useState(false);
+  const [showInlineGuide, setShowInlineGuide] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const standalone = isStandalone();
     setInstalled(standalone);
+
+    const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+    setIsIosDevice(isIos);
 
     const isDismissed =
       window.sessionStorage.getItem(DISMISS_KEY) === "1" ||
@@ -98,13 +103,16 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
         const choice = await promptEvent.userChoice;
         if (choice.outcome === "accepted") {
           setInstallEvent(null);
+          dismissPrompt();
+          return;
         }
       } catch {
-        /* ignore */
+        /* fallback to inline guide */
       }
     }
-    // Dismiss straightaway without opening any secondary popups
-    dismissPrompt();
+
+    // On iOS or when native prompt is not permitted, show inline visual instruction
+    setShowInlineGuide(true);
   }
 
   const shouldRender = showPopup && !installed && !dismissed;
@@ -138,26 +146,48 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className={styles.pwaPopupBody}>
-            <p className={styles.pwaPopupText}>
-              Install WiselyFox on your device for full-screen learning, study streaks, and offline access.
-            </p>
+            {!showInlineGuide ? (
+              <p className={styles.pwaPopupText}>
+                Install WiselyFox on your phone or tablet for a fast full-screen app experience, study streaks, and offline practice.
+              </p>
+            ) : isIosDevice ? (
+              <p className={styles.pwaPopupText} style={{ color: "#1e40af", fontWeight: 600 }}>
+                👉 Tap the <strong>Share button (⎋)</strong> at the bottom of Safari, then tap <strong>&quot;Add to Home Screen&quot; (⊞)</strong>.
+              </p>
+            ) : (
+              <p className={styles.pwaPopupText} style={{ color: "#1e40af", fontWeight: 600 }}>
+                👉 Tap the <strong>Menu button (⋮)</strong> in Chrome, then tap <strong>&quot;Install app&quot;</strong> or <strong>&quot;Add to Home screen&quot;</strong>.
+              </p>
+            )}
           </div>
 
           <div className={styles.pwaPopupActions}>
-            <button
-              type="button"
-              className={styles.pwaInstallActionBtn}
-              onClick={() => void handleInstall()}
-            >
-              Install App
-            </button>
-            <button
-              type="button"
-              className={styles.pwaDismissActionBtn}
-              onClick={dismissPrompt}
-            >
-              Not now
-            </button>
+            {!showInlineGuide ? (
+              <>
+                <button
+                  type="button"
+                  className={styles.pwaInstallActionBtn}
+                  onClick={() => void handleInstall()}
+                >
+                  Install App
+                </button>
+                <button
+                  type="button"
+                  className={styles.pwaDismissActionBtn}
+                  onClick={dismissPrompt}
+                >
+                  Not now
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                className={styles.pwaInstallActionBtn}
+                onClick={dismissPrompt}
+              >
+                Got it, done!
+              </button>
+            )}
           </div>
         </aside>
       )}

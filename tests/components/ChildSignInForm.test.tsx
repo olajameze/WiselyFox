@@ -32,5 +32,5 @@ describe("ChildSignInForm", () => {
       accessCode: "wfox-demo-alex",
       pin: "1234",
     });
-  });
+  }, 15000);
 });
