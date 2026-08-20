@@ -6,6 +6,9 @@ import { AppDemoPreview } from "./AppDemoPreview";
 import { PricingSection } from "./PricingSection";
 import { WaitlistSection } from "./WaitlistSection";
 import { WritingText } from "./WritingText";
+import { FoxCodingAnimation } from "./FoxCodingAnimation";
+import { FoxReadingAnimation } from "./FoxReadingAnimation";
+import { FoxNotesAnimation } from "./FoxNotesAnimation";
 import { LANDING_FAQS } from "../lib/landing-faqs";
 import styles from "../styles/marketing.module.css";
 
@@ -54,55 +57,62 @@ export function LandingSections() {
       </section>
 
       <section id="features" className={`${styles.section} ${styles.notebookSection}`}>
-        <WritingText
-          text="Built for real families"
-          as="h2"
-          className={`${styles.sectionTitle} ${styles.sectionTitleWarm}`}
-          startWhenVisible
-          speed={22}
-        />
-        <div className={`${styles.grid} ${styles.grid3}`}>
-          <Card interactive className={styles.featureCard}>
-            <div className={styles.featureIcon}>📚</div>
+        <div className={styles.featureShowcaseRow}>
+          <div className={styles.showcaseMascotCol}>
+            <FoxCodingAnimation />
+          </div>
+          <div className={styles.showcaseContentCol}>
             <WritingText
-              text="Subjects + study skills"
-              as="h3"
-              className={`${styles.cardTitle} ${styles.cardTitleLearn}`}
+              text="Built for real families"
+              as="h2"
+              className={`${styles.sectionTitle} ${styles.sectionTitleWarm}`}
               startWhenVisible
-              speed={18}
+              speed={22}
             />
-            <p>
-              Maths, reading, coding, money literacy, and how to learn, not just what to learn.
-            </p>
-          </Card>
-          <Card interactive className={styles.featureCard}>
-            <div className={styles.featureIcon}>🎯</div>
-            <WritingText
-              text="Adaptive paths"
-              as="h3"
-              className={`${styles.cardTitle} ${styles.cardTitleLearn}`}
-              startWhenVisible
-              speed={18}
-              delay={40}
-            />
-            <p>
-              Entrance assessment sets the level. Lessons adapt to mastery, gaps, and pace.
-            </p>
-          </Card>
-          <Card interactive className={styles.featureCard}>
-            <div className={styles.featureIcon}>👨‍👩‍👧</div>
-            <WritingText
-              text="Parent control"
-              as="h3"
-              className={`${styles.cardTitle} ${styles.cardTitleWarm}`}
-              startWhenVisible
-              speed={18}
-              delay={80}
-            />
-            <p>
-              Full visibility, reward approval, schedules, and privacy settings you can trust.
-            </p>
-          </Card>
+            <div className={styles.featureCardsStack}>
+              <Card interactive className={styles.featureCard}>
+                <div className={styles.featureIcon}>📚</div>
+                <WritingText
+                  text="Subjects + study skills"
+                  as="h3"
+                  className={`${styles.cardTitle} ${styles.cardTitleLearn}`}
+                  startWhenVisible
+                  speed={18}
+                />
+                <p>
+                  Maths, reading, coding, money literacy, and how to learn, not just what to learn.
+                </p>
+              </Card>
+              <Card interactive className={styles.featureCard}>
+                <div className={styles.featureIcon}>🎯</div>
+                <WritingText
+                  text="Adaptive paths"
+                  as="h3"
+                  className={`${styles.cardTitle} ${styles.cardTitleLearn}`}
+                  startWhenVisible
+                  speed={18}
+                  delay={40}
+                />
+                <p>
+                  Entrance assessment sets the level. Lessons adapt to mastery, gaps, and pace.
+                </p>
+              </Card>
+              <Card interactive className={styles.featureCard}>
+                <div className={styles.featureIcon}>👨‍👩‍👧</div>
+                <WritingText
+                  text="Parent control"
+                  as="h3"
+                  className={`${styles.cardTitle} ${styles.cardTitleWarm}`}
+                  startWhenVisible
+                  speed={18}
+                  delay={80}
+                />
+                <p>
+                  Full visibility, reward approval, schedules, and privacy settings you can trust.
+                </p>
+              </Card>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -110,115 +120,129 @@ export function LandingSections() {
         id="inclusive"
         className={`${styles.section} ${styles.notebookSection} ${styles.notebookSectionAlt}`}
       >
-        <WritingText
-          text="Inclusive by design"
-          as="h2"
-          className={`${styles.sectionTitle} ${styles.sectionTitleCalm}`}
-          startWhenVisible
-          speed={22}
-        />
-        <WritingText
-          text="Onboarding captures your child's strengths and needs, then applies tailored accessibility settings across lessons, quizzes, and focus sessions."
-          as="p"
-          className={styles.sectionSubtitle}
-          startWhenVisible
-          speed={10}
-          delay={60}
-        />
-        <div className={styles.grid}>
-          <Card className={styles.noteCard}>
+        <div className={`${styles.featureShowcaseRow} ${styles.featureShowcaseReverse}`}>
+          <div className={styles.showcaseMascotCol}>
+            <FoxReadingAnimation />
+          </div>
+          <div className={styles.showcaseContentCol}>
             <WritingText
-              text="Calm mode"
-              as="h3"
-              className={`${styles.cardTitle} ${styles.cardTitleCalm}`}
+              text="Inclusive by design"
+              as="h2"
+              className={`${styles.sectionTitle} ${styles.sectionTitleCalm}`}
               startWhenVisible
-              speed={18}
+              speed={22}
             />
-            <p>
-              Softer colours, reduced motion, and optional hidden timers in parent Settings. Gentle
-              celebrations with no confetti-style effects when calm mode is on.
-            </p>
-          </Card>
-          <Card className={styles.noteCard}>
             <WritingText
-              text="Visual schedules"
-              as="h3"
-              className={`${styles.cardTitle} ${styles.cardTitleCalm}`}
+              text="Onboarding captures your child's strengths and needs, then applies tailored accessibility settings across lessons, quizzes, and focus sessions."
+              as="p"
+              className={styles.sectionSubtitle}
               startWhenVisible
-              speed={18}
-              delay={40}
+              speed={10}
+              delay={60}
             />
-            <p>
-              Predictable step-by-step lesson flows for ADHD and autistic learners, plus
-              parent-built daily schedules on the learn home.
-            </p>
-          </Card>
-          <Card className={styles.noteCard}>
-            <WritingText
-              text="Focus sessions"
-              as="h3"
-              className={`${styles.cardTitle} ${styles.cardTitleCalm}`}
-              startWhenVisible
-              speed={18}
-              delay={80}
-            />
-            <p>
-              Short timed blocks with movement breaks every 10 minutes for ADHD profiles. Session
-              length is parent-controlled.
-            </p>
-          </Card>
-          <Card className={styles.noteCard}>
-            <WritingText
-              text="Readable content"
-              as="h3"
-              className={`${styles.cardTitle} ${styles.cardTitleCalm}`}
-              startWhenVisible
-              speed={18}
-              delay={120}
-            />
-            <p>
-              Dyslexia-friendly fonts and spacing, high contrast, larger text toggles, and lessons
-              chunked one idea at a time.
-            </p>
-          </Card>
+            <div className={styles.grid}>
+              <Card className={styles.noteCard}>
+                <WritingText
+                  text="Calm mode"
+                  as="h3"
+                  className={`${styles.cardTitle} ${styles.cardTitleCalm}`}
+                  startWhenVisible
+                  speed={18}
+                />
+                <p>
+                  Softer colours, reduced motion, and optional hidden timers in parent Settings. Gentle
+                  celebrations with no confetti-style effects when calm mode is on.
+                </p>
+              </Card>
+              <Card className={styles.noteCard}>
+                <WritingText
+                  text="Visual schedules"
+                  as="h3"
+                  className={`${styles.cardTitle} ${styles.cardTitleCalm}`}
+                  startWhenVisible
+                  speed={18}
+                  delay={40}
+                />
+                <p>
+                  Predictable step-by-step lesson flows for ADHD and autistic learners, plus
+                  parent-built daily schedules on the learn home.
+                </p>
+              </Card>
+              <Card className={styles.noteCard}>
+                <WritingText
+                  text="Focus sessions"
+                  as="h3"
+                  className={`${styles.cardTitle} ${styles.cardTitleCalm}`}
+                  startWhenVisible
+                  speed={18}
+                  delay={80}
+                />
+                <p>
+                  Short timed blocks with movement breaks every 10 minutes for ADHD profiles. Session
+                  length is parent-controlled.
+                </p>
+              </Card>
+              <Card className={styles.noteCard}>
+                <WritingText
+                  text="Readable content"
+                  as="h3"
+                  className={`${styles.cardTitle} ${styles.cardTitleCalm}`}
+                  startWhenVisible
+                  speed={18}
+                  delay={120}
+                />
+                <p>
+                  Dyslexia-friendly fonts and spacing, high contrast, larger text toggles, and lessons
+                  chunked one idea at a time.
+                </p>
+              </Card>
+            </div>
+          </div>
         </div>
       </section>
 
       <WaitlistSection />
 
       <section className={`${styles.section} ${styles.notebookSection}`}>
-        <WritingText
-          text="Trusted & safe"
-          as="h2"
-          className={`${styles.sectionTitle} ${styles.sectionTitleTrust}`}
-          startWhenVisible
-          speed={22}
-        />
-        <div className={styles.grid}>
-          <Card className={styles.noteCard}>
+        <div className={styles.featureShowcaseRow}>
+          <div className={styles.showcaseMascotCol}>
+            <FoxNotesAnimation />
+          </div>
+          <div className={styles.showcaseContentCol}>
             <WritingText
-              text="Privacy first"
-              as="h3"
-              className={`${styles.cardTitle} ${styles.cardTitleTrust}`}
+              text="Trusted & safe"
+              as="h2"
+              className={`${styles.sectionTitle} ${styles.sectionTitleTrust}`}
               startWhenVisible
-              speed={18}
+              speed={22}
             />
-            <p>GDPR minded. Parent consent gates. No child data sold. No third party ads.</p>
-          </Card>
-          <Card className={styles.noteCard}>
-            <WritingText
-              text="Secure by default"
-              as="h3"
-              className={`${styles.cardTitle} ${styles.cardTitleTrust}`}
-              startWhenVisible
-              speed={18}
-              delay={40}
-            />
-            <p>
-              Encrypted sessions, rate limited sign-in and PIN checks, disposable-email screening,
-              and audited admin access.
-            </p>
-          </Card>
+            <div className={styles.grid}>
+              <Card className={styles.noteCard}>
+                <WritingText
+                  text="Privacy first"
+                  as="h3"
+                  className={`${styles.cardTitle} ${styles.cardTitleTrust}`}
+                  startWhenVisible
+                  speed={18}
+                />
+                <p>GDPR minded. Parent consent gates. No child data sold. No third party ads.</p>
+              </Card>
+              <Card className={styles.noteCard}>
+                <WritingText
+                  text="Secure by default"
+                  as="h3"
+                  className={`${styles.cardTitle} ${styles.cardTitleTrust}`}
+                  startWhenVisible
+                  speed={18}
+                  delay={40}
+                />
+                <p>
+                  Encrypted sessions, rate limited sign-in and PIN checks, disposable-email screening,
+                  and audited admin access.
+                </p>
+              </Card>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireTutorProfile } from "@/shared/lib/permissions";
 import { getTutorStudentAccessList } from "@/features/tutors/services/tutor-progress.service";
-import { Card } from "@/shared/ui";
+import { Card, Button, Badge } from "@/shared/ui";
 import styles from "@/features/tutors/ui/tutor.module.css";
 
 export default async function TutorStudentsPage() {
@@ -11,37 +11,56 @@ export default async function TutorStudentsPage() {
   return (
     <div className={styles.dashboard}>
       <header className={styles.pageHeader}>
-        <h1>Students</h1>
+        <h1>My Students ({students.length})</h1>
         <p className={styles.pageSubtitle}>
-          Progress is shared by parents only. You never see child profiles or household settings.
+          Progress and assignments are securely linked via pseudonymous learner aliases. You have access to learning records without exposing personal child data.
         </p>
       </header>
+
       <Card>
         {students.length === 0 ? (
-          <p className={styles.meta}>No active student access. Parents grant access manually or when booking.</p>
+          <div style={{ padding: "1.5rem 0", textAlign: "center" }}>
+            <p className={styles.meta}>
+              No active students connected yet. When parents confirm bookings or grant learning access, they will appear here.
+            </p>
+          </div>
         ) : (
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Alias</th>
-                <th>Age band</th>
-                <th>Granted</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {students.map((s) => (
-                <tr key={s.id}>
-                  <td>{s.learnerAlias}</td>
-                  <td>{s.ageBand}</td>
-                  <td>{s.grantedAt?.toLocaleDateString("en-GB") ?? "Not set"}</td>
-                  <td>
-                    <Link href={`/tutor/students/${s.id}/progress`}>View progress</Link>
-                  </td>
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Learner Alias</th>
+                  <th>Age Band</th>
+                  <th>Access Granted</th>
+                  <th>Status</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {students.map((s) => (
+                  <tr key={s.id}>
+                    <td>
+                      <strong style={{ fontSize: "1rem" }}>{s.learnerAlias}</strong>
+                    </td>
+                    <td>
+                      <Badge variant="warning">Ages {s.ageBand}</Badge>
+                    </td>
+                    <td>{s.grantedAt?.toLocaleDateString("en-GB") ?? "Active"}</td>
+                    <td>
+                      <Badge variant="success">Active</Badge>
+                    </td>
+                    <td>
+                      <Link href={`/tutor/students/${s.id}/progress`}>
+                        <Button size="sm">
+                          View Progress &amp; Assign →
+                        </Button>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </Card>
     </div>

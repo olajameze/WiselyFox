@@ -43,6 +43,34 @@ export async function processTrialReminders() {
       data: { trialRemindersSent: JSON.stringify(sent) },
     });
   }
+
+  // Daily study reminder notifications
+  await processDailyStudyReminders();
+}
+
+export async function processDailyStudyReminders() {
+  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const children = await prisma.childProfile.findMany({
+    where: {
+      learningProfile: {
+        lastStudyDate: { lt: oneDayAgo },
+        streakDays: { gt: 0 },
+      },
+    },
+    include: { parent: true, learningProfile: true },
+    take: 50,
+  });
+
+  for (const child of children) {
+    if (!child.parent.userId) continue;
+    await createUserNotification({
+      userId: child.parent.userId,
+      type: NotificationType.LEARNING,
+      title: `Keep ${child.displayName}'s streak alive! 🔥`,
+      body: `${child.displayName} is on a ${child.learningProfile?.streakDays ?? 1}-day streak. Complete a quick 10-minute session today.`,
+      url: `/parent/children/${child.id}/progress`,
+    });
+  }
 }
 
 export function applyKAnonymity(

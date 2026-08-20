@@ -1,0 +1,255 @@
+/* ═══════════════════════════════════════════════════════════════════
+   WiselyFox Playful Animated Mascot Vignettes (Duolingo-Style)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.mascotWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.mascotSvg {
+  width: 100%;
+  height: auto;
+  max-height: 380px;
+  overflow: visible;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.22));
+}
+
+/* ── Hero Character Floating & Breathing ─────────────────────────── */
+.heroFloatingGroup {
+  animation: floatMascot 4s ease-in-out infinite alternate;
+  transform-origin: center bottom;
+}
+
+.tailWag {
+  animation: tailWag 3.2s ease-in-out infinite alternate;
+  transform-origin: 60px 140px;
+}
+
+.eyeBlink {
+  animation: eyeBlink 4.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.sparkleStar1 {
+  animation: sparkleRotate 3s ease-in-out infinite;
+  transform-origin: 30px 40px;
+}
+
+.sparkleStar2 {
+  animation: sparkleRotate 3.6s ease-in-out 0.8s infinite;
+  transform-origin: 170px 35px;
+}
+
+.floatingGlyph {
+  animation: glyphFloat 3.5s ease-in-out infinite alternate;
+}
+
+.floatingGlyphDelay {
+  animation: glyphFloat 4s ease-in-out 1.2s infinite alternate;
+}
+
+/* ── Coding Mascot Animations ─────────────────────────────────────── */
+.laptopScreenGlow {
+  animation: screenGlow 2.5s ease-in-out infinite alternate;
+}
+
+.codeParticle1 {
+  animation: codeFloat 2.4s ease-in-out infinite;
+}
+
+.codeParticle2 {
+  animation: codeFloat 2.8s ease-in-out 0.7s infinite;
+}
+
+.codeParticle3 {
+  animation: codeFloat 3.2s ease-in-out 1.4s infinite;
+}
+
+.typingHands {
+  animation: typingTap 0.6s ease-in-out infinite alternate;
+  transform-origin: center bottom;
+}
+
+/* ── Reading Mascot Animations ────────────────────────────────────── */
+.bookGlowAura {
+  animation: bookAura 3.8s ease-in-out infinite alternate;
+}
+
+.magicPageTurn {
+  animation: pageFlutter 2.2s ease-in-out infinite alternate;
+  transform-origin: 100px 130px;
+}
+
+/* ── Notes Mascot Animations ──────────────────────────────────────── */
+.pencilPencilWrite {
+  animation: pencilWrite 1.4s ease-in-out infinite alternate;
+  transform-origin: 140px 120px;
+}
+
+.ideaLightbulbGlow {
+  animation: bulbGlow 2s ease-in-out infinite alternate;
+  transform-origin: 100px 20px;
+}
+
+/* ── Keyframe Animations ──────────────────────────────────────────── */
+@keyframes floatMascot {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+  100% {
+    transform: translateY(-14px) rotate(-1deg);
+  }
+}
+
+@keyframes tailWag {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(12deg);
+  }
+  100% {
+    transform: rotate(-8deg);
+  }
+}
+
+@keyframes eyeBlink {
+  0%, 46%, 48%, 100% {
+    transform: scaleY(1);
+  }
+  47% {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes sparkleRotate {
+  0% {
+    transform: scale(0.8) rotate(0deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8) rotate(360deg);
+    opacity: 0.6;
+  }
+}
+
+@keyframes glyphFloat {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-12px) rotate(8deg);
+  }
+}
+
+@keyframes screenGlow {
+  0% {
+    opacity: 0.6;
+    filter: drop-shadow(0 0 4px rgba(72, 128, 255, 0.4));
+  }
+  100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 16px rgba(72, 128, 255, 0.85));
+  }
+}
+
+@keyframes codeFloat {
+  0% {
+    transform: translateY(6px) scale(0.85);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-20px) scale(1.05);
+    opacity: 0;
+  }
+}
+
+@keyframes typingTap {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes bookAura {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes pageFlutter {
+  0% {
+    transform: rotate(0deg) skewY(0deg);
+  }
+  100% {
+    transform: rotate(-6deg) skewY(3deg);
+  }
+}
+
+@keyframes pencilWrite {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(-4px, -2px) rotate(4deg);
+  }
+  100% {
+    transform: translate(4px, 1px) rotate(-3deg);
+  }
+}
+
+@keyframes bulbGlow {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroFloatingGroup,
+  .tailWag,
+  .eyeBlink,
+  .sparkleStar1,
+  .sparkleStar2,
+  .floatingGlyph,
+  .floatingGlyphDelay,
+  .laptopScreenGlow,
+  .codeParticle1,
+  .codeParticle2,
+  .codeParticle3,
+  .typingHands,
+  .bookGlowAura,
+  .magicPageTurn,
+  .pencilPencilWrite,
+  .ideaLightbulbGlow {
+    animation: none !important;
+    transform: none !important;
+  }
+}

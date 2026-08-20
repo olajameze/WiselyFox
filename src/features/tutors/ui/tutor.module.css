@@ -258,3 +258,104 @@
   flex-wrap: wrap;
   align-items: center;
 }
+
+/* ── Tutor Dashboard Workspace ────────────────────────────────────── */
+.tutorKpiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.tutorKpiCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-surface, #ffffff);
+}
+
+.tutorKpiMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tutorKpiLabel {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-muted, #737791);
+}
+
+.tutorKpiValue {
+  font-size: 1.65rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  color: var(--color-text, #202224);
+  line-height: 1.1;
+}
+
+.tutorKpiEarnings {
+  color: #059669;
+}
+
+.tutorKpiAlert {
+  color: #ef3826;
+}
+
+.tutorKpiIcon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.statusRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+@media (min-width: 600px) {
+  .statusRow {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.studentListGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-sm);
+}
+
+.studentCardItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: var(--space-md);
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, rgba(44, 36, 22, 0.12));
+  border-radius: var(--radius-md, 10px);
+}
+
+.studentItemHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.studentAlias {
+  font-size: 1.05rem;
+  color: var(--color-text, #202224);
+}
+
+.studentItemFooter {
+  margin-top: auto;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
