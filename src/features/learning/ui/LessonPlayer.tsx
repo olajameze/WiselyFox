@@ -144,6 +144,7 @@ export function LessonPlayer({
       if (canContinue) goNext();
     }, 1000);
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkPassed, step]);
 
   function toggleFact(index: number) {

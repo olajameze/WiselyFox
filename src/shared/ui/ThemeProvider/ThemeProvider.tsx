@@ -10,7 +10,7 @@ import {
 } from "@/shared/lib/theme";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setMode] = useState<ThemeMode>("system");
+  const [, setMode] = useState<ThemeMode>("system");
 
   useEffect(() => {
     const stored = readStoredTheme();

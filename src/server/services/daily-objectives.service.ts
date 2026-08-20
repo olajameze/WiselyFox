@@ -1,6 +1,7 @@
 import { prisma } from "@/shared/lib/prisma";
 
-export async function generateDailyObjectives(childId: string, ageBand: string) {
+export async function generateDailyObjectives(childId: string, ageBand?: string) {
+  void ageBand;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 

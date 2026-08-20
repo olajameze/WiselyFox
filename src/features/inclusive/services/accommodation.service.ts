@@ -1,4 +1,4 @@
-import type { LearningProfile, EngagementStyle } from "@prisma/client";
+import type { LearningProfile } from "@prisma/client";
 
 export type AccommodationRules = {
   chunkSize: "small" | "medium" | "large";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Alert } from "@/shared/ui";
+import { Button } from "@/shared/ui";
 import { exportHouseholdData } from "@/features/parent/actions/household.actions";
 import styles from "./parent.module.css";
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Button, Card, Alert, ProgressBar, Badge } from "@/shared/ui";
+import { Button, Card, Alert, ProgressBar } from "@/shared/ui";
 import { completeQuiz } from "@/features/learning/actions/learning.actions";
 import type { AccommodationRules } from "@/features/inclusive/services/accommodation.service";
 import styles from "./learnActivity.module.css";
@@ -97,6 +97,7 @@ export function QuizPlayer({
     if (!showFeedback || !isCorrect || finished || loading) return;
     const timer = setTimeout(goNext, advanceMs);
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showFeedback, isCorrect, finished, loading, index, advanceMs]);
 
   function answer(option: string) {

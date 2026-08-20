@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { requireParentOwner } from "@/shared/lib/permissions";
-import { assertHouseholdAccess } from "@/shared/lib/permissions";
+import { requireParentOwner, assertHouseholdAccess } from "@/shared/lib/permissions";
 import { getWeekSchedule } from "@/features/parent/services/schedule.service";
 import { ScheduleEditor } from "@/features/parent/ui/ScheduleEditor";
 import { Card, Button } from "@/shared/ui";

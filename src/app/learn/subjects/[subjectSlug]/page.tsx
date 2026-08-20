@@ -21,7 +21,7 @@ import {
   UNLOCK_ADVANCED_AT,
   UNLOCK_TRACKS_AT,
 } from "@/features/learning/services/lesson-unlock.service";
-import { Card, Button, Badge, Alert, ProgressBar } from "@/shared/ui";
+import { Button, Badge, Alert, ProgressBar } from "@/shared/ui";
 import styles from "@/features/parent/ui/parent.module.css";
 
 function LessonRow({

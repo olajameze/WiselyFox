@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { requireParentOwner, assertHouseholdAccess } from "@/shared/lib/permissions";
 import { prisma } from "@/shared/lib/prisma";
 import { Button, Card } from "@/shared/ui";

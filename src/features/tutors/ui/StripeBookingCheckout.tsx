@@ -31,6 +31,7 @@ function getStripeAppearance() {
 }
 
 function CheckoutForm({ clientSecret }: { clientSecret: string }) {
+  void clientSecret;
   const stripe = useStripe();
   const elements = useElements();
   const [status, setStatus] = useState<string | null>(null);

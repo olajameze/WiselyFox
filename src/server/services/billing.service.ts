@@ -1,4 +1,3 @@
-import Stripe from "stripe";
 import { prisma } from "@/shared/lib/prisma";
 import { getStripe } from "@/server/services/stripe.service";
 import { env } from "@/shared/lib/env";

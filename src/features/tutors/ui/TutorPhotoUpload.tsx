@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { setTutorProfilePhoto } from "@/features/tutors/actions/tutor-profile.actions";
-import { Button, Alert } from "@/shared/ui";
+import { Alert } from "@/shared/ui";
 import styles from "./tutor.module.css";
 
 type Props = {

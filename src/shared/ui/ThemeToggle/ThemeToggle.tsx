@@ -26,12 +26,8 @@ function iconFor(mode: ThemeMode, resolved: "light" | "dark") {
   return resolved === "dark" ? "🌙" : "☀️";
 }
 
-type Props = {
-  /** @deprecated compact is always on; prop kept for call-site compatibility */
-  compact?: boolean;
-};
-
-export function ThemeToggle({ compact: _compact = true }: Props) {
+export function ThemeToggle({ compact }: { compact?: boolean } = {}) {
+  void compact;
   const [mode, setMode] = useState<ThemeMode>("system");
   const [resolved, setResolved] = useState<"light" | "dark">("light");
 
