@@ -57,18 +57,9 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
     }
 
     if ("serviceWorker" in navigator) {
-      const enableDevPwa = process.env.NEXT_PUBLIC_ENABLE_PWA_DEV === "true";
-      if (process.env.NODE_ENV === "development" && !enableDevPwa) {
-        void navigator.serviceWorker.getRegistrations().then((registrations) => {
-          registrations.forEach((registration) => {
-            void registration.unregister();
-          });
-        });
-      } else {
-        navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {
-          /* registration may fail on unsupported hosts */
-        });
-      }
+      navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {
+        /* registration may fail on unsupported hosts */
+      });
     }
 
     const onInstall = (event: Event) => {
