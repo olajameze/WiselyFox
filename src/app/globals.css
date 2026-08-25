@@ -1,21 +1,34 @@
 @import url("https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Lexend:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap");
 
 :root {
-  /* Notebook study-book palette */
-  --bg-paper-cream: #faf5e8;
-  --bg-desk-wood: #1e222b;
-  --bg-desk-shadow: #111318;
-  --spine-accent-dark: #203354;
-  --spine-shadow-deep: #142035;
-  --text-main-ink: #1e1710;
-  --text-muted-ink: #4e4438;
-  --margin-coral: #df6e61;
-  --accent-blue-trust: #1E40AF;
-  --accent-blue-primary: #2563EB;
-  --accent-orange-warm: #F59E0B;
-  --accent-green-calm: #19804e;
-  --status-danger: #cf2222;
-  --status-success: #138a3e;
+  /* Surfaces & Backdrops (Ditching Brown for a Light Modern Studio Desktop) */
+  --bg-desk-wood: #f0f2f5;         /* Crisp, bright neutral-light gray studio desktop backdrop */
+  --bg-paper-cream: #faf9f6;       /* Glare-free, premium soft organic notebook paper sheet */
+  --color-card: #ffffff;           /* Stark, clean white elevated card frames */
+
+  /* High-Contrast Typography Elements */
+  --text-primary: #1e293b;         /* Deep brand navy/slate ink for perfect WCAG AA readability */
+  --text-secondary: #64748b;       /* Clean muted slate gray for instructional subtitles */
+  --margin-coral: #e05638;         /* Vibrant fox-coral for notebook alignment margins */
+
+  /* Duolingo-Style Tactile Action Colors */
+  --brand-navy: #1e293b;           /* Secure base tone for high-level parent controls */
+  --brand-fox-amber: #e05638;      /* Primary high-energy action amber for booking triggers */
+  --brand-teal: #0d9488;           /* Energetic mint/teal for verification checkmarks */
+
+  /* Secondary & Supporting System Tokens */
+  --bg-desk-shadow: #cbd5e1;
+  --spine-accent-dark: var(--brand-navy);
+  --spine-shadow-deep: #0f172a;
+  --text-main-ink: var(--text-primary);
+  --text-muted-ink: var(--text-secondary);
+  --accent-blue-trust: #1e40af;
+  --accent-blue-primary: #2563eb;
+  --accent-orange-warm: var(--brand-fox-amber);
+  --accent-green-calm: var(--brand-teal);
+  --status-danger: #b42318;
+  --status-success: #087443;
+  --border-color-dark: #cbd5e1;
 
   --notebook-paper: var(--bg-paper-cream);
   --notebook-paper-shadow: #ebe4d4;
@@ -24,7 +37,7 @@
   --notebook-ink: var(--text-main-ink);
   --notebook-ink-muted: var(--text-muted-ink);
   --notebook-desk: var(--bg-desk-wood);
-  --notebook-desk-light: #2d3340;
+  --notebook-desk-light: #f8fafc;
   --notebook-spine: var(--spine-accent-dark);
   --notebook-spine-dark: var(--spine-shadow-deep);
   --notebook-trust: var(--accent-blue-trust);
@@ -35,7 +48,7 @@
 
   /* App tokens mapped to notebook theme */
   --color-bg: var(--bg-paper-cream);
-  --color-surface: #fffdf8;
+  --color-surface: var(--color-card);
   --color-primary: var(--accent-blue-primary);
   --color-primary-soft: #e8f0fe;
   --color-primary-dark: var(--accent-blue-trust);
@@ -54,15 +67,15 @@
   --color-danger-soft: #fef2f2;
   --color-success: var(--status-success);
   --color-success-soft: #ecfdf3;
-  --color-border: rgba(44, 36, 22, 0.14);
-  --color-footer: #111827;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  --color-border: #cbd5e1;
+  --color-footer: #1e293b;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 12px;
   --radius-full: 9999px;
-  --shadow-soft: 2px 3px 0 rgba(44, 36, 22, 0.06);
-  --shadow-md: 0 8px 24px rgba(44, 36, 22, 0.12);
-  --shadow-accent: 0 8px 28px rgba(249, 115, 22, 0.22);
+  --shadow-soft: 0 4px 0 var(--border-color-dark);
+  --shadow-md: 0 4px 0 var(--border-color-dark), 0 8px 24px rgba(30, 41, 59, 0.08);
+  --shadow-accent: 0 4px 0 #b43e2b;
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;
@@ -78,9 +91,9 @@
   --motion-fast: 150ms;
   --motion-base: 250ms;
   --motion-slow: 400ms;
-  --motion-page-turn: 280ms;
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-page-turn: cubic-bezier(0.28, 0.72, 0.38, 1);
+  --motion-page-turn: 500ms;
+  --ease-out: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-page-turn: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 [data-theme="dark"] {

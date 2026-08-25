@@ -44,47 +44,49 @@ export function FoxReadingAnimation({ className }: { className?: string }) {
           <ellipse cx="120" cy="150" rx="46" ry="40" fill="#E05638" stroke="#203354" strokeWidth="3" />
           <ellipse cx="120" cy="156" rx="28" ry="26" fill="#FFFDF8" />
 
-          {/* Head */}
-          <g transform="translate(120 85)">
-            <path d="M-36 -32 L-52 -82 L-12 -56 Z" fill="#E05638" stroke="#203354" strokeWidth="3" />
-            <path d="M-38 -45 L-46 -72 L-24 -56 Z" fill="#FBBF24" />
-            <path d="M36 -32 L52 -82 L12 -56 Z" fill="#E05638" stroke="#203354" strokeWidth="3" />
-            <path d="M38 -45 L46 -72 L24 -56 Z" fill="#FBBF24" />
+          {/* Head & Glasses Dynamic Tilt Group */}
+          <g className={styles.headTiltGroup}>
+            <g transform="translate(120 85)">
+              <path d="M-36 -32 L-52 -82 L-12 -56 Z" fill="#E05638" stroke="#203354" strokeWidth="3" />
+              <path d="M-38 -45 L-46 -72 L-24 -56 Z" fill="#FBBF24" />
+              <path d="M36 -32 L52 -82 L12 -56 Z" fill="#E05638" stroke="#203354" strokeWidth="3" />
+              <path d="M38 -45 L46 -72 L24 -56 Z" fill="#FBBF24" />
 
-            <path
-              d="M-44 -32 C-54 -2, -34 26, 0 34 C34 26, 54 -2, 44 -32 C30 -42, -30 -42, -44 -32 Z"
-              fill="#E05638"
-              stroke="#203354"
-              strokeWidth="3"
-            />
-            <path
-              d="M-40 -18 C-44 14, -24 30, 0 34 C24 30, 44 14, 40 -18 C28 -4, -28 -4, -40 -18 Z"
-              fill="#FFFDF8"
-              stroke="#203354"
-              strokeWidth="2"
-            />
-            <ellipse cx="-24" cy="8" rx="8" ry="5" fill="#F59E0B" opacity="0.6" />
-            <ellipse cx="24" cy="8" rx="8" ry="5" fill="#F59E0B" opacity="0.6" />
+              <path
+                d="M-44 -32 C-54 -2, -34 26, 0 34 C34 26, 54 -2, 44 -32 C30 -42, -30 -42, -44 -32 Z"
+                fill="#E05638"
+                stroke="#203354"
+                strokeWidth="3"
+              />
+              <path
+                d="M-40 -18 C-44 14, -24 30, 0 34 C24 30, 44 14, 40 -18 C28 -4, -28 -4, -40 -18 Z"
+                fill="#FFFDF8"
+                stroke="#203354"
+                strokeWidth="2"
+              />
+              <ellipse cx="-24" cy="8" rx="8" ry="5" fill="#F59E0B" opacity="0.6" />
+              <ellipse cx="24" cy="8" rx="8" ry="5" fill="#F59E0B" opacity="0.6" />
 
-            {/* Delighted Reading Eyes */}
-            <g className={styles.eyeBlink}>
-              <ellipse cx="-16" cy="-4" rx="4.5" ry="6.5" fill="#203354" />
-              <circle cx="-14.5" cy="-6" r="2" fill="#FFFFFF" />
-              <ellipse cx="16" cy="-4" rx="4.5" ry="6.5" fill="#203354" />
-              <circle cx="17.5" cy="-6" r="2" fill="#FFFFFF" />
+              {/* Delighted Reading Eyes */}
+              <g className={styles.eyeBlink}>
+                <ellipse cx="-16" cy="-4" rx="4.5" ry="6.5" fill="#203354" />
+                <circle cx="-14.5" cy="-6" r="2" fill="#FFFFFF" />
+                <ellipse cx="16" cy="-4" rx="4.5" ry="6.5" fill="#203354" />
+                <circle cx="17.5" cy="-6" r="2" fill="#FFFFFF" />
+              </g>
+
+              <polygon points="-5,14 5,14 0,19" fill="#203354" />
+              <path d="M-6 24 Q0 28 6 24" stroke="#203354" strokeWidth="2" fill="none" strokeLinecap="round" />
             </g>
 
-            <polygon points="-5,14 5,14 0,19" fill="#203354" />
-            <path d="M-6 24 Q0 28 6 24" stroke="#203354" strokeWidth="2" fill="none" strokeLinecap="round" />
-          </g>
-
-          {/* Glasses */}
-          <g fill="none" stroke="#1E40AF" strokeWidth="3.5" strokeLinejoin="round">
-            <circle cx="102" cy="81" r="15" fill="rgba(255,255,255,0.4)" />
-            <circle cx="138" cy="81" r="15" fill="rgba(255,255,255,0.4)" />
-            <path d="M117 81 L123 81" />
-            <path d="M87 81 L74 76" />
-            <path d="M153 81 L166 76" />
+            {/* Glasses */}
+            <g fill="none" stroke="#1E40AF" strokeWidth="3.5" strokeLinejoin="round">
+              <circle cx="102" cy="81" r="15" fill="rgba(255,255,255,0.4)" />
+              <circle cx="138" cy="81" r="15" fill="rgba(255,255,255,0.4)" />
+              <path d="M117 81 L123 81" />
+              <path d="M87 81 L74 76" />
+              <path d="M153 81 L166 76" />
+            </g>
           </g>
 
           {/* Large Open Storybook */}

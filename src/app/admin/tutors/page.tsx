@@ -24,6 +24,41 @@ export default async function AdminTutorsPage() {
             <p>Headline: {tutor.headline || "Not set"}</p>
             <p>DOB: {tutor.dateOfBirth?.toLocaleDateString("en-GB") ?? "Not set"}</p>
             <p>Photo: {tutor.profilePhotoUrl ? "Uploaded" : "Missing"}</p>
+            <div style={{ margin: "0.5rem 0", fontSize: "0.875rem" }}>
+              <p><strong>Safety Documents:</strong></p>
+              <ul>
+                <li>
+                  DBS Certificate:{" "}
+                  {tutor.dbsLetterUrl ? (
+                    <a href={tutor.dbsLetterUrl} target="_blank" rel="noreferrer" style={{ textDecoration: "underline" }}>
+                      View DBS Certificate
+                    </a>
+                  ) : (
+                    <span style={{ color: "var(--color-danger)" }}>Missing</span>
+                  )}
+                </li>
+                <li>
+                  Government Photo ID:{" "}
+                  {tutor.photoIdUrl ? (
+                    <a href={tutor.photoIdUrl} target="_blank" rel="noreferrer" style={{ textDecoration: "underline" }}>
+                      View Photo ID
+                    </a>
+                  ) : (
+                    <span style={{ color: "var(--color-danger)" }}>Missing</span>
+                  )}
+                </li>
+                <li>
+                  Proof of Address:{" "}
+                  {tutor.proofOfAddressUrl ? (
+                    <a href={tutor.proofOfAddressUrl} target="_blank" rel="noreferrer" style={{ textDecoration: "underline" }}>
+                      View Proof of Address
+                    </a>
+                  ) : (
+                    <span style={{ color: "var(--color-danger)" }}>Missing</span>
+                  )}
+                </li>
+              </ul>
+            </div>
             {tutor.profilePhotoUrl && (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={tutor.profilePhotoUrl} alt="" width={80} height={80} />

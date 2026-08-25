@@ -27,7 +27,19 @@ export async function assignLessonToStudentAction(
     return fail(parsed.error.issues[0]?.message ?? "Invalid assignment");
   }
 
-  const { user } = await requireTutorProfile();
+  const { user, tutor } = await requireTutorProfile();
+
+  // Mandatory multi-document verification check for child safety
+  if (
+    !tutor.isVerified ||
+    !tutor.dbsLetterUrl ||
+    !tutor.photoIdUrl ||
+    !tutor.proofOfAddressUrl
+  ) {
+    return fail(
+      "Mandatory tutor safety verification required. You must upload your DBS certificate, government photo ID, and proof of address and be verified before assigning lessons.",
+    );
+  }
 
   // Sanitize incoming notes for links / off-platform payments.
   const tutorNotes = sanitizeTutorNotes(parsed.data.tutorNotes);

@@ -13,7 +13,49 @@ import {
   TUTOR_TERMS_COPY,
 } from "@/features/tutors/lib/tutor-consent";
 import { submitTutorForAgeReview } from "@/features/tutors/services/tutor-verification.service";
-import { requireParentOwner } from "@/shared/lib/permissions";
+import { requireParentOwner, requireTutorProfile } from "@/shared/lib/permissions";
+import { TutorVerificationStatus } from "@prisma/client";
+
+const tutorOnboardingUploadsSchema = z.object({
+  dbsLetterUrl: z.string().min(1, "Official DBS Certificate letter is required"),
+  photoIdUrl: z.string().min(1, "Government Photo ID card is required"),
+  proofOfAddressUrl: z.string().min(1, "Proof of Address document is required"),
+});
+
+export async function saveTutorOnboardingAction(
+  input: z.infer<typeof tutorOnboardingUploadsSchema>,
+): Promise<ActionResult<{ tutorId: string }>> {
+  const { user, tutor } = await requireTutorProfile();
+  const parsed = tutorOnboardingUploadsSchema.safeParse(input);
+  if (!parsed.success) {
+    return fail(parsed.error.issues[0]?.message ?? "All three safety verification documents are mandatory");
+  }
+
+  const { dbsLetterUrl, photoIdUrl, proofOfAddressUrl } = parsed.data;
+  if (!dbsLetterUrl.trim() || !photoIdUrl.trim() || !proofOfAddressUrl.trim()) {
+    return fail("All three safety verification documents (DBS Certificate, Photo ID, Proof of Address) must be uploaded");
+  }
+
+  await prisma.tutorProfile.update({
+    where: { id: tutor.id },
+    data: {
+      dbsLetterUrl,
+      photoIdUrl,
+      proofOfAddressUrl,
+      isVerified: false,
+      verificationStatus: TutorVerificationStatus.PENDING_PROFILE_REVIEW,
+    },
+  });
+
+  await logAudit({
+    actorId: user.id,
+    action: "tutor.onboarding.documents.upload",
+    resource: "TutorProfile",
+    resourceId: tutor.id,
+  });
+
+  return ok({ tutorId: tutor.id });
+}
 
 const tutorSignUpSchema = z.object({
   name: z.string().min(2),

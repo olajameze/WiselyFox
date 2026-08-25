@@ -9,7 +9,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: "#2563eb",
+  themeColor: "#1e293b",
   viewportFit: "cover",
 };
 
@@ -62,7 +62,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="flex flex-col min-h-screen">
+      <body>
         <PwaProvider>
           <Header />
           <main className="flex-grow">{children}</main>

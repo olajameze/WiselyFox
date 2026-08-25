@@ -39,12 +39,25 @@ export function canPublishTutorProfile(tutor: {
   ageVerifiedAt: Date | null;
   feeTermsAcceptedAt: Date | null;
   verificationStatus: TutorVerificationStatus;
+  dbsLetterUrl?: string | null;
+  photoIdUrl?: string | null;
+  proofOfAddressUrl?: string | null;
+  isVerified?: boolean;
 }): boolean {
+  // Safety documents are all-or-nothing: if any is supplied, all three are required.
+  const anyDocSupplied = Boolean(
+    tutor.dbsLetterUrl || tutor.photoIdUrl || tutor.proofOfAddressUrl,
+  );
+  const hasAllSafetyDocs = Boolean(
+    tutor.dbsLetterUrl && tutor.photoIdUrl && tutor.proofOfAddressUrl,
+  );
+
   return (
     Boolean(tutor.profilePhotoUrl) &&
     Boolean(tutor.ageVerifiedAt) &&
     Boolean(tutor.feeTermsAcceptedAt) &&
-    tutor.verificationStatus === TutorVerificationStatus.VERIFIED
+    tutor.verificationStatus === TutorVerificationStatus.VERIFIED &&
+    (!anyDocSupplied || hasAllSafetyDocs)
   );
 }
 

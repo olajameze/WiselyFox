@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/shared/ui/Button/Button";
 import { PreferenceIconGroup } from "@/shared/ui/PreferenceIconGroup/PreferenceIconGroup";
+import { useScrollSpy } from "@/shared/hooks/useScrollSpy";
 import styles from "./Header.module.css";
 
 interface HeaderProps {
@@ -11,15 +12,18 @@ interface HeaderProps {
   variant?: "default" | "notebook";
 }
 
+const SECTION_IDS = ["features", "pricing", "faq", "inclusive", "demo", "waitlist"];
+
 const mainNav = [
-  { href: "/#features", label: "Features" },
-  { href: "/tutors", label: "Tutors" },
-  { href: "/#pricing", label: "Pricing" },
-  { href: "/#faq", label: "FAQ" },
+  { href: "/#features", label: "Features", sectionId: "features" },
+  { href: "/tutors", label: "Tutors", sectionId: null },
+  { href: "/#pricing", label: "Pricing", sectionId: "pricing" },
+  { href: "/#faq", label: "FAQ", sectionId: "faq" },
 ] as const;
 
 export function Header({ signedIn, variant = "default" }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const activeSection = useScrollSpy(SECTION_IDS);
   const isNotebook = variant === "notebook";
 
   return (
@@ -44,11 +48,19 @@ export function Header({ signedIn, variant = "default" }: HeaderProps) {
           className={[styles.nav, isNotebook ? styles.navNotebook : ""].filter(Boolean).join(" ")}
           aria-label="Main"
         >
-          {mainNav.map((item) => (
-            <Link key={item.href} href={item.href}>
-              {item.label}
-            </Link>
-          ))}
+          {mainNav.map((item) => {
+            const isActive = item.sectionId ? activeSection === item.sectionId : false;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={isActive ? styles.navLinkActive : styles.navLink}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className={styles.actions}>

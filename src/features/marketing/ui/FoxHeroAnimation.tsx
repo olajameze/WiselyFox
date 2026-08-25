@@ -59,85 +59,87 @@ export function FoxHeroAnimation({ className }: { className?: string }) {
           {/* White Chest Belly */}
           <ellipse cx="120" cy="156" rx="28" ry="26" fill="#FFFDF8" />
 
-          {/* Fox Head Group */}
-          <g transform="translate(120 90)">
-            {/* Left Ear */}
-            <path
-              d="M-36 -32 L-52 -82 L-12 -56 Z"
-              fill="#E05638"
-              stroke="#203354"
-              strokeWidth="3"
-              strokeLinejoin="round"
-            />
-            <path d="M-38 -45 L-46 -72 L-24 -56 Z" fill="#FBBF24" />
+          {/* Fox Head & Glasses Dynamic Tilt Group */}
+          <g className={styles.headTiltGroup}>
+            <g transform="translate(120 90)">
+              {/* Left Ear */}
+              <path
+                d="M-36 -32 L-52 -82 L-12 -56 Z"
+                fill="#E05638"
+                stroke="#203354"
+                strokeWidth="3"
+                strokeLinejoin="round"
+              />
+              <path d="M-38 -45 L-46 -72 L-24 -56 Z" fill="#FBBF24" />
 
-            {/* Right Ear */}
-            <path
-              d="M36 -32 L52 -82 L12 -56 Z"
-              fill="#E05638"
-              stroke="#203354"
-              strokeWidth="3"
-              strokeLinejoin="round"
-            />
-            <path d="M38 -45 L46 -72 L24 -56 Z" fill="#FBBF24" />
+              {/* Right Ear */}
+              <path
+                d="M36 -32 L52 -82 L12 -56 Z"
+                fill="#E05638"
+                stroke="#203354"
+                strokeWidth="3"
+                strokeLinejoin="round"
+              />
+              <path d="M38 -45 L46 -72 L24 -56 Z" fill="#FBBF24" />
 
-            {/* Face base */}
-            <path
-              d="M-44 -32 C-54 -2, -34 26, 0 34 C34 26, 54 -2, 44 -32 C30 -42, -30 -42, -44 -32 Z"
-              fill="#E05638"
-              stroke="#203354"
-              strokeWidth="3"
-              strokeLinejoin="round"
-            />
+              {/* Face base */}
+              <path
+                d="M-44 -32 C-54 -2, -34 26, 0 34 C34 26, 54 -2, 44 -32 C30 -42, -30 -42, -44 -32 Z"
+                fill="#E05638"
+                stroke="#203354"
+                strokeWidth="3"
+                strokeLinejoin="round"
+              />
 
-            {/* White face cheeks / snout mask */}
-            <path
-              d="M-40 -18 C-44 14, -24 30, 0 34 C24 30, 44 14, 40 -18 C28 -4, -28 -4, -40 -18 Z"
-              fill="#FFFDF8"
-              stroke="#203354"
-              strokeWidth="2"
-            />
+              {/* White face cheeks / snout mask */}
+              <path
+                d="M-40 -18 C-44 14, -24 30, 0 34 C24 30, 44 14, 40 -18 C28 -4, -28 -4, -40 -18 Z"
+                fill="#FFFDF8"
+                stroke="#203354"
+                strokeWidth="2"
+              />
 
-            {/* Rosy Cheeks */}
-            <ellipse cx="-24" cy="8" rx="8" ry="5" fill="#F59E0B" opacity="0.6" />
-            <ellipse cx="24" cy="8" rx="8" ry="5" fill="#F59E0B" opacity="0.6" />
+              {/* Rosy Cheeks */}
+              <ellipse cx="-24" cy="8" rx="8" ry="5" fill="#F59E0B" opacity="0.6" />
+              <ellipse cx="24" cy="8" rx="8" ry="5" fill="#F59E0B" opacity="0.6" />
 
-            {/* Cute Eyes with Blink */}
-            <g className={styles.eyeBlink}>
-              <ellipse cx="-16" cy="-4" rx="4.5" ry="6.5" fill="#203354" />
-              <circle cx="-14.5" cy="-6" r="2" fill="#FFFFFF" />
-              <ellipse cx="16" cy="-4" rx="4.5" ry="6.5" fill="#203354" />
-              <circle cx="17.5" cy="-6" r="2" fill="#FFFFFF" />
+              {/* Cute Eyes with Blink */}
+              <g className={styles.eyeBlink}>
+                <ellipse cx="-16" cy="-4" rx="4.5" ry="6.5" fill="#203354" />
+                <circle cx="-14.5" cy="-6" r="2" fill="#FFFFFF" />
+                <ellipse cx="16" cy="-4" rx="4.5" ry="6.5" fill="#203354" />
+                <circle cx="17.5" cy="-6" r="2" fill="#FFFFFF" />
+              </g>
+
+              {/* Cute Nose Snout */}
+              <polygon points="-5,14 5,14 0,19" fill="#203354" />
+              <path d="M0 19 L0 23" stroke="#203354" strokeWidth="2" strokeLinecap="round" />
+              <path
+                d="M-6 24 Q0 28 6 24"
+                stroke="#203354"
+                strokeWidth="2"
+                fill="none"
+                strokeLinecap="round"
+              />
             </g>
 
-            {/* Cute Nose Snout */}
-            <polygon points="-5,14 5,14 0,19" fill="#203354" />
-            <path d="M0 19 L0 23" stroke="#203354" strokeWidth="2" strokeLinecap="round" />
-            <path
-              d="M-6 24 Q0 28 6 24"
-              stroke="#203354"
-              strokeWidth="2"
+            {/* Smart Scholar Glasses */}
+            <g
               fill="none"
+              stroke="#1E40AF"
+              strokeWidth="3.5"
+              strokeLinejoin="round"
               strokeLinecap="round"
-            />
-          </g>
-
-          {/* Smart Scholar Glasses */}
-          <g
-            fill="none"
-            stroke="#1E40AF"
-            strokeWidth="3.5"
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          >
-            <circle cx="102" cy="86" r="15" fill="rgba(255,255,255,0.4)" />
-            <circle cx="138" cy="86" r="15" fill="rgba(255,255,255,0.4)" />
-            <path d="M117 86 L123 86" />
-            <path d="M87 86 L74 81" />
-            <path d="M153 86 L166 81" />
-            {/* Glass Lens reflection sparkles */}
-            <line x1="96" y1="78" x2="100" y2="75" stroke="#FFFFFF" strokeWidth="2.5" />
-            <line x1="132" y1="78" x2="136" y2="75" stroke="#FFFFFF" strokeWidth="2.5" />
+            >
+              <circle cx="102" cy="86" r="15" fill="rgba(255,255,255,0.4)" />
+              <circle cx="138" cy="86" r="15" fill="rgba(255,255,255,0.4)" />
+              <path d="M117 86 L123 86" />
+              <path d="M87 86 L74 81" />
+              <path d="M153 86 L166 81" />
+              {/* Glass Lens reflection sparkles */}
+              <line x1="96" y1="78" x2="100" y2="75" stroke="#FFFFFF" strokeWidth="2.5" />
+              <line x1="132" y1="78" x2="136" y2="75" stroke="#FFFFFF" strokeWidth="2.5" />
+            </g>
           </g>
 
           {/* Open Learning Journal (Held in Paws) */}

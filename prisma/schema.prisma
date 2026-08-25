@@ -559,6 +559,10 @@ model TutorProfile {
   hourlyRatePence    Int                     @default(0)
   profilePhotoUrl    String?
   cvUrl              String?
+  dbsLetterUrl       String?
+  photoIdUrl         String?
+  proofOfAddressUrl  String?
+  isVerified         Boolean                 @default(false)
   dateOfBirth        DateTime?
   ageVerifiedAt      DateTime?
   verifiedAt         DateTime?

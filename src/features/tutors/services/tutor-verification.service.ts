@@ -1,5 +1,6 @@
 import { prisma } from "@/shared/lib/prisma";
 import { TutorVerificationStatus } from "@prisma/client";
+import { canPublishTutorProfile } from "./tutor-profile.service";
 
 export async function submitTutorForAgeReview(tutorId: string) {
   return prisma.tutorProfile.update({
@@ -36,6 +37,15 @@ export async function approveTutorAge(tutorId: string, reviewerId: string, note?
 }
 
 export async function approveTutorProfile(tutorId: string, reviewerId: string, note?: string) {
+  const tutor = await prisma.tutorProfile.findUnique({ where: { id: tutorId } });
+  if (!tutor) throw new Error("Tutor not found");
+
+  if (!canPublishTutorProfile(tutor)) {
+    throw new Error(
+      "Tutor is missing required items for publication (photo, age verification, fee terms, safety documents)",
+    );
+  }
+
   await prisma.tutorVerification.create({
     data: {
       tutorId,
@@ -50,6 +60,7 @@ export async function approveTutorProfile(tutorId: string, reviewerId: string, n
     where: { id: tutorId },
     data: {
       verificationStatus: TutorVerificationStatus.VERIFIED,
+      isVerified: true,
       verifiedAt: new Date(),
       published: true,
     },
@@ -76,6 +87,7 @@ export async function rejectTutorVerification(
     where: { id: tutorId },
     data: {
       verificationStatus: TutorVerificationStatus.REJECTED,
+      isVerified: false,
       published: false,
     },
   });
@@ -96,6 +108,7 @@ export async function suspendTutor(tutorId: string, reviewerId: string, note?: s
     where: { id: tutorId },
     data: {
       verificationStatus: TutorVerificationStatus.SUSPENDED,
+      isVerified: false,
       published: false,
     },
   });

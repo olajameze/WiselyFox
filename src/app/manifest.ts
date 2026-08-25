@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: "WiselyFox, Adaptive Learning",
+    name: "WiselyFox - Adaptive Learning Platform",
     short_name: "WiselyFox",
     description: "Child safe, parent guided adaptive learning for mobile, tablet, and desktop.",
     start_url: "/",
@@ -11,8 +11,8 @@ export default function manifest(): MetadataRoute.Manifest {
     display: "standalone",
     display_override: ["standalone", "window-controls-overlay", "browser"],
     orientation: "any",
-    background_color: "#faf5e8",
-    theme_color: "#2563eb",
+    background_color: "#faf9f6",
+    theme_color: "#1e293b",
     categories: ["education", "kids"],
     lang: "en-GB",
     dir: "ltr",

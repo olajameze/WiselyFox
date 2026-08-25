@@ -1,29 +1,41 @@
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: var(--space-xs) var(--space-sm);
+  padding: 0.35rem 0.75rem;
   border-radius: var(--radius-full);
+  font-family: var(--font-sans, "Lexend", sans-serif);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   line-height: 1;
+  border: 2px solid transparent;
 }
 
 .default {
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
+  background: var(--color-primary-soft, #e8f0fe);
+  color: var(--color-primary-dark, #1e40af);
+  border-color: #bfdbfe;
+  box-shadow: 0 2px 0 #93c5fd;
 }
 
 .success {
-  background: var(--color-success-soft);
-  color: var(--color-success);
+  background: var(--color-success-soft, #ecfdf3);
+  color: #065f46;
+  border-color: #a7f3d0;
+  box-shadow: 0 2px 0 #6ee7b7;
 }
 
 .warning {
-  background: var(--color-reward-soft);
-  color: var(--color-reward-dark);
+  background: var(--color-reward-soft, #fef3c7);
+  color: #92400e;
+  border-color: #fde68a;
+  box-shadow: 0 2px 0 #fcd34d;
 }
 
 .danger {
-  background: var(--color-danger-soft);
-  color: var(--color-danger);
+  background: var(--color-danger-soft, #fef2f2);
+  color: #991b1b;
+  border-color: #fecaca;
+  box-shadow: 0 2px 0 #f87171;
 }

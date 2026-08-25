@@ -28,6 +28,21 @@ export function PwaProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    // Register Service Worker for PWA offline capabilities
+    if ("serviceWorker" in navigator && process.env.NODE_ENV !== "test") {
+      navigator.serviceWorker
+        .register("/sw.js", { scope: "/" })
+        .then((reg) => {
+          if (process.env.NODE_ENV === "development") {
+            console.log("[PWA] Service Worker registered with scope:", reg.scope);
+          }
+        })
+        .catch((err) => {
+          console.error("[PWA] Service Worker registration failed:", err);
+        });
+    }
+
     const standalone = isStandalone();
     setInstalled(standalone);
 

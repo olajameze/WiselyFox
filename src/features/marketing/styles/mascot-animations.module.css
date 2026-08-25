@@ -29,6 +29,19 @@
   }
 }
 
+/* ── Head & Glasses Anchor Rotation & Peer Loop ──────────────────── */
+.headTiltGroup {
+  transform-origin: 120px 90px;
+  animation: headPeerDown 5s ease-in-out infinite alternate;
+  will-change: transform;
+  transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mascotWrapper:hover .headTiltGroup {
+  animation-play-state: paused;
+  transform: rotate(-6deg) translateY(3px);
+}
+
 /* ── Hero Character Floating & Breathing ─────────────────────────── */
 .heroFloatingGroup {
   animation: floatMascot 4s ease-in-out infinite alternate;
@@ -230,6 +243,21 @@
   }
 }
 
+@keyframes headPeerDown {
+  0% {
+    transform: rotate(0deg) translateY(0);
+  }
+  35% {
+    transform: rotate(-3deg) translateY(2px);
+  }
+  65% {
+    transform: rotate(2deg) translateY(1px);
+  }
+  100% {
+    transform: rotate(-4.5deg) translateY(3px);
+  }
+}
+
 @keyframes bulbGlow {
   0% {
     opacity: 0.7;
@@ -242,6 +270,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .headTiltGroup,
   .heroFloatingGroup,
   .tailWag,
   .eyeBlink,
@@ -260,5 +289,6 @@
   .ideaLightbulbGlow {
     animation: none !important;
     transform: none !important;
+    transition: none !important;
   }
 }

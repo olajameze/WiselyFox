@@ -43,6 +43,24 @@ export default async function TutorHomePage() {
         </p>
       </header>
 
+      {(!tutor.isVerified || !tutor.dbsLetterUrl || !tutor.photoIdUrl || !tutor.proofOfAddressUrl) && (
+        <Card className={styles.mtLg} style={{ border: "2px solid #e05638", background: "#fff5f2" }}>
+          <div style={{ display: "flex", gap: "1rem", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" }}>
+            <div>
+              <strong style={{ color: "#b42318", fontSize: "1.05rem" }}>
+                ⚠️ Mandatory Child Safety Verification Required
+              </strong>
+              <p style={{ margin: "0.25rem 0 0", fontSize: "0.875rem", color: "#64748b" }}>
+                You must upload your DBS certificate, government photo ID, and proof of address before you can assign lessons or list publicly.
+              </p>
+            </div>
+            <Link href="/tutor/profile">
+              <Button size="sm">Complete Verification →</Button>
+            </Link>
+          </div>
+        </Card>
+      )}
+
       {/* 4-Card Tutor KPI Overview */}
       <div className={styles.tutorKpiGrid}>
         <Card className={styles.tutorKpiCard}>

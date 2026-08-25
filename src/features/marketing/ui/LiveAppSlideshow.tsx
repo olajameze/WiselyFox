@@ -42,6 +42,7 @@ const THEME_CLASSES = {
 export function LiveAppSlideshow() {
   const [index, setIndex] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [isFlipping, setIsFlipping] = useState(false);
 
   const slides = useMemo(
     () =>
@@ -60,9 +61,29 @@ export function LiveAppSlideshow() {
     return () => mq.removeEventListener("change", apply);
   }, []);
 
+  const changeSlide = (nextIndex: number) => {
+    if (reducedMotion) {
+      setIndex(nextIndex);
+      return;
+    }
+    setIsFlipping(true);
+    setIndex(nextIndex);
+    const timer = setTimeout(() => {
+      setIsFlipping(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  };
+
   useEffect(() => {
     if (reducedMotion) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % slides.length), 4000);
+    const id = setInterval(() => {
+      setIndex((i) => {
+        const next = (i + 1) % slides.length;
+        setIsFlipping(true);
+        setTimeout(() => setIsFlipping(false), 500);
+        return next;
+      });
+    }, 4000);
     return () => clearInterval(id);
   }, [reducedMotion, slides.length]);
 
@@ -84,7 +105,15 @@ export function LiveAppSlideshow() {
   return (
     <div className={slideStyles.wrapper}>
       <div className={slideStyles.device}>
-        <div className={[slideStyles.screen, slide.theme].join(" ")}>
+        <div
+          className={[
+            slideStyles.screen,
+            slide.theme,
+            isFlipping ? slideStyles.pageFlipping : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
           <div className={slideStyles.mockNav} />
           <h3>{slide.title}</h3>
           <p>{slide.desc}</p>
@@ -98,7 +127,7 @@ export function LiveAppSlideshow() {
         <button
           type="button"
           aria-label="Previous slide"
-          onClick={() => setIndex((i) => (i - 1 + slides.length) % slides.length)}
+          onClick={() => changeSlide((index - 1 + slides.length) % slides.length)}
         >
           ‹
         </button>
@@ -109,13 +138,13 @@ export function LiveAppSlideshow() {
             aria-label={`Slide ${i + 1}`}
             aria-current={i === index}
             className={i === index ? slideStyles.dotActive : slideStyles.dot}
-            onClick={() => setIndex(i)}
+            onClick={() => changeSlide(i)}
           />
         ))}
         <button
           type="button"
           aria-label="Next slide"
-          onClick={() => setIndex((i) => (i + 1) % slides.length)}
+          onClick={() => changeSlide((index + 1) % slides.length)}
         >
           ›
         </button>

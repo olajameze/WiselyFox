@@ -14,7 +14,11 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - icons (PWA icon files)
+     * - manifest.json / manifest.webmanifest (PWA manifest files)
+     * - sw.js (service worker file)
+     * - apple-touch-icon (apple touch icon file)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|icons|manifest\\.json|manifest\\.webmanifest|sw\\.js|apple-touch-icon).*)",
   ],
 };

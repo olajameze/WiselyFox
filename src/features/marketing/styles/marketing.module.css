@@ -404,13 +404,30 @@
       var(--notebook-line) var(--line-height)
     ),
     var(--notebook-paper);
-  border-radius: 2px 8px 8px 2px;
+  border: 2px solid var(--border-color-dark, #cbd5e1);
+  border-radius: var(--radius-md, 12px);
   box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.2),
+    0 6px 0 var(--border-color-dark, #cbd5e1),
+    0 12px 32px rgba(30, 41, 59, 0.08),
     inset 48px 0 0 0 var(--notebook-paper),
     inset 50px 0 0 0 var(--notebook-margin);
   color: var(--notebook-ink);
   transform: rotate(-0.35deg);
+  transition: opacity 600ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scrollEntrance {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: opacity, transform;
+}
+
+.scrollEntranceVisible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .notebookSectionAlt {
@@ -749,10 +766,13 @@
   .pricingCard,
   .faqItem,
   .toggleBtn,
-  .toggle {
+  .toggle,
+  .scrollEntrance,
+  .scrollEntranceVisible {
     transform: none !important;
     animation: none !important;
     transition: none !important;
+    opacity: 1 !important;
   }
 
   .penDecor {
