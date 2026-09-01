@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/shared/ui/Button/Button";
-import { PreferenceIconGroup } from "@/shared/ui/PreferenceIconGroup/PreferenceIconGroup";
+import { ThemeToggle } from "@/shared/ui/ThemeToggle/ThemeToggle";
+import { AccessibilityToolbar } from "@/shared/ui/AccessibilityToolbar/AccessibilityToolbar";
 import { useScrollSpy } from "@/shared/hooks/useScrollSpy";
 import styles from "./Header.module.css";
 
@@ -23,8 +24,42 @@ const mainNav = [
 
 export function Header({ signedIn, variant = "default" }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showDisplayTools, setShowDisplayTools] = useState(false);
+  const [dockPosition, setDockPosition] = useState({ x: 16, y: 88 });
+  const dragState = useRef<{ startX: number; startY: number; originX: number; originY: number } | null>(null);
   const activeSection = useScrollSpy(SECTION_IDS);
   const isNotebook = variant === "notebook";
+
+  useEffect(() => {
+    function onPointerMove(event: PointerEvent) {
+      if (!dragState.current) return;
+      const { startX, startY, originX, originY } = dragState.current;
+      const nextX = Math.min(Math.max(originX + (event.clientX - startX), 12), Math.max(12, window.innerWidth - 260));
+      const nextY = Math.min(Math.max(originY + (event.clientY - startY), 12), Math.max(12, window.innerHeight - 120));
+      setDockPosition({ x: nextX, y: nextY });
+    }
+
+    function onPointerUp() {
+      dragState.current = null;
+    }
+
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerup", onPointerUp);
+
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
+    };
+  }, []);
+
+  function beginDockDrag(event: React.PointerEvent<HTMLButtonElement>) {
+    dragState.current = {
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: dockPosition.x,
+      originY: dockPosition.y,
+    };
+  }
 
   return (
     <header
@@ -89,10 +124,10 @@ export function Header({ signedIn, variant = "default" }: HeaderProps) {
               <Link href="/sign-up" className={styles.joinCta}>
                 <Button size="sm">Join free</Button>
               </Link>
-              </>
-            )}
-            <PreferenceIconGroup className={styles.headerPrefsDesktop} placement="bottom" />
-            {menuOpen ? (
+            </>
+          )}
+
+          {menuOpen ? (
             <button
               type="button"
               className={styles.menuBtn}
@@ -118,6 +153,50 @@ export function Header({ signedIn, variant = "default" }: HeaderProps) {
         </div>
       </div>
 
+      <div
+        className={styles.utilityDock}
+        style={{ left: dockPosition.x, top: dockPosition.y }}
+      >
+        {showDisplayTools ? (
+          <div className={styles.displayTools} role="group" aria-label="Display preferences">
+            <button
+              type="button"
+              className={styles.dragHandle}
+              onPointerDown={beginDockDrag}
+              aria-label="Move display tools"
+              title="Drag to move display tools"
+            >
+              ⋮⋮
+            </button>
+            <ThemeToggle compact />
+            <AccessibilityToolbar
+              hint="Adjust display for easier reading. These settings apply to this device only."
+              placement="bottom"
+            />
+            <button
+              type="button"
+              className={styles.displayToolsClose}
+              onClick={() => setShowDisplayTools(false)}
+              aria-label="Hide display tools"
+              title="Hide display tools"
+            >
+              ×
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            className={styles.displayToolsToggle}
+            onClick={() => setShowDisplayTools(true)}
+            aria-label="Show display tools"
+            title="Show display tools"
+            onPointerDown={(event) => beginDockDrag(event)}
+          >
+            ☼
+          </button>
+        )}
+      </div>
+
       {menuOpen && (
         <nav
           id="header-mobile-nav"
@@ -126,15 +205,12 @@ export function Header({ signedIn, variant = "default" }: HeaderProps) {
             .join(" ")}
           aria-label="Mobile"
         >
-          <div className={styles.mobilePrefs}>
-            <PreferenceIconGroup placement="bottom" />
-          </div>
           {mainNav.map((item) => (
             <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
               {item.label}
             </Link>
           ))}
-<Link href="/#inclusive" onClick={() => setMenuOpen(false)}>
+          <Link href="/#inclusive" onClick={() => setMenuOpen(false)}>
             Inclusive learning
           </Link>
           <div className={styles.mobileAuth}>

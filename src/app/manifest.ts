@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "WiselyFox - Adaptive Learning Platform",
     short_name: "WiselyFox",
     description: "Child safe, parent guided adaptive learning for mobile, tablet, and desktop.",
-    start_url: "/",
+    start_url: "/sign-in",
     scope: "/",
     display: "standalone",
     display_override: ["standalone", "window-controls-overlay", "browser"],

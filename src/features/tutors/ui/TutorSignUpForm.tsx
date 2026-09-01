@@ -7,6 +7,7 @@ import { signUpTutor } from "@/features/tutors/actions/tutor-onboarding.actions"
 import { TutorFeeDisclosure } from "./TutorFeeDisclosure";
 import { TUTOR_TERMS_COPY } from "@/features/tutors/lib/tutor-consent";
 import { Button, Input, Card, Alert } from "@/shared/ui";
+import { PasswordField } from "@/shared/ui/PasswordField/PasswordField";
 import styles from "@/features/auth/ui/auth.module.css";
 import tutorStyles from "./tutor.module.css";
 
@@ -56,7 +57,7 @@ export function TutorSignUpForm() {
       <form className={styles.form} onSubmit={handleSubmit}>
         <Input name="name" label="Full Name" required autoComplete="name" />
         <Input name="email" type="email" label="Email" required autoComplete="email" />
-        <Input name="password" type="password" label="Password (min. 8 characters)" required autoComplete="new-password" />
+        <PasswordField name="password" label="Password (min. 8 characters)" required autoComplete="new-password" />
         
         <div className={tutorStyles.field}>
           <label htmlFor="dateOfBirth">Date of birth (must be 18+)</label>

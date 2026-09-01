@@ -5,7 +5,8 @@ export const THEME_STORAGE_KEY = "wiselyfox-theme";
 export function resolveTheme(mode: ThemeMode): "light" | "dark" {
   if (mode === "light" || mode === "dark") return mode;
   if (typeof window === "undefined") return "light";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  const media = typeof window.matchMedia === "function" ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  return media?.matches ? "dark" : "light";
 }
 
 export function readStoredTheme(): ThemeMode {

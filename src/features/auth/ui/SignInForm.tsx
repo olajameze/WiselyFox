@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button, Input, Card, Alert } from "@/shared/ui";
+import { PasswordField } from "@/shared/ui/PasswordField/PasswordField";
 import { signInWithEmail } from "@/features/auth/actions/auth.actions";
 import {
   DEMO_PARENT_EMAIL,
@@ -95,7 +96,7 @@ export function SignInForm({
           <DemoCredentials variant={variant} />
           <form className={styles.form} onSubmit={handleSubmit}>
             <Input name="email" type="email" label="Email" required autoComplete="email" />
-            <Input name="password" type="password" label="Password" required autoComplete="current-password" />
+            <PasswordField name="password" label="Password" required autoComplete="current-password" />
             <div className={styles.formActions}>
               <Button type="submit" loading={loading}>
                 {isTutor ? "Sign in as tutor" : "Sign in"}

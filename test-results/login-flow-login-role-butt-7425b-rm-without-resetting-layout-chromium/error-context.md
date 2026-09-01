@@ -12,13 +12,17 @@
 # Error details
 
 ```
-Test timeout of 30000ms exceeded.
-```
+Error: expect(locator).toBeVisible() failed
 
-```
-Error: locator.click: Test timeout of 30000ms exceeded.
+Locator: getByLabel(/Password/i)
+Expected: visible
+Error: strict mode violation: getByLabel(/Password/i) resolved to 2 elements:
+    1) <input id="_r_1_" required="" type="password" name="password" aria-invalid="false" autocomplete="current-password" class="Input_input__H3gb4 PasswordField_input__rVcR5"/> aka getByRole('textbox', { name: 'Password' })
+    2) <button type="button" aria-pressed="false" aria-label="Show password" class="PasswordField_toggle__vE_pC">Show</button> aka getByRole('button', { name: 'Show password' })
+
 Call log:
-  - waiting for getByRole('button', { name: /Continue as Parent/i })
+  - Expect "toBeVisible" with timeout 5000ms
+  - waiting for getByLabel(/Password/i)
 
 ```
 
@@ -26,89 +30,152 @@ Call log:
 
 ```yaml
 - generic [active] [ref=e1]:
-  - banner [ref=e2]:
+  - dialog "Install WiselyFox app" [ref=e2]:
     - generic [ref=e3]:
-      - link "WiselyFox" [ref=e4] [cursor=pointer]:
+      - generic [ref=e4]:
+        - generic [ref=e5]: 🦊
+        - generic [ref=e6]:
+          - strong [ref=e7]: Install WiselyFox
+          - generic [ref=e8]: Instant app • Fast access
+      - button "Close install prompt" [ref=e9] [cursor=pointer]: ✕
+    - paragraph [ref=e11]: Install WiselyFox on your phone or tablet for a fast full-screen app experience, study streaks, and offline practice.
+    - generic [ref=e12]:
+      - button "Install App" [ref=e13] [cursor=pointer]
+      - button "Not now" [ref=e14] [cursor=pointer]
+  - banner [ref=e15]:
+    - generic [ref=e16]:
+      - link "WiselyFox" [ref=e17] [cursor=pointer]:
         - /url: /
-      - navigation "Main" [ref=e5]:
-        - link "Features" [ref=e6] [cursor=pointer]:
+        - generic [ref=e18]: 🦊
+        - generic [ref=e19]: WiselyFox
+      - navigation "Main" [ref=e20]:
+        - link "Features" [ref=e21] [cursor=pointer]:
           - /url: /#features
-        - link "Tutors" [ref=e7] [cursor=pointer]:
+        - link "Tutors" [ref=e22] [cursor=pointer]:
           - /url: /tutors
-        - link "Pricing" [ref=e8] [cursor=pointer]:
+        - link "Pricing" [ref=e23] [cursor=pointer]:
           - /url: /#pricing
-        - link "FAQ" [ref=e9] [cursor=pointer]:
+        - link "FAQ" [ref=e24] [cursor=pointer]:
           - /url: /#faq
-      - generic [ref=e10]:
-        - generic [ref=e11]:
-          - link "Sign in" [ref=e12] [cursor=pointer]:
-            - /url: /sign-in
-          - generic [ref=e13]: "|"
-          - link "Tutor" [ref=e14] [cursor=pointer]:
-            - /url: /tutor/sign-in
-        - link "Teach" [ref=e15] [cursor=pointer]:
-          - /url: /tutor/sign-up
-          - button "Teach" [ref=e16]
-        - link "Join free" [ref=e17] [cursor=pointer]:
-          - /url: /sign-up
-          - button "Join free" [ref=e18]
-  - main [ref=e19]:
-    - tabpanel [ref=e23]:
       - generic [ref=e25]:
-        - img [ref=e27]
-        - heading "Welcome to WiselyFox" [level=1] [ref=e51]
-        - paragraph [ref=e52]: Login as a
-        - generic [ref=e53]:
-          - button "Continue as Student" [ref=e54] [cursor=pointer]:
-            - generic [ref=e55]: Student
-            - generic [ref=e56]: I'm here to learn
-          - button "Continue as Parent" [ref=e57] [cursor=pointer]:
-            - generic [ref=e58]: Parent
-            - generic [ref=e59]: I guide a learner
-          - button "Continue as Tutor" [ref=e60] [cursor=pointer]:
-            - generic [ref=e61]: Tutor
-            - generic [ref=e62]: I teach on WiselyFox
-  - contentinfo [ref=e63]:
-    - generic [ref=e64]:
-      - generic [ref=e65]:
-        - generic [ref=e66]:
-          - generic [ref=e67]: WiselyFox
-          - paragraph [ref=e68]: Child safe, parent guided learning for every mind. Subjects, study skills, and future-ready skills in one calm adaptive experience.
-        - generic [ref=e69]:
-          - heading "Product" [level=3] [ref=e70]
-          - generic [ref=e71]:
-            - link "Features" [ref=e72] [cursor=pointer]:
-              - /url: /#features
-            - link "Pricing" [ref=e73] [cursor=pointer]:
-              - /url: /#pricing
-            - link "Family pilot" [ref=e74] [cursor=pointer]:
-              - /url: /sign-up
-        - generic [ref=e75]:
-          - heading "Safety" [level=3] [ref=e76]
-          - generic [ref=e77]:
-            - link "Privacy" [ref=e78] [cursor=pointer]:
-              - /url: /privacy
-            - link "Terms" [ref=e79] [cursor=pointer]:
+        - button "Show display tools" [ref=e27] [cursor=pointer]: ☼
+        - generic [ref=e28]:
+          - link "Sign in" [ref=e29] [cursor=pointer]:
+            - /url: /sign-in
+          - generic [ref=e30]: "|"
+          - link "Tutor" [ref=e31] [cursor=pointer]:
+            - /url: /tutor/sign-in
+        - link "Join free" [ref=e32] [cursor=pointer]:
+          - /url: /sign-up
+          - button "Join free" [ref=e33]
+  - main [ref=e34]:
+    - tabpanel [ref=e38]:
+      - generic [ref=e40]:
+        - button "Back to role selection" [ref=e41] [cursor=pointer]: ← Back
+        - generic [ref=e42]:
+          - generic [ref=e43]: 🦊
+          - generic [ref=e44]:
+            - generic [ref=e45]: WiselyFox
+            - generic [ref=e46]: Online learning platform
+        - generic [ref=e47]:
+          - text: Logging in as
+          - strong [ref=e49]: Parent
+        - status [ref=e50]:
+          - generic [ref=e51]: Demo Parent & Super Admin
+          - generic [ref=e52]:
+            - strong [ref=e53]: "Parent:"
+            - text: "Email: parent@example.com, Password: password123"
+          - separator [ref=e54]
+          - generic [ref=e55]:
+            - strong [ref=e56]: "Super Admin:"
+            - text: "Email: admin@wiselyfox.com, Password: password123"
+        - generic [ref=e57]:
+          - generic [ref=e58]:
+            - generic [ref=e59]:
+              - generic [ref=e60]: Email address
+              - textbox "Email address" [ref=e61]
+            - generic [ref=e63]:
+              - generic [ref=e64]:
+                - generic [ref=e65]: Password
+                - textbox "Password" [ref=e66]
+              - button "Show password" [ref=e67] [cursor=pointer]: Show
+            - generic [ref=e68]:
+              - button "Continue with Google" [ref=e69] [cursor=pointer]:
+                - img [ref=e70]
+                - text: Google
+              - button "Continue with Facebook" [ref=e75] [cursor=pointer]:
+                - img [ref=e76]
+                - text: Facebook
+          - button "Sign in" [ref=e79] [cursor=pointer]
+        - generic [ref=e80]:
+          - link "Forgot password?" [ref=e81] [cursor=pointer]:
+            - /url: /forgot-password
+          - paragraph [ref=e82]:
+            - text: By continuing you agree to the
+            - link "Terms" [ref=e83] [cursor=pointer]:
               - /url: /terms
-            - link "Support" [ref=e80] [cursor=pointer]:
-              - /url: /support
-            - link "Inclusive learning" [ref=e81] [cursor=pointer]:
+            - text: and
+            - link "Privacy Policy" [ref=e84] [cursor=pointer]:
+              - /url: /privacy
+            - text: .
+  - contentinfo "Site footer" [ref=e85]:
+    - generic [ref=e86]:
+      - generic [ref=e87]:
+        - generic [ref=e88]:
+          - link "WiselyFox" [ref=e89] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e90]: 🦊
+            - generic [ref=e91]: WiselyFox
+          - paragraph [ref=e92]: Child-safe, parent-guided adaptive learning for every mind. Subjects, study skills, and future-ready coding in one calm, inclusive notebook.
+        - generic [ref=e93]:
+          - heading "Learning Tracks" [level=4] [ref=e94]
+          - generic [ref=e95]:
+            - link "Mathematics" [ref=e96] [cursor=pointer]:
+              - /url: /#features
+            - link "Coding & STEM" [ref=e97] [cursor=pointer]:
+              - /url: /#features
+            - link "Reading & Literacy" [ref=e98] [cursor=pointer]:
+              - /url: /#features
+            - link "Logic & Reasoning" [ref=e99] [cursor=pointer]:
+              - /url: /#features
+            - link "Study Skills" [ref=e100] [cursor=pointer]:
+              - /url: /#features
+        - generic [ref=e101]:
+          - heading "Features & Safety" [level=4] [ref=e102]
+          - generic [ref=e103]:
+            - link "Inclusive Calm Mode" [ref=e104] [cursor=pointer]:
               - /url: /#inclusive
-        - generic [ref=e82]:
-          - heading "Account" [level=3] [ref=e83]
-          - generic [ref=e84]:
-            - link "Sign in" [ref=e85] [cursor=pointer]:
+            - link "Visual Schedules" [ref=e105] [cursor=pointer]:
+              - /url: /#inclusive
+            - link "Verified Tutors" [ref=e106] [cursor=pointer]:
+              - /url: /tutors
+            - link "Pricing Plans" [ref=e107] [cursor=pointer]:
+              - /url: /#pricing
+            - link "Frequently Asked" [ref=e108] [cursor=pointer]:
+              - /url: /#faq
+        - generic [ref=e109]:
+          - heading "Account & Legal" [level=4] [ref=e110]
+          - generic [ref=e111]:
+            - link "Parent Sign In" [ref=e112] [cursor=pointer]:
               - /url: /sign-in
-            - link "Create account" [ref=e86] [cursor=pointer]:
-              - /url: /sign-up
-      - generic [ref=e87]: © 2026 WiselyFox. Built with care for families and learners.
-  - group "Display preferences" [ref=e88]:
-    - group "Display preferences" [ref=e89]:
-      - button "System theme (light). Click to change." [ref=e90] [cursor=pointer]:
-        - generic [ref=e91]: 💻
-      - group [ref=e92]:
-        - generic "Accessibility options" [ref=e93] [cursor=pointer]:
-          - generic [ref=e94]: ♿
+            - link "Child PIN Sign In" [ref=e113] [cursor=pointer]:
+              - /url: /child-sign-in
+            - link "Tutor Sign In" [ref=e114] [cursor=pointer]:
+              - /url: /tutor/sign-in
+            - link "Privacy Policy" [ref=e115] [cursor=pointer]:
+              - /url: /privacy
+            - link "Terms of Service" [ref=e116] [cursor=pointer]:
+              - /url: /terms
+            - link "Support & GDPR" [ref=e117] [cursor=pointer]:
+              - /url: /support
+      - generic [ref=e118]:
+        - generic "Site Language" [ref=e119]:
+          - generic [ref=e120]: 🇬🇧
+          - generic [ref=e121]: English (UK)
+        - generic [ref=e122]: © 2026 WiselyFox. Built with care for families and learners worldwide.
+  - button "Open Next.js Dev Tools" [ref=e128] [cursor=pointer]:
+    - img [ref=e129]
+  - alert [ref=e132]
 ```
 
 # Test source
@@ -125,13 +192,13 @@ Call log:
   9  |   await expect(page.getByRole("heading", { name: /Welcome to WiselyFox/i })).toBeVisible();
   10 | 
   11 |   // Click Parent role
-> 12 |   await page.getByRole("button", { name: /Continue as Parent/i }).click();
-     |                                                                   ^ Error: locator.click: Test timeout of 30000ms exceeded.
+  12 |   await page.getByRole("button", { name: /Continue as Parent/i }).click();
   13 | 
   14 |   // Step 2: parent credential form is shown
   15 |   await expect(page.getByText(/Logging in as Parent/i)).toBeVisible();
   16 |   await expect(page.getByLabel(/Email address/i)).toBeVisible();
-  17 |   await expect(page.getByLabel(/Password/i)).toBeVisible();
+> 17 |   await expect(page.getByLabel(/Password/i)).toBeVisible();
+     |                                              ^ Error: expect(locator).toBeVisible() failed
   18 | 
   19 |   // Layout anchor (the open book / role pill) stays visible
   20 |   await expect(page.getByText(/Online learning platform/i)).toBeVisible();

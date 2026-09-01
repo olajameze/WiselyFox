@@ -39,12 +39,28 @@ export function ThemeToggle({ compact }: { compact?: boolean } = {}) {
       setMode(getThemeMode());
       setResolved(getResolvedTheme());
     };
+
     window.addEventListener("wiselyfox-theme-change", onThemeChange);
+
+    if (typeof window.matchMedia !== "function") {
+      return () => {
+        window.removeEventListener("wiselyfox-theme-change", onThemeChange);
+      };
+    }
+
     const media = window.matchMedia("(prefers-color-scheme: dark)");
-    media.addEventListener("change", onThemeChange);
+    if (typeof media.addEventListener === "function") {
+      media.addEventListener("change", onThemeChange);
+      return () => {
+        window.removeEventListener("wiselyfox-theme-change", onThemeChange);
+        media.removeEventListener("change", onThemeChange);
+      };
+    }
+
+    media.addListener(onThemeChange);
     return () => {
       window.removeEventListener("wiselyfox-theme-change", onThemeChange);
-      media.removeEventListener("change", onThemeChange);
+      media.removeListener(onThemeChange);
     };
   }, []);
 

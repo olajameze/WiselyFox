@@ -8,4 +8,5 @@ export { Tabs } from "./Tabs/Tabs";
 export { ProgressBar } from "./ProgressBar/ProgressBar";
 export { Header } from "./Header/Header";
 export { Footer } from "./Footer/Footer";
+export { PasswordField } from "./PasswordField/PasswordField";
 export { TextToSpeechPlayer } from "@/components/accessibility/TextToSpeechPlayer";

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { signIn as nextAuthSignIn } from "next-auth/react";
 import { Button, Input, Card, Alert } from "@/shared/ui";
+import { PasswordField } from "@/shared/ui/PasswordField/PasswordField";
 import { signUpParent } from "@/features/auth/actions/auth.actions";
 import styles from "./auth.module.css";
 
@@ -49,9 +50,8 @@ export function SignUpForm({ plan = "essential" }: { plan?: string }) {
           <form className={styles.form} onSubmit={handleSubmit}>
             <Input name="name" label="Your name" required autoComplete="name" />
             <Input name="email" type="email" label="Email" required autoComplete="email" />
-            <Input
+            <PasswordField
               name="password"
-              type="password"
               label="Password"
               required
               minLength={8}

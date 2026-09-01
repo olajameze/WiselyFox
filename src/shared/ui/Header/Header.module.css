@@ -101,6 +101,68 @@
   flex-shrink: 0;
 }
 
+.utilityDock {
+  position: fixed;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.displayTools {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.45rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
+}
+
+.displayToolsToggle,
+.displayToolsClose,
+.dragHandle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
+}
+
+.displayToolsToggle:hover,
+.displayToolsClose:hover,
+.dragHandle:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.displayToolsClose {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.dragHandle {
+  cursor: grab;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
 .headerPrefsDesktop {
   display: none;
 }

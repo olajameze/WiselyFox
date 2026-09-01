@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { signIn as nextAuthSignIn } from "next-auth/react";
 import { Input, Alert } from "@/shared/ui";
+import { PasswordField } from "@/shared/ui/PasswordField/PasswordField";
 import {
   signInWithEmail,
   signInChild,
@@ -216,9 +217,8 @@ export function LoginStepTwo({ role, callbackUrl, onBack }: LoginStepTwoProps) {
               required
               autoComplete="email"
             />
-            <Input
+            <PasswordField
               name="password"
-              type="password"
               label="Password"
               required
               autoComplete="current-password"
