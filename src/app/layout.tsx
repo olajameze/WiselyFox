@@ -61,7 +61,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-[100dvh] flex flex-col">
+      <body className="min-h-dvh flex flex-col">
         <PwaProvider>
           <PublicLayoutWrapper>{children}</PublicLayoutWrapper>
         </PwaProvider>
