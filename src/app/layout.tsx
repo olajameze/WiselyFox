@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { Header } from "@/shared/ui/Header/Header";
-import { Footer } from "@/shared/ui/Footer/Footer";
+import { PublicLayoutWrapper } from "@/shared/ui/PublicLayoutWrapper/PublicLayoutWrapper";
 import { PwaProvider } from "@/features/pwa/ui/PwaProvider";
 
 export const viewport: Viewport = {
@@ -9,7 +8,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: "#1e293b",
+  themeColor: "#e05638",
   viewportFit: "cover",
 };
 
@@ -62,11 +61,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>
+      <body className="min-h-[100dvh] flex flex-col">
         <PwaProvider>
-          <Header />
-          <main className="flex-grow">{children}</main>
-          <Footer />
+          <PublicLayoutWrapper>{children}</PublicLayoutWrapper>
         </PwaProvider>
       </body>
     </html>

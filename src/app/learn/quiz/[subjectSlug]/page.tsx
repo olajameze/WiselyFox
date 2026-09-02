@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { requireChild } from "@/shared/lib/permissions";
-import { prisma } from "@/shared/lib/prisma";
+import { getLearnChildByUserId } from "@/features/learning/services/child-session.service";
+import { ALL_CURRICULUM_SUBJECTS } from "@/data/curriculum";
 import { pickQuestions } from "@/features/learning/services/learning-engine.service";
 import { buildLearnAccommodation, toAccommodationUiProps } from "@/features/inclusive/lib/accommodation-client";
 import { QuizPlayer } from "@/features/learning/ui/QuizPlayer";
@@ -15,34 +16,22 @@ export default async function SubjectQuizPage({
   const user = await requireChild();
   const { subjectSlug } = await params;
 
-  const child = await prisma.childProfile.findFirst({
-    where: { userId: user.id },
-    include: { learningProfile: true },
-  });
+  const child = await getLearnChildByUserId(user.id);
+  if (!child) redirect("/child-sign-in");
 
-  const subject = await prisma.subject.findUnique({
-    where: { slug: subjectSlug },
-    include: {
-      skills: {
-        include: {
-          questions: { where: { published: true } },
-        },
-      },
-    },
-  });
+  // Use curriculum data for questions (not limited to DB-seeded subjects)
+  const subject = ALL_CURRICULUM_SUBJECTS.find((s) => s.slug === subjectSlug);
   if (!subject) notFound();
 
-  const pool = subject.skills.flatMap((skill) =>
-    skill.questions.map((q) => ({
-      id: q.id,
-      prompt: q.prompt,
-      options: JSON.parse(q.options) as string[],
-      correctAnswer: q.correctAnswer,
-      explanation: q.explanation,
-      difficulty: q.difficulty,
-      ageBand: q.ageBand,
-    })),
-  );
+  const pool = subject.questions.map((q) => ({
+    id: q.prompt,
+    prompt: q.prompt,
+    options: q.options,
+    correctAnswer: q.correctAnswer,
+    explanation: q.explanation,
+    difficulty: q.difficulty,
+    ageBand: q.ageBand,
+  }));
 
   const ageBand = child?.ageBand ?? "8-10";
   const level = child?.learningProfile?.levelScore
@@ -85,3 +74,4 @@ export default async function SubjectQuizPage({
     </>
   );
 }
+

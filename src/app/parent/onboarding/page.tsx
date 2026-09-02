@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Input, Card, Alert } from "@/shared/ui";
 import { createChildProfile, completeOnboarding } from "@/features/onboarding/actions/onboarding.actions";
+import { signInChild } from "@/features/auth/actions/auth.actions";
 import { AGE_BANDS, AGE_BAND_LABELS, type AgeBand } from "@/data/age-bands";
 import { CONSENT_COPY } from "@/shared/lib/consent";
 import Link from "next/link";
@@ -48,6 +49,19 @@ export default function OnboardingPage() {
     await completeOnboarding();
     setLoading(false);
     setStep(4);
+  }
+
+  async function handleLaunchChild() {
+    setLoading(true);
+    const result = await signInChild({
+      accessCode,
+      pin: form.pin,
+    });
+    if (result.success) {
+      window.location.assign(result.data.redirectTo || "/learn");
+    } else {
+      router.push(`/child-sign-in?code=${encodeURIComponent(accessCode)}`);
+    }
   }
 
   return (
@@ -195,13 +209,24 @@ export default function OnboardingPage() {
 
       {step === 4 && (
         <Card>
-          <h2>All set!</h2>
-          <Alert variant="success" title="Child access code">
-            Share this code with your child: <strong>{accessCode}</strong>
+          <h2>🎉 All set! {form.displayName}&apos;s profile is ready</h2>
+          <Alert variant="success" title="Learner Login Credentials">
+            Access code: <strong>{accessCode}</strong> • PIN: <strong>{form.pin}</strong>
           </Alert>
-          <p>They can sign in at the child login page with this code and their PIN.</p>
-          <div className={styles.formActions}>
-            <Button onClick={() => router.push("/parent")}>Go to dashboard</Button>
+          <p style={{ color: "var(--color-text-muted)", margin: "0.75rem 0 1.25rem", lineHeight: 1.6 }}>
+            Save this access code and PIN for your child to log in on their tablet or phone. You can also test their learning space right now with one click.
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+            <Button
+              onClick={handleLaunchChild}
+              loading={loading}
+              style={{ background: "#10b981", borderColor: "#059669" }}
+            >
+              🚀 Start Learning as {form.displayName} Now
+            </Button>
+            <Button variant="secondary" onClick={() => router.push("/parent")}>
+              Go to Parent Dashboard
+            </Button>
           </div>
         </Card>
       )}

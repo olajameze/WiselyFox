@@ -2,12 +2,12 @@
   "short_name": "WiselyFox",
   "name": "WiselyFox - Adaptive Learning Platform",
   "description": "Child safe, parent guided adaptive learning for mobile, tablet, and desktop.",
-  "start_url": "/",
+  "start_url": "/login?source=pwa",
   "scope": "/",
   "display": "standalone",
   "background_color": "#faf9f6",
-  "theme_color": "#1e293b",
-  "orientation": "any",
+  "theme_color": "#e05638",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "/icons/icon-192.png",

@@ -23,33 +23,68 @@ export default async function LearnRewardsPage() {
 
   return (
     <>
-      <header className={styles.pageHeader}>
-        <h1>Your rewards</h1>
-        <p className={styles.pageSubtitle}>
-          Keep a daily study streak for rewards. Finish weekly quests for stickers. Earn XP from
-          lessons, quizzes, and focus time.
-        </p>
-      </header>
-
-      <Card>
-        <div className={styles.statsGrid}>
-          <div>
-            <strong>{xp} XP</strong>
-            <p className={styles.meta}>Total experience</p>
+      <div
+        style={{
+          background: "linear-gradient(135deg, #e05638 0%, #f97316 100%)",
+          borderRadius: "20px",
+          padding: "1.75rem",
+          color: "#ffffff",
+          boxShadow: "0 6px 0 #b43e2b, 0 12px 24px rgba(224, 86, 56, 0.25)",
+          marginBottom: "1.5rem",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "1rem",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <div
+            style={{
+              fontSize: "3.25rem",
+              background: "rgba(255, 255, 255, 0.2)",
+              borderRadius: "50%",
+              width: "72px",
+              height: "72px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+            }}
+          >
+            🦊
           </div>
           <div>
-            <strong>{profile?.coins ?? 0}</strong>
-            <p className={styles.meta}>Coins</p>
-          </div>
-          <div>
-            <strong>{dashboard.streakDays} days</strong>
-            <p className={styles.meta}>Study streak</p>
-          </div>
-          <div>
-            <strong>{dashboard.stickers.length}</strong>
-            <p className={styles.meta}>Stickers collected</p>
+            <h1 style={{ margin: 0, fontFamily: "var(--font-display)", fontSize: "1.5rem", fontWeight: 800 }}>
+              The Fox Den Rewards
+            </h1>
+            <p style={{ margin: "0.25rem 0 0", opacity: 0.9, fontSize: "0.9rem" }}>
+              Level up your daily study streak, collect quest stickers, and earn badges!
+            </p>
           </div>
         </div>
+
+        <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+          <div style={{ background: "rgba(0,0,0,0.25)", padding: "0.6rem 1rem", borderRadius: "14px", textAlign: "center", minWidth: "80px" }}>
+            <span style={{ fontSize: "1.25rem", display: "block", fontWeight: 800 }}>🔥 {dashboard.streakDays}</span>
+            <span style={{ fontSize: "0.725rem", textTransform: "uppercase", opacity: 0.9, fontWeight: 700 }}>Streak</span>
+          </div>
+          <div style={{ background: "rgba(0,0,0,0.25)", padding: "0.6rem 1rem", borderRadius: "14px", textAlign: "center", minWidth: "80px" }}>
+            <span style={{ fontSize: "1.25rem", display: "block", fontWeight: 800 }}>⚡ {xp}</span>
+            <span style={{ fontSize: "0.725rem", textTransform: "uppercase", opacity: 0.9, fontWeight: 700 }}>Total XP</span>
+          </div>
+          <div style={{ background: "rgba(0,0,0,0.25)", padding: "0.6rem 1rem", borderRadius: "14px", textAlign: "center", minWidth: "80px" }}>
+            <span style={{ fontSize: "1.25rem", display: "block", fontWeight: 800 }}>🪙 {profile?.coins ?? 0}</span>
+            <span style={{ fontSize: "0.725rem", textTransform: "uppercase", opacity: 0.9, fontWeight: 700 }}>Coins</span>
+          </div>
+          <div style={{ background: "rgba(0,0,0,0.25)", padding: "0.6rem 1rem", borderRadius: "14px", textAlign: "center", minWidth: "80px" }}>
+            <span style={{ fontSize: "1.25rem", display: "block", fontWeight: 800 }}>🌟 {dashboard.stickers.length}</span>
+            <span style={{ fontSize: "0.725rem", textTransform: "uppercase", opacity: 0.9, fontWeight: 700 }}>Stickers</span>
+          </div>
+        </div>
+      </div>
+
+      <Card>
         {dashboard.nextStreakReward && (
           <div className={styles.mtLg}>
             <ProgressBar

@@ -10,7 +10,13 @@ import {
 } from "@/shared/lib/demo-credentials";
 import styles from "./auth.module.css";
 
-export function ChildSignInForm({ consentError = false }: { consentError?: boolean }) {
+export function ChildSignInForm({
+  consentError = false,
+  defaultAccessCode = "",
+}: {
+  consentError?: boolean;
+  defaultAccessCode?: string;
+}) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +26,7 @@ export function ChildSignInForm({ consentError = false }: { consentError?: boole
     setError("");
     const fd = new FormData(e.currentTarget);
     const result = await signInChild({
-      accessCode: fd.get("accessCode") as string,
+      accessCode: (fd.get("accessCode") as string).trim().toUpperCase(),
       pin: fd.get("pin") as string,
     });
     if (!result.success) {
@@ -52,7 +58,13 @@ export function ChildSignInForm({ consentError = false }: { consentError?: boole
         </Alert>
         <form className={`${styles.form} ${styles.childForm}`} onSubmit={handleSubmit}>
           <div className={styles.fieldAccessCode}>
-            <Input name="accessCode" label="Family access code" required autoComplete="off" />
+            <Input
+              name="accessCode"
+              label="Family access code"
+              defaultValue={defaultAccessCode}
+              required
+              autoComplete="off"
+            />
           </div>
           <div className={styles.fieldPin}>
             <Input

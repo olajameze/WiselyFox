@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Button, Card, ProgressBar, Alert, Badge } from "@/shared/ui";
+import { Badge } from "@/shared/ui";
 import { completeLesson } from "@/features/learning/actions/learning.actions";
 import { LEARNING_METHOD_LABELS, LEARNING_METHOD_HINTS } from "@/data/learning-methods";
 import type { LessonStep } from "@/data/curriculum";
 import { LessonVideoEmbed } from "@/features/learning/ui/LessonVideoEmbed";
 import type { AccommodationRules } from "@/features/inclusive/services/accommodation.service";
-import styles from "./learnActivity.module.css";
+import styles from "./LessonPlayerTactile.module.css";
 
 export function LessonPlayer({
   subjectSlug,
@@ -69,8 +69,6 @@ export function LessonPlayer({
       ? factIndex >= (current.keyFacts?.length ?? 0) - 1 &&
         Boolean(factsChecked[factIndex])
       : current.keyFacts!.every((_, i) => factsChecked[i]));
-  const needsContentChunk = hasMoreContent;
-  const needsMoreFacts = hasMoreFacts;
   const allInstructionsChecked =
     !hasInstructions ||
     current.instructions!.every((_, i) => instructionsChecked[i]);
@@ -124,12 +122,6 @@ export function LessonPlayer({
     }
   }
 
-  function goToStep(index: number) {
-    if (index > step) return;
-    setStep(index);
-    resetStepInteraction();
-  }
-
   function submitCheck(option: string) {
     if (!current.check || checkPassed) return;
     setCheckAnswer(option);
@@ -142,7 +134,7 @@ export function LessonPlayer({
     if (!checkPassed || !current.check) return;
     const timer = setTimeout(() => {
       if (canContinue) goNext();
-    }, 1000);
+    }, 1200);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkPassed, step]);
@@ -155,82 +147,113 @@ export function LessonPlayer({
     setInstructionsChecked((prev) => ({ ...prev, [index]: !prev[index] }));
   }
 
+  const progressPercent = Math.round(((step + 1) / steps.length) * 100);
+
+  // ── CELEBRATION MODAL / SCREEN ──────────────────────────────────────────
   if (done) {
     return (
-      <Card>
-        <Alert variant="success" title={noCelebration ? "Lesson finished" : alreadyCompleted ? "Lesson completed again!" : "Lesson complete!"}>
-          +{xp} XP earned.
-          {noCelebration
-            ? " Well done, take a breath before your next step."
-            : alreadyCompleted
-              ? " Great revision, try the quiz to see what you remember!"
-              : " You practised real skills, try the quiz to see what you remember!"}
-        </Alert>
-        <div className={styles.btnGroup}>
-          <Link href={`/learn/quiz/${subjectSlug}`}>
-            <Button variant="secondary" size="sm">
-              Take quiz
-            </Button>
-          </Link>
-          <Link href={`/learn/subjects/${subjectSlug}`}>
-            <Button variant="secondary" size="sm">
-              More lessons
-            </Button>
-          </Link>
-          <Link href="/learn">
-            <Button size="sm">Back home</Button>
-          </Link>
+      <div className={styles.playerWrapper}>
+        <div className={styles.celebrationCard}>
+          <div className={styles.celebrationFox} aria-hidden="true">
+            🦊
+          </div>
+          <h2 className={styles.celebrationHeading}>
+            {noCelebration
+              ? "Lesson Finished!"
+              : alreadyCompleted
+                ? "Lesson Completed Again!"
+                : "Lesson Complete!"}
+          </h2>
+          <div className={styles.xpBadge}>+{xp} XP EARNED</div>
+          <p style={{ color: "#64748b", maxWidth: "420px", margin: "0 auto", lineHeight: 1.6 }}>
+            {noCelebration
+              ? "Well done, take a breath before your next step."
+              : alreadyCompleted
+                ? "Great revision! You're strengthening your knowledge every single day."
+                : "Fantastic work! You practised real skills and earned bonus streak progress."}
+          </p>
+
+          <div className={styles.celebrationActions}>
+            <Link
+              href={`/learn/quiz/${subjectSlug}`}
+              className={[styles.bigActionButton, styles.btnSuccess].join(" ")}
+              style={{ width: "100%" }}
+            >
+              Take Quiz 🎯
+            </Link>
+            <Link
+              href={`/learn/subjects/${subjectSlug}`}
+              className={[styles.bigActionButton, styles.btnPrimary].join(" ")}
+              style={{ width: "100%" }}
+            >
+              Back to Trail 🗺️
+            </Link>
+            <Link
+              href="/learn"
+              className={styles.bigActionButton}
+              style={{ width: "100%", background: "#f1f5f9", color: "#475569" }}
+            >
+              Home Space 🏠
+            </Link>
+          </div>
         </div>
-      </Card>
+      </div>
     );
   }
 
   return (
-    <>
-      <p className={styles.learnMeta}>
-        {title}, Step {step + 1} of {steps.length}
-        {showTimer ? `, ~${durationMinutes} min` : ""}
-        {chunkSize === "small" ? ", One idea at a time" : ""}
-      </p>
-      <ProgressBar value={((step + 1) / steps.length) * 100} label="Lesson progress" calm={calm} />
+    <div className={[styles.playerWrapper, calm ? "calmModeContainer" : ""].filter(Boolean).join(" ")}>
+      {/* ── DUOLINGO-STYLE TOP BAR ─────────────────────────────────────── */}
+      <div className={styles.topBar}>
+        <Link
+          href={`/learn/subjects/${subjectSlug}`}
+          className={styles.exitBtn}
+          title="Exit lesson"
+          aria-label="Exit lesson"
+        >
+          ✕
+        </Link>
+        <div className={styles.progressTrack} role="progressbar" aria-valuenow={progressPercent} aria-valuemin={0} aria-valuemax={100}>
+          <div className={styles.progressBar} style={{ width: `${progressPercent}%` }} />
+        </div>
+        <div className={styles.statsCluster}>
+          <span className={styles.streakPill} title="Study streak">
+            🔥 <span>{showTimer ? `~${durationMinutes}m` : "Active"}</span>
+          </span>
+          <span className={styles.heartsPill} title="Wisely Energy">
+            ❤️ <span>5</span>
+          </span>
+        </div>
+      </div>
 
-      <nav className={styles.stepNav} aria-label="Lesson steps">
-        {steps.map((s, i) => (
-          <button
-            key={s.title}
-            type="button"
-            className={[
-              styles.stepPill,
-              i === step ? styles.stepPillActive : "",
-              i < step ? styles.stepPillDone : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-            disabled={i > step}
-            aria-current={i === step ? "step" : undefined}
-            onClick={() => goToStep(i)}
-          >
-            {s.title}
-          </button>
-        ))}
-      </nav>
+      {/* ── MIMO-STYLE LESSON CARD ─────────────────────────────────────── */}
+      <div className={styles.lessonCard}>
+        <div className={styles.stepTagRow}>
+          {current.method && (
+            <Badge variant="success">{LEARNING_METHOD_LABELS[current.method]}</Badge>
+          )}
+          <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "#64748b" }}>
+            Step {step + 1} of {steps.length}
+          </span>
+        </div>
 
-      <Card className={styles.lessonCard}>
+        <h2 className={styles.stepTitle}>{current.title}</h2>
+
         {current.method && (
-          <Badge variant="success">{LEARNING_METHOD_LABELS[current.method]}</Badge>
-        )}
-        <Badge>{current.title}</Badge>
-        <h2 className={styles.lessonHeading}>{current.title}</h2>
-        {current.method && (
-          <p className={styles.learnMeta}>{LEARNING_METHOD_HINTS[current.method]}</p>
-        )}
-        <p className={styles.lessonBody}>{visibleContent}</p>
-        {chunkSize === "small" && contentParts.length > 1 && (
-          <p className={styles.learnMeta}>
-            Part {contentChunk + 1} of {contentParts.length}
+          <p style={{ margin: 0, fontSize: "0.85rem", color: "#64748b" }}>
+            {LEARNING_METHOD_HINTS[current.method]}
           </p>
         )}
 
+        <p className={styles.lessonBody}>{visibleContent}</p>
+
+        {chunkSize === "small" && contentParts.length > 1 && (
+          <span style={{ fontSize: "0.8rem", color: "#94a3b8" }}>
+            Part {contentChunk + 1} of {contentParts.length}
+          </span>
+        )}
+
+        {/* Video Embed */}
         {current.videoId && (
           <LessonVideoEmbed
             videoId={current.videoId}
@@ -238,145 +261,215 @@ export function LessonPlayer({
           />
         )}
 
+        {/* Key Facts Checklist */}
         {visibleFacts && visibleFacts.length > 0 && (
-          <div className={styles.keyFacts}>
-            <strong>
-              {chunkSize === "small"
-                ? "Understand this fact, then continue"
-                : "Tap each fact when you understand it"}
+          <div style={{ marginTop: "0.5rem" }}>
+            <strong style={{ fontSize: "0.95rem", color: "#1e293b", display: "block", marginBottom: "0.5rem" }}>
+              {chunkSize === "small" ? "Understand this fact, then continue:" : "Tap each key fact to check off:"}
             </strong>
-            <ul className={styles.factChecklist}>
+            <div className={styles.checkList}>
               {visibleFacts.map((fact, i) => {
                 const factKey = chunkSize === "small" ? factIndex : i;
+                const isChecked = Boolean(factsChecked[factKey]);
                 return (
-                <li key={fact}>
-                  <label className={styles.factLabel}>
-                    <input
-                      type="checkbox"
-                      checked={Boolean(factsChecked[factKey])}
-                      onChange={() => toggleFact(factKey)}
-                    />
-                    <span>{fact}</span>
-                  </label>
-                </li>
-              );
-              })}
-            </ul>
-          </div>
-        )}
-
-        {current.instructions && current.instructions.length > 0 && (
-          <div className={styles.practiceBlock}>
-            <strong>Follow these steps, tick each when done</strong>
-            <ul className={styles.factChecklist}>
-              {current.instructions.map((instruction, i) => (
-                <li key={instruction}>
-                  <label className={styles.factLabel}>
-                    <input
-                      type="checkbox"
-                      checked={Boolean(instructionsChecked[i])}
-                      onChange={() => toggleInstruction(i)}
-                    />
-                    <span>
-                      <strong>Step {i + 1}.</strong> {instruction}
-                    </span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {current.tip && (
-          <div className={styles.tipReveal}>
-            {tipRevealed ? (
-              <Alert variant="info" title="Tip">
-                {current.tip}
-              </Alert>
-            ) : (
-              <Button variant="secondary" size="sm" onClick={() => setTipRevealed(true)}>
-                Show hint
-              </Button>
-            )}
-          </div>
-        )}
-
-        {current.check && (
-          <div className={styles.checkBlock}>
-            <strong>Check your understanding</strong>
-            <p>{current.check.prompt}</p>
-            <div className={styles.optionGrid}>
-              {current.check.options.map((opt) => {
-                const isSelected = checkAnswer === opt;
-                const isCorrect = opt === current.check!.correctAnswer;
-                let variant: "secondary" | "primary" = "secondary";
-                if (isSelected && isCorrect) variant = "primary";
-                return (
-                  <Button
-                    key={opt}
-                    variant={variant}
-                    size="sm"
-                    disabled={checkPassed && !isCorrect}
-                    onClick={() => submitCheck(opt)}
+                  <div
+                    key={fact}
+                    className={[
+                      styles.interactiveCheckItem,
+                      isChecked ? styles.interactiveCheckItemActive : "",
+                    ].join(" ")}
+                    onClick={() => toggleFact(factKey)}
                   >
-                    {opt}
-                  </Button>
+                    <div className={styles.checkBoxMark}>{isChecked ? "✓" : ""}</div>
+                    <span style={{ fontSize: "0.95rem", lineHeight: 1.4 }}>{fact}</span>
+                  </div>
                 );
               })}
             </div>
-            {checkAnswer && checkAnswer !== current.check.correctAnswer && (
-              <Alert variant="warning">{current.check.explanation} Try again!</Alert>
-            )}
-            {checkPassed && (
-              <Alert variant="success">{current.check.explanation} Well done!</Alert>
+          </div>
+        )}
+
+        {/* Practice Instructions */}
+        {current.instructions && current.instructions.length > 0 && (
+          <div style={{ marginTop: "0.5rem" }}>
+            <strong style={{ fontSize: "0.95rem", color: "#1e293b", display: "block", marginBottom: "0.5rem" }}>
+              Follow these practice steps:
+            </strong>
+            <div className={styles.checkList}>
+              {current.instructions.map((instruction, i) => {
+                const isChecked = Boolean(instructionsChecked[i]);
+                return (
+                  <div
+                    key={instruction}
+                    className={[
+                      styles.interactiveCheckItem,
+                      isChecked ? styles.interactiveCheckItemActive : "",
+                    ].join(" ")}
+                    onClick={() => toggleInstruction(i)}
+                  >
+                    <div className={styles.checkBoxMark}>{isChecked ? "✓" : ""}</div>
+                    <span style={{ fontSize: "0.95rem", lineHeight: 1.4 }}>
+                      <strong>Step {i + 1}.</strong> {instruction}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Codecademy Practical Tip */}
+        {current.tip && (
+          <div style={{ marginTop: "0.5rem" }}>
+            {tipRevealed ? (
+              <div className={styles.tipBox}>
+                <strong>💡 Wisely&apos;s Pro Tip</strong>
+                {current.tip}
+              </div>
+            ) : (
+              <button
+                type="button"
+                className={[styles.tactileChoiceBtn, styles.tactileChoiceSelected].join(" ")}
+                style={{ padding: "0.6rem 1rem", fontSize: "0.85rem", width: "auto" }}
+                onClick={() => setTipRevealed(true)}
+              >
+                💡 Show Hint & Pro Tip
+              </button>
             )}
           </div>
         )}
 
+        {/* ── DUOLINGO-STYLE INTERACTIVE QUESTION CHECK ─────────────────── */}
+        {current.check && (
+          <div style={{ marginTop: "1rem" }}>
+            <h3 style={{ fontSize: "1.1rem", fontFamily: "var(--font-sans)", fontWeight: 800, color: "#1e293b", marginBottom: "0.75rem" }}>
+              {current.check.prompt}
+            </h3>
+
+            <div className={styles.optionsGrid}>
+              {current.check.options.map((opt) => {
+                const isSelected = checkAnswer === opt;
+                const isCorrect = opt === current.check!.correctAnswer;
+                const isPassed = checkPassed && isCorrect;
+                const isFailed = checkAnswer && !checkPassed && isSelected;
+
+                return (
+                  <button
+                    key={opt}
+                    type="button"
+                    className={[
+                      styles.tactileChoiceBtn,
+                      isSelected ? styles.tactileChoiceSelected : "",
+                      isPassed ? styles.tactileChoiceCorrect : "",
+                      isFailed ? styles.tactileChoiceIncorrect : "",
+                    ].join(" ")}
+                    disabled={checkPassed}
+                    onClick={() => submitCheck(opt)}
+                  >
+                    <span>{opt}</span>
+                    {isPassed && <span aria-hidden="true">✓</span>}
+                    {isFailed && <span aria-hidden="true">✗</span>}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Acknowledge Button for pure reading steps */}
         {!current.check && !hasKeyFacts && (
-          <div className={styles.ackBlock}>
-            <Button
-              variant={stepReady ? "primary" : "secondary"}
-              size="sm"
+          <div style={{ marginTop: "0.5rem" }}>
+            <button
+              type="button"
+              className={[
+                styles.tactileChoiceBtn,
+                stepReady ? styles.tactileChoiceCorrect : styles.tactileChoiceSelected,
+              ].join(" ")}
               onClick={() => setStepReady(true)}
             >
-              {stepReady ? "Ready, keep going!" : "I've read this, continue"}
-            </Button>
+              <span>{stepReady ? "✓ I've got it, ready to proceed!" : "📖 Tap here once you've read this"}</span>
+            </button>
           </div>
         )}
+      </div>
 
-        <div className={styles.btnGroup}>
-          {step > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setStep(step - 1);
-                resetStepInteraction();
-              }}
-            >
-              Back
-            </Button>
+      {/* ── DUOLINGO-STYLE STICKY BOTTOM ACTION SHEET ─────────────────── */}
+      <div
+        className={[
+          styles.actionTray,
+          checkPassed
+            ? styles.actionTrayCorrect
+            : checkAnswer && !checkPassed
+              ? styles.actionTrayIncorrect
+              : "",
+        ].join(" ")}
+      >
+        <div className={styles.actionTrayInner}>
+          {checkPassed ? (
+            <div className={styles.feedbackMessage}>
+              <span className={styles.feedbackIcon} aria-hidden="true">
+                🎉
+              </span>
+              <div className={styles.feedbackText}>
+                <h4 className={styles.feedbackTitle}>Great job! +10 XP</h4>
+                <p className={styles.feedbackSub}>{current.check?.explanation || "Spot on!"}</p>
+              </div>
+            </div>
+          ) : checkAnswer && !checkPassed ? (
+            <div className={styles.feedbackMessage}>
+              <span className={styles.feedbackIcon} aria-hidden="true">
+                🦊
+              </span>
+              <div className={styles.feedbackText}>
+                <h4 className={[styles.feedbackTitle, styles.feedbackTitleIncorrect].join(" ")}>
+                  Not quite yet!
+                </h4>
+                <p className={[styles.feedbackSub, styles.feedbackSubIncorrect].join(" ")}>
+                  {current.check?.explanation || "Review the text above and try another option."}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div style={{ fontSize: "0.875rem", color: "#64748b", fontWeight: 600 }}>
+              {hasMoreContent
+                ? "Read through to continue"
+                : needsFacts
+                  ? "Check all facts above"
+                  : needsInstructions
+                    ? "Complete steps above"
+                    : needsCheck
+                      ? "Select the correct answer"
+                      : "Ready for the next step!"}
+            </div>
           )}
-          <Button size="sm" loading={loading} disabled={!canPressNext} onClick={goNext}>
-            {needsContentChunk
-              ? "Read next part"
-              : needsMoreFacts
-                ? "Next fact"
-              : needsCheck
-              ? "Answer correctly to continue"
-              : needsFacts
-                ? "Check all key facts to continue"
-                : needsInstructions
-                  ? "Complete all practice steps to continue"
-                  : needsAcknowledge
-                  ? "Tap 'I've read this' above"
-                  : step < steps.length - 1
-                    ? "Next step"
-                    : "Finish lesson"}
-          </Button>
+
+          <button
+            type="button"
+            className={[
+              styles.bigActionButton,
+              canPressNext
+                ? checkPassed
+                  ? styles.btnSuccess
+                  : styles.btnPrimary
+                : styles.btnDisabled,
+            ].join(" ")}
+            disabled={!canPressNext || loading}
+            onClick={goNext}
+          >
+            {loading
+              ? "Saving..."
+              : checkPassed
+                ? "Continue →"
+                : hasMoreContent
+                  ? "Next part"
+                  : hasMoreFacts
+                    ? "Next fact"
+                    : step < steps.length - 1
+                      ? "Continue"
+                      : "Finish Lesson"}
+          </button>
         </div>
-      </Card>
-    </>
+      </div>
+    </div>
   );
 }

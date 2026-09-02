@@ -1,9 +1,11 @@
 /* WiselyFox service worker: offline shell + push notifications */
-const CACHE = "wiselyfox-v5";
+const CACHE = "wiselyfox-v6";
 const OFFLINE_URL = "/offline.html";
 const PRECACHE = [
   "/",
   OFFLINE_URL,
+  "/login",
+  "/sign-in",
   "/learn/offline",
   "/learn/rewards",
   "/icons/icon.svg",

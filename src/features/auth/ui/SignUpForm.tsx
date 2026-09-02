@@ -5,7 +5,7 @@ import Link from "next/link";
 import { signIn as nextAuthSignIn } from "next-auth/react";
 import { Button, Input, Card, Alert } from "@/shared/ui";
 import { PasswordField } from "@/shared/ui/PasswordField/PasswordField";
-import { signUpParent } from "@/features/auth/actions/auth.actions";
+import { signUpParent, signInWithEmail } from "@/features/auth/actions/auth.actions";
 import styles from "./auth.module.css";
 
 export function SignUpForm({ plan = "essential" }: { plan?: string }) {
@@ -17,10 +17,12 @@ export function SignUpForm({ plan = "essential" }: { plan?: string }) {
     setLoading(true);
     setError("");
     const fd = new FormData(e.currentTarget);
+    const email = fd.get("email") as string;
+    const password = fd.get("password") as string;
     const result = await signUpParent({
       name: fd.get("name") as string,
-      email: fd.get("email") as string,
-      password: fd.get("password") as string,
+      email,
+      password,
       marketingOptIn: fd.get("marketing") === "on",
       termsAccepted: fd.get("terms") === "on",
       privacyAccepted: fd.get("privacy") === "on",
@@ -28,6 +30,16 @@ export function SignUpForm({ plan = "essential" }: { plan?: string }) {
     if (!result.success) {
       setLoading(false);
       setError(result.error);
+      return;
+    }
+    // Auto sign in newly registered parent to enter onboarding immediately
+    const loginResult = await signInWithEmail({
+      email,
+      password,
+      role: "parent",
+    });
+    if (loginResult.success) {
+      window.location.assign("/parent/onboarding");
       return;
     }
     window.location.assign(`/sign-in?registered=1&plan=${encodeURIComponent(plan)}`);

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { requireChild } from "@/shared/lib/permissions";
 import { getLearnChildByUserId } from "@/features/learning/services/child-session.service";
-import { getSubjectWithLessons } from "@/features/learning/services/curriculum-cache.service";
 import {
   getCompletedLessonSlugs,
   getSubjectCompletionCount,
@@ -13,98 +12,15 @@ import {
   ageBandLabel,
 } from "@/features/learning/services/age-content.service";
 import { buildLessonSections } from "@/features/learning/services/lesson-grouping.service";
+import type { LessonRow } from "@/features/learning/services/lesson-grouping.service";
+import { ALL_CURRICULUM_SUBJECTS } from "@/data/curriculum";
 import {
   isLessonUnlocked,
-  isTrackLesson,
   lessonUnlockLabel,
   UNLOCK_CAREER_AT,
-  UNLOCK_ADVANCED_AT,
   UNLOCK_TRACKS_AT,
 } from "@/features/learning/services/lesson-unlock.service";
-import { Button, Badge, Alert, ProgressBar } from "@/shared/ui";
-import styles from "@/features/parent/ui/parent.module.css";
-
-function LessonRow({
-  lesson,
-  subjectSlug,
-  childAgeBand,
-  sortedLessons,
-  completedCount,
-  completedSet,
-}: {
-  lesson: {
-    id: string;
-    slug: string;
-    title: string;
-    ageBand: string;
-    difficulty: number;
-    durationMinutes: number;
-  };
-  subjectSlug: string;
-  childAgeBand: string;
-  sortedLessons: { slug: string }[];
-  completedCount: number;
-  completedSet: Set<string>;
-}) {
-  const index = sortedLessons.findIndex((l) => l.slug === lesson.slug);
-  const unlocked = isLessonUnlocked(lesson.slug, subjectSlug, index, completedCount);
-  const lockLabel = lessonUnlockLabel(lesson.slug, subjectSlug, index, completedCount);
-  const done = completedSet.has(lesson.slug);
-
-  return (
-    <div
-      className={[
-        styles.quest,
-        done ? styles.lessonCompleted : styles.lessonIncomplete,
-        !unlocked ? styles.lockedLesson : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-    >
-      <div>
-        <div className={styles.lessonTitleRow}>
-          <strong>{lesson.title}</strong>
-          {done ? (
-            <Badge variant="success">Completed</Badge>
-          ) : unlocked ? (
-            <Badge variant="warning">Incomplete</Badge>
-          ) : null}
-        </div>
-        <div className={styles.meta}>
-          ~{lesson.durationMinutes} min, Level {lesson.difficulty}, Ages {lesson.ageBand}
-          {isTrackLesson(lesson.slug) && (
-            <>
-              {" "}
-             , <Badge>Specialty track</Badge>
-            </>
-          )}
-          {lesson.slug.startsWith("career-") && subjectSlug !== "career-skills" && (
-            <>
-              {" "}
-             , <Badge>Career & business</Badge>
-            </>
-          )}
-          {ageBandProximity(childAgeBand, lesson.ageBand) === 0 && (
-            <>
-              {" "}
-             , <Badge variant="success">Best fit</Badge>
-            </>
-          )}
-        </div>
-        {lockLabel && <p className={styles.meta}>{lockLabel}</p>}
-      </div>
-      {unlocked ? (
-        <Link href={`/learn/lesson/${subjectSlug}/${lesson.slug}`}>
-          <Button size="sm">{done ? "Again" : "Start"}</Button>
-        </Link>
-      ) : (
-        <Button size="sm" disabled>
-          Locked
-        </Button>
-      )}
-    </div>
-  );
-}
+import s from "@/features/learning/ui/SubjectCards.module.css";
 
 export default async function LearnSubjectPage({
   params,
@@ -116,111 +32,263 @@ export default async function LearnSubjectPage({
   const child = await getLearnChildByUserId(user.id);
   if (!child) redirect("/child-sign-in");
 
-  const [subject, completedCount, completedSlugs] = await Promise.all([
-    getSubjectWithLessons(subjectSlug),
+  const curriculumSubject = ALL_CURRICULUM_SUBJECTS.find((s) => s.slug === subjectSlug);
+  if (!curriculumSubject) notFound();
+
+  const [completedCount, completedSlugs] = await Promise.all([
     getSubjectCompletionCount(child.id, subjectSlug),
     getCompletedLessonSlugs(child.id, subjectSlug),
   ]);
-  if (!subject) notFound();
 
-  const sortedLessons = [...subject.lessons].sort(
+  const sortedLessons = [...curriculumSubject.lessons].sort(
     (a, b) =>
       ageBandProximity(child.ageBand, a.ageBand) - ageBandProximity(child.ageBand, b.ageBand) ||
       a.difficulty - b.difficulty,
   );
-  const lessons = filterContentForAge(sortedLessons, child.ageBand);
-  const sections = buildLessonSections(lessons, subjectSlug, sortedLessons);
+  const lessons = filterContentForAge(sortedLessons, child.ageBand) as LessonRow[];
+  const sections = buildLessonSections(lessons, subjectSlug, sortedLessons as LessonRow[]);
   const completedSet = new Set(completedSlugs);
   const visibleCompleted = lessons.filter((l) => completedSet.has(l.slug)).length;
-
-  const rowProps = {
-    subjectSlug,
-    childAgeBand: child.ageBand,
-    sortedLessons,
-    completedCount,
-    completedSet,
-  };
+  const progressPct =
+    lessons.length > 0 ? Math.min(100, Math.round((visibleCompleted / lessons.length) * 100)) : 0;
 
   return (
     <>
-      <Link href="/learn/subjects">
-        <Button variant="ghost" size="sm">
+      {/* ── DARK HERO BANNER ─────────────────────────────────────── */}
+      <div className={s.lessonPageHero}>
+        <Link href="/learn/subjects" className={s.lessonHeroBack}>
           ← All subjects
-        </Button>
-      </Link>
-      <header className={styles.pageHeader}>
-        <h1>{subject.title}</h1>
-        <p className={styles.pageSubtitle}>{subject.description}</p>
-        <p className={styles.meta}>
-          {visibleCompleted} of {lessons.length} lessons completed on your path, {ageBandLabel(child.ageBand)}{" "}
-         , Complete {UNLOCK_TRACKS_AT} foundation lessons for specialty tracks, {UNLOCK_ADVANCED_AT}{" "}
-          advanced, {UNLOCK_CAREER_AT} career
-        </p>
+        </Link>
+        <h1 className={s.lessonHeroTitle}>{curriculumSubject.title}</h1>
+        <p className={s.lessonHeroSub}>{curriculumSubject.description}</p>
+        <div className={s.lessonHeroStats}>
+          <span className={s.heroPill}>📚 {lessons.length} lessons</span>
+          <span className={s.heroPill}>✅ {visibleCompleted} done</span>
+          <span className={s.heroPill}>🎯 Ages {ageBandLabel(child.ageBand)}</span>
+          {completedCount >= UNLOCK_TRACKS_AT && (
+            <span className={s.heroPill} style={{ background: "rgba(16,185,129,0.25)", borderColor: "rgba(16,185,129,0.4)" }}>
+              🔓 Tracks unlocked
+            </span>
+          )}
+        </div>
         {lessons.length > 0 && (
-          <ProgressBar
-            value={visibleCompleted}
-            max={lessons.length}
-            label="Subject progress"
-          />
+          <div className={s.lessonProgressBar}>
+            <div className={s.progressTrack}>
+              <div className={s.progressFillLight} style={{ width: `${progressPct}%` }} />
+            </div>
+            <p className={s.progressText}>{progressPct}% complete · {visibleCompleted} of {lessons.length} lessons</p>
+          </div>
         )}
-      </header>
+      </div>
 
-      <div className={styles.childActions}>
-        <Link href={`/learn/guide/${subject.slug}`}>
-          <Button variant="secondary" size="sm">
-            Study guide
-          </Button>
+      {/* ── QUICK ACTIONS ────────────────────────────────────────── */}
+      <div className={s.quickActions}>
+        <Link href={`/learn/guide/${subjectSlug}`} className={s.quickActionBtn}>
+          📖 Study guide
         </Link>
-        <Link href={`/learn/videos/${subject.slug}`}>
-          <Button variant="secondary" size="sm">
-            Videos
-          </Button>
+        <Link href={`/learn/videos/${subjectSlug}`} className={s.quickActionBtn}>
+          🎬 Videos
         </Link>
-        <Link href={`/learn/quiz/${subject.slug}`}>
-          <Button variant="secondary" size="sm">
-            Take quiz
-          </Button>
+        <Link href={`/learn/quiz/${subjectSlug}`} className={s.quickActionBtn}>
+          🧠 Quiz
         </Link>
       </div>
 
-      {sections.map((section) => (
-        <section key={section.kind + section.title} className={styles.section}>
-          <h2>{section.title}</h2>
-          {section.kind === "tracks" ? (
-            section.groups.map((group) => (
-              <div key={group.trackSlug} className={styles.trackGroup}>
-                <div className={styles.trackHeader}>
-                  <h3>{group.title}</h3>
-                  <Badge>{group.category}</Badge>
-                </div>
-                <div className={styles.questList}>
-                  {group.lessons.map((lesson) => (
-                    <LessonRow key={lesson.id} lesson={lesson} {...rowProps} />
-                  ))}
-                </div>
+      {/* ── UNLOCK BANNERS ───────────────────────────────────────── */}
+      {completedCount >= UNLOCK_TRACKS_AT && (
+        <div className={s.unlockBanner}>
+          <span className={s.unlockBannerIcon}>🌟</span>
+          <div className={s.unlockBannerText}>
+            <strong>Specialty tracks unlocked!</strong>
+            <span>Python, web dev, science branches and more — explore your specialty tracks below.</span>
+          </div>
+        </div>
+      )}
+      {completedCount >= UNLOCK_CAREER_AT && (
+        <div className={s.unlockBanner}>
+          <span className={s.unlockBannerIcon}>🚀</span>
+          <div className={s.unlockBannerText}>
+            <strong>Career pack unlocked!</strong>
+            <span>You've earned access to career &amp; business lessons in this subject.</span>
+          </div>
+        </div>
+      )}
+
+      {/* ── LESSON SECTIONS ──────────────────────────────────────── */}
+      {sections.map((section) => {
+        if (section.kind === "tracks") {
+          return (
+            <div key="tracks" className={s.lessonSectionBlock}>
+              <div className={s.lessonSectionHeading}>
+                <span className={s.lessonSectionLabel}>🛤️ {section.title}</span>
+                <span className={s.lessonSectionDivider} />
               </div>
-            ))
-          ) : (
-            <div className={styles.questList}>
-              {section.lessons.map((lesson) => (
-                <LessonRow key={lesson.id} lesson={lesson} {...rowProps} />
+              {section.groups.map((group) => (
+                <div key={group.trackSlug} className={s.trackGroup}>
+                  <div className={s.trackGroupHeader}>
+                    <h3 className={s.trackGroupTitle}>{group.title}</h3>
+                    <span className={s.trackGroupCategory}>{group.category}</span>
+                  </div>
+                  <div className={s.trackGroupLessons}>
+                    {group.lessons.map((lesson, i) => (
+                      <LessonCard
+                        key={lesson.slug}
+                        lesson={lesson}
+                        subjectSlug={subjectSlug}
+                        sortIndex={sortedLessons.findIndex((l) => l.slug === lesson.slug)}
+                        completedCount={completedCount}
+                        completedSet={completedSet}
+                        isFirst={i === 0 && completedSet.size === 0}
+                        tag="track"
+                      />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
-          )}
-        </section>
-      ))}
+          );
+        }
 
-      {completedCount >= UNLOCK_TRACKS_AT && (
-        <Alert variant="success" title="Specialty tracks unlocked">
-          Python, web dev, science branches, and more, explore your specialty tracks above!
-        </Alert>
-      )}
+        const sectionIcon =
+          section.kind === "foundation" ? "📗" :
+          section.kind === "advanced" ? "🔥" : "💼";
 
-      {completedCount >= UNLOCK_CAREER_AT && (
-        <Alert variant="success" title="Career pack unlocked">
-          You unlocked career & business lessons in this subject. Great work!
-        </Alert>
-      )}
+        const lessons =
+          section.kind === "foundation" || section.kind === "advanced" || section.kind === "career"
+            ? section.lessons
+            : [];
+
+        const tag =
+          section.kind === "foundation" ? "foundation" :
+          section.kind === "advanced" ? "advanced" : "career";
+
+        return (
+          <div key={section.kind} className={s.lessonSectionBlock}>
+            <div className={s.lessonSectionHeading}>
+              <span className={s.lessonSectionLabel}>{sectionIcon} {section.title}</span>
+              <span className={s.lessonSectionCount}>{lessons.length}</span>
+              <span className={s.lessonSectionDivider} />
+            </div>
+            <div className={s.lessonList}>
+              {lessons.map((lesson, i) => (
+                <LessonCard
+                  key={lesson.slug}
+                  lesson={lesson}
+                  subjectSlug={subjectSlug}
+                  sortIndex={sortedLessons.findIndex((l) => l.slug === lesson.slug)}
+                  completedCount={completedCount}
+                  completedSet={completedSet}
+                  isFirst={section.kind === "foundation" && i === 0 && completedSet.size === 0}
+                  tag={tag as "foundation" | "advanced" | "career"}
+                />
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </>
   );
 }
+
+function DifficultyDots({ level }: { level: number }) {
+  return (
+    <span style={{ display: "flex", gap: "2px", alignItems: "center" }}>
+      {[1, 2, 3, 4, 5].map((d) => (
+        <span
+          key={d}
+          style={{
+            width: "6px",
+            height: "6px",
+            borderRadius: "50%",
+            background: d <= level ? "#6366f1" : "#e2e8f0",
+            display: "inline-block",
+          }}
+        />
+      ))}
+    </span>
+  );
+}
+
+function LessonCard({
+  lesson,
+  subjectSlug,
+  sortIndex,
+  completedCount,
+  completedSet,
+  isFirst,
+  tag,
+}: {
+  lesson: LessonRow;
+  subjectSlug: string;
+  sortIndex: number;
+  completedCount: number;
+  completedSet: Set<string>;
+  isFirst: boolean;
+  tag: "foundation" | "advanced" | "track" | "career";
+}) {
+  const isDone = completedSet.has(lesson.slug);
+  const unlocked = isLessonUnlocked(lesson.slug, subjectSlug, sortIndex, completedCount);
+  const lockMsg = lessonUnlockLabel(lesson.slug, subjectSlug, sortIndex, completedCount);
+  const isActive = !isDone && unlocked && isFirst;
+
+  const cardClass = [
+    s.lessonRowCard,
+    isDone ? s.completed : "",
+    !unlocked ? s.locked : "",
+    isActive ? s.activelesson : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const statusIcon = isDone ? (
+    <span className={[s.lessonStatusIcon, s.statusIconCompleted].join(" ")}>✓</span>
+  ) : !unlocked ? (
+    <span className={[s.lessonStatusIcon, s.statusIconLocked].join(" ")}>🔒</span>
+  ) : isActive ? (
+    <span className={[s.lessonStatusIcon, s.statusIconActive].join(" ")}>▶</span>
+  ) : (
+    <span className={[s.lessonStatusIcon, s.statusIconReady].join(" ")}>○</span>
+  );
+
+  const tagClass =
+    tag === "foundation" ? s.tagFoundation :
+    tag === "advanced" ? s.tagAdvanced :
+    tag === "track" ? s.tagTrack : s.tagCareer;
+
+  const tagLabel =
+    tag === "foundation" ? "Foundation" :
+    tag === "advanced" ? "Advanced" :
+    tag === "track" ? "Track" : "Career";
+
+  return (
+    <div className={cardClass}>
+      {statusIcon}
+      <div className={s.lessonRowInfo}>
+        <p className={s.lessonRowTitle}>{lesson.title}</p>
+        <div className={s.lessonRowMeta}>
+          <span className={[s.lessonTag, tagClass].join(" ")}>{tagLabel}</span>
+          <span>~{lesson.durationMinutes} min</span>
+          <DifficultyDots level={lesson.difficulty} />
+          <span>Ages {lesson.ageBand}</span>
+        </div>
+        {lockMsg && <p className={s.lockLabel}>{lockMsg}</p>}
+      </div>
+      <div className={s.lessonRowAction}>
+        {unlocked ? (
+          <Link
+            href={`/learn/lesson/${subjectSlug}/${lesson.slug}`}
+            className={isDone ? s.reviewBtn : s.startBtn}
+          >
+            {isDone ? "Review" : "Start →"}
+          </Link>
+        ) : (
+          <span className={s.reviewBtn} style={{ opacity: 0.5, cursor: "not-allowed" }}>
+            Locked
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+

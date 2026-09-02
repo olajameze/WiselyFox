@@ -25,7 +25,7 @@ const mainNav = [
 export function Header({ signedIn, variant = "default" }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showDisplayTools, setShowDisplayTools] = useState(false);
-  const [dockPosition, setDockPosition] = useState({ x: 16, y: 88 });
+  const [dockPosition, setDockPosition] = useState<{ x: number; y: number } | null>(null);
   const dragState = useRef<{ startX: number; startY: number; originX: number; originY: number } | null>(null);
   const activeSection = useScrollSpy(SECTION_IDS);
   const isNotebook = variant === "notebook";
@@ -53,11 +53,13 @@ export function Header({ signedIn, variant = "default" }: HeaderProps) {
   }, []);
 
   function beginDockDrag(event: React.PointerEvent<HTMLButtonElement>) {
+    const currentX = dockPosition ? dockPosition.x : window.innerWidth - 70;
+    const currentY = dockPosition ? dockPosition.y : window.innerHeight - 70;
     dragState.current = {
       startX: event.clientX,
       startY: event.clientY,
-      originX: dockPosition.x,
-      originY: dockPosition.y,
+      originX: currentX,
+      originY: currentY,
     };
   }
 
@@ -155,7 +157,11 @@ export function Header({ signedIn, variant = "default" }: HeaderProps) {
 
       <div
         className={styles.utilityDock}
-        style={{ left: dockPosition.x, top: dockPosition.y }}
+        style={
+          dockPosition
+            ? { left: dockPosition.x, top: dockPosition.y }
+            : { right: "1.25rem", bottom: "1.25rem" }
+        }
       >
         {showDisplayTools ? (
           <div className={styles.displayTools} role="group" aria-label="Display preferences">
