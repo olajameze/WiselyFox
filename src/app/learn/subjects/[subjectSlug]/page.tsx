@@ -45,8 +45,11 @@ export default async function LearnSubjectPage({
       ageBandProximity(child.ageBand, a.ageBand) - ageBandProximity(child.ageBand, b.ageBand) ||
       a.difficulty - b.difficulty,
   );
-  const lessons = filterContentForAge(sortedLessons, child.ageBand) as LessonRow[];
-  const sections = buildLessonSections(lessons, subjectSlug, sortedLessons as LessonRow[]);
+  const lessons = filterContentForAge(sortedLessons, child.ageBand).map((l) => ({
+    ...l,
+    id: l.slug,
+  }));
+  const sections = buildLessonSections(lessons, subjectSlug, sortedLessons.map((l) => ({ ...l, id: l.slug })));
   const completedSet = new Set(completedSlugs);
   const visibleCompleted = lessons.filter((l) => completedSet.has(l.slug)).length;
   const progressPct =
@@ -109,7 +112,7 @@ export default async function LearnSubjectPage({
           <span className={s.unlockBannerIcon}>🚀</span>
           <div className={s.unlockBannerText}>
             <strong>Career pack unlocked!</strong>
-            <span>You've earned access to career &amp; business lessons in this subject.</span>
+            <span>You&apos;ve earned access to career &amp; business lessons in this subject.</span>
           </div>
         </div>
       )}
