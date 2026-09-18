@@ -79,6 +79,8 @@ export default async function LearnLessonPage({
         chunkSize={ui.chunkSize}
         showTimer={ui.showTimer}
         celebrationIntensity={ui.celebrationIntensity}
+        showVisualSchedule={ui.showVisualSchedule}
+        breakEveryMinutes={ui.breakEveryMinutes}
       />
     </>
   );

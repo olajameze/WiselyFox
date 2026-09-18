@@ -37,6 +37,7 @@ export type AccommodationUiProps = {
   celebrationIntensity: AccommodationRules["celebrationIntensity"];
   breakEveryMinutes: number | null;
   hintDelaySeconds: number;
+  showVisualSchedule: boolean;
   calm: boolean;
   soundEnabled: boolean;
 };
@@ -48,6 +49,7 @@ export function toAccommodationUiProps(accommodation: LearnAccommodation): Accom
     celebrationIntensity: accommodation.rules.celebrationIntensity,
     breakEveryMinutes: accommodation.rules.breakEveryMinutes,
     hintDelaySeconds: accommodation.rules.hintDelaySeconds,
+    showVisualSchedule: accommodation.rules.showVisualSchedule,
     calm: accommodation.calm,
     soundEnabled: accommodation.soundEnabled,
   };

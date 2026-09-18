@@ -21,6 +21,8 @@ export function LessonPlayer({
   chunkSize = "medium",
   showTimer = true,
   celebrationIntensity = "medium",
+  showVisualSchedule = false,
+  breakEveryMinutes = null,
 }: {
   subjectSlug: string;
   lessonSlug: string;
@@ -32,6 +34,8 @@ export function LessonPlayer({
   chunkSize?: AccommodationRules["chunkSize"];
   showTimer?: boolean;
   celebrationIntensity?: AccommodationRules["celebrationIntensity"];
+  showVisualSchedule?: boolean;
+  breakEveryMinutes?: number | null;
 }) {
   const [step, setStep] = useState(0);
   const [contentChunk, setContentChunk] = useState(0);
@@ -45,6 +49,16 @@ export function LessonPlayer({
   const [factsChecked, setFactsChecked] = useState<Record<number, boolean>>({});
   const [instructionsChecked, setInstructionsChecked] = useState<Record<number, boolean>>({});
   const [stepReady, setStepReady] = useState(false);
+  const [showBreakAlert, setShowBreakAlert] = useState(false);
+
+  useEffect(() => {
+    if (!breakEveryMinutes) return;
+    const breakTimer = setTimeout(() => {
+      setShowBreakAlert(true);
+    }, breakEveryMinutes * 60 * 1000);
+    return () => clearTimeout(breakTimer);
+  }, [breakEveryMinutes]);
+
 
   const current = steps[step];
   const contentParts =
@@ -151,23 +165,24 @@ export function LessonPlayer({
 
   // ── CELEBRATION MODAL / SCREEN ──────────────────────────────────────────
   if (done) {
+    const isCalm = calm || noCelebration || celebrationIntensity === "low";
     return (
-      <div className={styles.playerWrapper}>
-        <div className={styles.celebrationCard}>
-          <div className={styles.celebrationFox} aria-hidden="true">
+      <div className={[styles.playerWrapper, isCalm ? "calmModeContainer" : ""].filter(Boolean).join(" ")}>
+        <div className={isCalm ? styles.celebrationCardCalm : styles.celebrationCard}>
+          <div className={isCalm ? styles.celebrationFoxCalm : styles.celebrationFox} aria-hidden="true">
             🦊
           </div>
           <h2 className={styles.celebrationHeading}>
-            {noCelebration
-              ? "Lesson Finished!"
+            {isCalm
+              ? "Lesson Finished"
               : alreadyCompleted
                 ? "Lesson Completed Again!"
                 : "Lesson Complete!"}
           </h2>
-          <div className={styles.xpBadge}>+{xp} XP EARNED</div>
+          <div className={isCalm ? styles.xpBadgeCalm : styles.xpBadge}>+{xp} XP EARNED</div>
           <p style={{ color: "#64748b", maxWidth: "420px", margin: "0 auto", lineHeight: 1.6 }}>
-            {noCelebration
-              ? "Well done, take a breath before your next step."
+            {isCalm
+              ? "Well done! Take a quiet breath before choosing what to explore next."
               : alreadyCompleted
                 ? "Great revision! You're strengthening your knowledge every single day."
                 : "Fantastic work! You practised real skills and earned bonus streak progress."}
@@ -225,6 +240,89 @@ export function LessonPlayer({
           </span>
         </div>
       </div>
+
+      {/* ── ADHD / FOCUS MOVEMENT BREAK ALERT ──────────────────────────── */}
+      {showBreakAlert && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            background: "#FEF3C7",
+            border: "1.5px solid #F59E0B",
+            borderRadius: "12px",
+            padding: "0.75rem 1rem",
+            marginBottom: "1rem",
+            gap: "0.75rem",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <span style={{ fontSize: "1.25rem" }}>🧘</span>
+            <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#92400E" }}>
+              Time for a quick stretch break! Stand up, stretch, or take a sip of water.
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowBreakAlert(false)}
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "#92400E",
+              fontWeight: 800,
+              fontSize: "0.85rem",
+              cursor: "pointer",
+            }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* ── VISUAL SCHEDULE (ADHD & AUTISM PREDICTABILITY) ─────────────── */}
+      {showVisualSchedule && steps.length > 1 && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.4rem",
+            marginBottom: "1rem",
+            padding: "0.5rem 0.75rem",
+            background: calm ? "#f4f6f5" : "#f8fafc",
+            borderRadius: "12px",
+            border: "1.5px solid #e2e8f0",
+            overflowX: "auto",
+          }}
+          aria-label="Visual lesson schedule"
+        >
+          <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+            Plan:
+          </span>
+          {steps.map((s, idx) => {
+            const isPast = idx < step;
+            const isCurrent = idx === step;
+            return (
+              <span
+                key={idx}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.2rem",
+                  fontSize: "0.75rem",
+                  fontWeight: isCurrent ? 800 : 600,
+                  color: isPast ? "#10b981" : isCurrent ? "var(--color-primary, #e05638)" : "#94a3b8",
+                  background: isCurrent ? (calm ? "#eef4f0" : "#fff7ed") : "transparent",
+                  padding: "0.2rem 0.5rem",
+                  borderRadius: "6px",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {isPast ? "✓" : `${idx + 1}.`} {s.title.length > 16 ? s.title.slice(0, 16) + "…" : s.title}
+              </span>
+            );
+          })}
+        </div>
+      )}
 
       {/* ── MIMO-STYLE LESSON CARD ─────────────────────────────────────── */}
       <div className={styles.lessonCard}>
