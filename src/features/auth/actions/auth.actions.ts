@@ -14,12 +14,13 @@ import { syncSuperAdminRole } from "@/server/services/super-admin.service";
 import { resolvePostLoginRedirect } from "@/shared/lib/user-capabilities";
 import { checkRateLimit } from "@/server/services/rate-limit.service";
 import { getClientIp } from "@/shared/lib/client-ip";
+import { strongPasswordSchema } from "@/shared/lib/password-strength";
 import { normalizeAccessCodeInput } from "@/shared/lib/access-code";
 
 const signUpSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
-  password: z.string().min(8),
+  password: strongPasswordSchema,
   marketingOptIn: z.boolean().default(false),
   termsAccepted: z.boolean().refine((value) => value, {
     message: "You must accept the Terms of Service",

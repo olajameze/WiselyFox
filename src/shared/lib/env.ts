@@ -10,7 +10,12 @@ const optionalEmail = z.preprocess(emptyToUndefined, z.string().email().optional
 const optionalUrl = z.preprocess(emptyToUndefined, z.string().url().optional());
 
 const envSchema = z.object({
-  DATABASE_URL: z.string().min(1),
+  DATABASE_URL: z
+    .string()
+    .min(1)
+    .refine((url) => !url.includes("db.example.com"), {
+      message: "DATABASE_URL is still a placeholder — set it to a real PostgreSQL connection string",
+    }),
   AUTH_SECRET: z.string().min(16),
   AUTH_URL: optionalUrl,
   RESEND_API_KEY: optionalString,

@@ -15,6 +15,7 @@ import {
 import { submitTutorForAgeReview } from "@/features/tutors/services/tutor-verification.service";
 import { requireParentOwner, requireTutorProfile, getSessionUser } from "@/shared/lib/permissions";
 import { TutorVerificationStatus } from "@prisma/client";
+import { strongPasswordSchema } from "@/shared/lib/password-strength";
 
 const tutorOnboardingUploadsSchema = z.object({
   dbsLetterUrl: z.string().min(1, "Official DBS Certificate letter is required"),
@@ -60,7 +61,7 @@ export async function saveTutorOnboardingAction(
 const tutorSignUpSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
-  password: z.string().min(8),
+  password: strongPasswordSchema,
   dateOfBirth: z.string().min(1),
   feeAccepted: z.boolean().refine((v) => v, { message: "You must accept the fee disclosure" }),
   termsAccepted: z.boolean().refine((v) => v, { message: "You must accept the tutor terms" }),

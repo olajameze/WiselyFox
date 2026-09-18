@@ -57,7 +57,7 @@ export function TutorSignUpForm() {
       <form className={styles.form} onSubmit={handleSubmit}>
         <Input name="name" label="Full Name" required autoComplete="name" />
         <Input name="email" type="email" label="Email" required autoComplete="email" />
-        <PasswordField name="password" label="Password (min. 8 characters)" required autoComplete="new-password" />
+        <PasswordField name="password" label="Password (min. 10 characters, uppercase, number & symbol)" required minLength={10} autoComplete="new-password" helperText="At least 10 characters, with an uppercase letter, a number and a special character (!@#$%)" />
         
         <div className={tutorStyles.field}>
           <label htmlFor="dateOfBirth">Date of birth (must be 18+)</label>

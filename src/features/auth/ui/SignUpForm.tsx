@@ -66,8 +66,8 @@ export function SignUpForm({ plan = "essential" }: { plan?: string }) {
               name="password"
               label="Password"
               required
-              minLength={8}
-              helperText="At least 8 characters"
+              minLength={10}
+              helperText="At least 10 characters, with an uppercase letter, a number and a special character (!@#$%)"
               autoComplete="new-password"
             />
             <label className={styles.checkbox}>
