@@ -40,76 +40,95 @@ export async function signUpParent(
   const limited = checkRateLimit("sign-up", `${ip}:${email}`);
   if (!limited.ok) return fail(limited.message);
 
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) return fail("An account with this email already exists");
+  try {
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) return fail("An account with this email already exists");
 
-  // Cost 10 is OWASP-acceptable and materially faster than 12 on signup.
-  const passwordHash = await bcrypt.hash(password, 10);
-  const fraudScore = scoreSignupFraud(email);
+    // Cost 10 is OWASP-acceptable and materially faster than 12 on signup.
+    const passwordHash = await bcrypt.hash(password, 10);
+    const fraudScore = scoreSignupFraud(email);
 
-  const user = await prisma.user.create({
-    data: {
-      email,
-      name,
-      passwordHash,
-      role: UserRole.PARENT,
-      parentProfile: { create: {} },
-    },
-    include: { parentProfile: true },
-  });
-
-  await syncSuperAdminRole(user.id, email);
-
-  await prisma.consentRecord.createMany({
-    data: [
-      {
-        parentId: user.parentProfile!.id,
-        type: ConsentType.TERMS,
-        granted: true,
-        version: CONSENT_VERSION,
+    const user = await prisma.user.create({
+      data: {
+        email,
+        name,
+        passwordHash,
+        role: UserRole.PARENT,
+        parentProfile: { create: {} },
       },
-      {
-        parentId: user.parentProfile!.id,
-        type: ConsentType.PRIVACY,
-        granted: true,
-        version: CONSENT_VERSION,
-      },
-      {
-        parentId: user.parentProfile!.id,
-        type: ConsentType.MARKETING,
-        granted: marketingOptIn,
-        version: CONSENT_VERSION,
-      },
-    ],
-  });
+      include: { parentProfile: true },
+    });
 
-  if (shouldFlagForReview(fraudScore)) {
-    await prisma.fraudSignal.create({
+    await syncSuperAdminRole(user.id, email);
+
+    await prisma.consentRecord.createMany({
+      data: [
+        {
+          parentId: user.parentProfile!.id,
+          type: ConsentType.TERMS,
+          granted: true,
+          version: CONSENT_VERSION,
+        },
+        {
+          parentId: user.parentProfile!.id,
+          type: ConsentType.PRIVACY,
+          granted: true,
+          version: CONSENT_VERSION,
+        },
+        {
+          parentId: user.parentProfile!.id,
+          type: ConsentType.MARKETING,
+          granted: marketingOptIn,
+          version: CONSENT_VERSION,
+        },
+      ],
+    });
+
+    if (shouldFlagForReview(fraudScore)) {
+      await prisma.fraudSignal.create({
+        data: {
+          parentId: user.parentProfile!.id,
+          signal: "signup_risk",
+          score: fraudScore,
+          status: fraudScore >= 80 ? "BLOCKED" : "REVIEW",
+        },
+      });
+    }
+
+    const trialDays = env.TRIAL_PERIOD_DAYS;
+    const trialEnds = new Date();
+    trialEnds.setDate(trialEnds.getDate() + trialDays);
+
+    await prisma.subscription.create({
       data: {
         parentId: user.parentProfile!.id,
-        signal: "signup_risk",
-        score: fraudScore,
-        status: fraudScore >= 80 ? "BLOCKED" : "REVIEW",
+        trialStartsAt: new Date(),
+        trialEndsAt: trialEnds,
+        status: "TRIALING",
       },
     });
+
+    await logAudit({ actorId: user.id, action: "parent.signup", resource: "User", resourceId: user.id });
+
+    return ok({ email });
+  } catch (error) {
+    // Handle the duplicate-email race (unique constraint) explicitly.
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code?: string }).code === "P2002"
+    ) {
+      return fail("An account with this email already exists");
+    }
+
+    // Log the real cause so the server logs (e.g. Vercel) show what broke,
+    // then surface a friendly message instead of an unhandled 500.
+    console.error("[signUpParent] failed:", error);
+    return fail(
+      "We could not create your account right now. Please try again in a moment — if it keeps failing, contact support.",
+    );
   }
-
-  const trialDays = env.TRIAL_PERIOD_DAYS;
-  const trialEnds = new Date();
-  trialEnds.setDate(trialEnds.getDate() + trialDays);
-
-  await prisma.subscription.create({
-    data: {
-      parentId: user.parentProfile!.id,
-      trialStartsAt: new Date(),
-      trialEndsAt: trialEnds,
-      status: "TRIALING",
-    },
-  });
-
-  await logAudit({ actorId: user.id, action: "parent.signup", resource: "User", resourceId: user.id });
-
-  return ok({ email });
 }
 
 const signInSchema = z.object({

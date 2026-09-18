@@ -88,6 +88,6 @@ export async function deleteParentAccount(
     await prisma.user.delete({ where: { id: childUserId } }).catch(() => undefined);
   }
 
-  await signOut({ redirectTo: "/" });
+  await signOut({ redirectTo: "/login" });
   return ok(null);
 }

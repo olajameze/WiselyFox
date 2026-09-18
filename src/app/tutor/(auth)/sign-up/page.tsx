@@ -1,10 +1,44 @@
 import { Header } from "@/shared/ui/Header/Header";
 import { Footer } from "@/shared/ui/Footer/Footer";
 import { TutorSignUpForm } from "@/features/tutors/ui/TutorSignUpForm";
+import { TutorSocialCompleteForm } from "@/features/tutors/ui/TutorSocialCompleteForm";
+import { getSessionUser } from "@/shared/lib/permissions";
+import { prisma } from "@/shared/lib/prisma";
 import Link from "next/link";
 import styles from "@/features/auth/ui/auth.module.css";
 
-export default function TutorSignUpPage() {
+export default async function TutorSignUpPage() {
+  const sessionUser = await getSessionUser();
+
+  // A user who arrived via Google/Facebook sign-in has a session but no tutor
+  // profile yet — show the completion step (DOB + consents) instead of the
+  // full registration form.
+  if (sessionUser) {
+    const existingTutor = await prisma.tutorProfile.findUnique({
+      where: { userId: sessionUser.id },
+      select: { id: true },
+    });
+    if (!existingTutor) {
+      return (
+        <>
+          <Header />
+          <div className={styles.authPage}>
+            <div className={styles.notebookOpen}>
+              <div className={styles.bookSpine} aria-hidden="true" />
+              <div className={[styles.authCard, styles.tutorSignUpCard].join(" ")}>
+                <TutorSocialCompleteForm
+                  name={sessionUser.name ?? "Tutor"}
+                  email={sessionUser.email ?? ""}
+                />
+              </div>
+            </div>
+          </div>
+          <Footer />
+        </>
+      );
+    }
+  }
+
   return (
     <>
       <Header />

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { signUpTutor } from "@/features/tutors/actions/tutor-onboarding.actions";
 import { TutorFeeDisclosure } from "./TutorFeeDisclosure";
 import { TUTOR_TERMS_COPY } from "@/features/tutors/lib/tutor-consent";
-import { Button, Input, Card, Alert } from "@/shared/ui";
+import { Button, Input, Card, Alert, SocialProviderButtons } from "@/shared/ui";
 import { PasswordField } from "@/shared/ui/PasswordField/PasswordField";
 import styles from "@/features/auth/ui/auth.module.css";
 import tutorStyles from "./tutor.module.css";
@@ -85,6 +85,12 @@ export function TutorSignUpForm() {
                 {loading ? "Creating Account…" : "Create Tutor Account"}
             </Button>
         </div>
+
+        <div className={styles.oauthDivider}>
+          <span>or sign up with</span>
+        </div>
+
+        <SocialProviderButtons callbackUrl="/tutor/sign-up" googleLabel="Google" facebookLabel="Facebook" />
       </form>
       
       <p className={styles.link}>

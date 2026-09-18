@@ -13,7 +13,7 @@ import {
   TUTOR_TERMS_COPY,
 } from "@/features/tutors/lib/tutor-consent";
 import { submitTutorForAgeReview } from "@/features/tutors/services/tutor-verification.service";
-import { requireParentOwner, requireTutorProfile } from "@/shared/lib/permissions";
+import { requireParentOwner, requireTutorProfile, getSessionUser } from "@/shared/lib/permissions";
 import { TutorVerificationStatus } from "@prisma/client";
 
 const tutorOnboardingUploadsSchema = z.object({
@@ -189,4 +189,84 @@ export async function getTutorOnboardingCopy() {
     terms: TUTOR_TERMS_COPY,
     version: TUTOR_CONSENT_VERSION,
   };
+}
+
+const tutorSocialSignUpSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  dateOfBirth: z.string().min(1),
+  feeAccepted: z.boolean().refine((v) => v, { message: "You must accept the fee disclosure" }),
+  termsAccepted: z.boolean().refine((v) => v, { message: "You must accept the tutor terms" }),
+});
+
+/**
+ * Completes tutor registration for a user who has just signed in with a
+ * social provider (Google / Facebook). The user record already exists from
+ * the OAuth sign-in callback; this only adds the tutor profile and consents.
+ */
+export async function signUpTutorSocial(
+  input: z.infer<typeof tutorSocialSignUpSchema>,
+): Promise<ActionResult<{ tutorId: string }>> {
+  const sessionUser = await getSessionUser();
+  if (!sessionUser) return fail("You must be signed in with Google or Facebook first");
+
+  const parsed = tutorSocialSignUpSchema.safeParse(input);
+  if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? "Invalid input");
+
+  const { name, email, dateOfBirth } = parsed.data;
+  const dob = parseDateOfBirth(dateOfBirth);
+  if (!dob) return fail("Invalid date of birth");
+  if (!isAdultTutorAge(dob)) return fail("You must be at least 18 years old to tutor");
+
+  // Ensure the email on file matches the signed-in social account
+  if (email.trim().toLowerCase() !== (sessionUser.email ?? "").toLowerCase()) {
+    return fail("Email must match the account you signed in with");
+  }
+
+  const existingTutor = await prisma.tutorProfile.findUnique({ where: { userId: sessionUser.id } });
+  if (existingTutor) return ok({ tutorId: existingTutor.id });
+
+  const dbUser = await prisma.user.findUnique({ where: { id: sessionUser.id } });
+  if (!dbUser) return fail("Signed-in user no longer exists");
+
+  const now = new Date();
+  const tutor = await prisma.tutorProfile.create({
+    data: {
+      userId: sessionUser.id,
+      dateOfBirth: dob,
+      feeTermsAcceptedAt: now,
+      feeTermsVersion: TUTOR_CONSENT_VERSION,
+    },
+  });
+
+  if (name && name !== dbUser.name) {
+    await prisma.user.update({ where: { id: sessionUser.id }, data: { name } });
+  }
+
+  await prisma.tutorConsentRecord.createMany({
+    data: [
+      {
+        tutorId: tutor.id,
+        type: TutorConsentType.TUTOR_TERMS,
+        granted: true,
+        version: TUTOR_CONSENT_VERSION,
+      },
+      {
+        tutorId: tutor.id,
+        type: TutorConsentType.TUTOR_FEE_DISCLOSURE,
+        granted: true,
+        version: TUTOR_CONSENT_VERSION,
+      },
+    ],
+  });
+
+  await submitTutorForAgeReview(tutor.id);
+  await logAudit({
+    actorId: sessionUser.id,
+    action: "tutor.signup.social",
+    resource: "TutorProfile",
+    resourceId: tutor.id,
+  });
+
+  return ok({ tutorId: tutor.id });
 }

@@ -10,3 +10,4 @@ export { Header } from "./Header/Header";
 export { Footer } from "./Footer/Footer";
 export { PasswordField } from "./PasswordField/PasswordField";
 export { TextToSpeechPlayer } from "@/components/accessibility/TextToSpeechPlayer";
+export { SocialProviderButtons } from "./SocialProviderButtons";
