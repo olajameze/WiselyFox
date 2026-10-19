@@ -7,7 +7,10 @@ export default async function SignInPage({
 }) {
   const params = await searchParams;
   const role =
-    params.role === "student" || params.role === "parent" || params.role === "tutor"
+    params.role === "learner" ||
+    params.role === "student" ||
+    params.role === "parent" ||
+    params.role === "tutor"
       ? params.role
       : undefined;
   return <LoginFlow defaultRole={role} callbackUrl={params.callbackUrl} />;

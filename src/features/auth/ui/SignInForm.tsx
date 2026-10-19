@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Button, Input, Card, Alert } from "@/shared/ui";
+import { Button, Input, Card, Alert, SocialProviderButtons } from "@/shared/ui";
 import { PasswordField } from "@/shared/ui/PasswordField/PasswordField";
 import { signInWithEmail } from "@/features/auth/actions/auth.actions";
 import {
@@ -98,10 +98,16 @@ export function SignInForm({
             <Input name="email" type="email" label="Email" required autoComplete="email" />
             <PasswordField name="password" label="Password" required autoComplete="current-password" />
             <div className={styles.formActions}>
-              <Button type="submit" loading={loading}>
+              <Button type="submit" loading={loading} className={styles.fullWidthBtn}>
                 {isTutor ? "Sign in as tutor" : "Sign in"}
               </Button>
             </div>
+
+            <div className={styles.oauthDivider}>
+              <span>or continue with</span>
+            </div>
+
+            <SocialProviderButtons callbackUrl={callbackUrl || (isTutor ? "/tutor" : "/parent")} />
           </form>
           <p className={styles.link}>
             {isTutor ? (

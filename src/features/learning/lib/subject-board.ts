@@ -79,7 +79,12 @@ export function buildSubjectBoardEntries(
   completedBySlug: Record<string, number> = {},
 ): SubjectBoardEntry[] {
   return subjects
-    .filter((subject) => (subject.ageBands ?? []).includes(childAgeBand) || (subject.ageBands ?? []).length === 0)
+    .filter(
+      (subject) =>
+        (subject.ageBands ?? []).includes(childAgeBand) ||
+        (subject.ageBands ?? []).length === 0 ||
+        (completedBySlug[subject.slug] ?? 0) > 0,
+    )
     .map((subject) => {
       const lessonsCount = subject.lessons?.length ?? 0;
       const completeCount = completedBySlug[subject.slug] ?? 0;

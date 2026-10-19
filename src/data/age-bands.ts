@@ -17,6 +17,7 @@ export function isAgeBand(value: string): value is AgeBand {
 }
 
 export function ageBandProximity(childBand: string, contentBand: string): number {
+  if (childBand === "24+") return 0;
   const i = AGE_BANDS.indexOf(childBand as AgeBand);
   const j = AGE_BANDS.indexOf(contentBand as AgeBand);
   if (i === -1 || j === -1) return 99;
@@ -25,6 +26,7 @@ export function ageBandProximity(childBand: string, contentBand: string): number
 
 /** Pick quiz/lesson content bands: exact match first, then nearest */
 export function quizBandPriority(childBand: string): string[] {
+  if (childBand === "24+") return [...AGE_BANDS];
   if (!isAgeBand(childBand)) return [...AGE_BANDS];
   const idx = AGE_BANDS.indexOf(childBand);
   const ordered = [childBand];

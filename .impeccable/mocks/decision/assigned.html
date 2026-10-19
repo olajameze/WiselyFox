@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Living Folio</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { width: 1440px; height: 900px; margin: 0; overflow: hidden; }
+      body { display: flex; background: #f4efe4; color: #172421; font: 17px/1.5 Arial, sans-serif; }
+      aside { width: 252px; padding: 38px 24px; background: #172421; color: #f4efe4; }
+      .brand { font: 600 25px Georgia, serif; letter-spacing: -.5px; }
+      .brand small { display: block; margin-top: 7px; color: #d1bd98; font: 14px Arial, sans-serif; }
+      nav { display: grid; gap: 8px; margin-top: 64px; }
+      nav span { padding: 13px 15px; border-radius: 8px; color: #ded8ca; }
+      nav .active { background: #34443b; color: #fff8e9; }
+      .account { margin-top: 370px; color: #d1bd98; font-size: 14px; }
+      main { flex: 1; padding: 48px 70px; }
+      .top { display: flex; justify-content: space-between; align-items: center; }
+      .crumb { color: #67746b; font-size: 15px; }
+      .profile { padding: 9px 14px; border: 1px solid #d7cebd; border-radius: 24px; }
+      h1 { margin: 46px 0 8px; font: 500 44px/1.12 Georgia, serif; letter-spacing: -1px; }
+      .intro { margin: 0; color: #58675e; font-size: 18px; }
+      .content { display: grid; grid-template-columns: 1.55fr 1fr; gap: 26px; margin-top: 38px; }
+      .current { min-height: 350px; padding: 34px 38px; background: #fffaf0; border: 1px solid #e5dcc9; border-radius: 12px; }
+      .folio { display: flex; justify-content: space-between; color: #8a6238; font-size: 14px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+      h2 { margin: 25px 0 8px; font: 500 34px/1.2 Georgia, serif; }
+      .current p { max-width: 520px; color: #59665e; font-size: 17px; }
+      .button { display: inline-block; margin-top: 18px; padding: 13px 20px; border-radius: 7px; background: #a44834; color: white; font-weight: 700; }
+      .progress { height: 5px; margin-top: 26px; background: #e8e0d1; }
+      .progress span { display: block; width: 44%; height: 100%; background: #b78942; }
+      .week { padding: 28px 30px; border-top: 2px solid #b78942; background: #ece5d8; }
+      .week h2 { margin: 0 0 20px; font-size: 25px; }
+      .line { display: flex; justify-content: space-between; padding: 17px 0; border-top: 1px solid #d7cebd; }
+      .line strong { font-weight: 600; }
+      .line small { display: block; color: #66746a; }
+      .next { margin-top: 28px; padding: 22px 26px; border-left: 3px solid #a44834; }
+      .next strong { font: 500 22px Georgia, serif; }
+      .next p { margin: 8px 0 0; color: #59665e; }
+    </style>
+  </head>
+  <body>
+    <aside>
+      <div class="brand">WiselyFox<small>Your learning space</small></div>
+      <nav aria-label="Learning navigation">
+        <span class="active">Today</span><span>Courses</span><span>Quizzes</span><span>Focus</span><span>Progress</span>
+      </nav>
+      <div class="account">Preferences&nbsp;&nbsp; · &nbsp;&nbsp;Account</div>
+    </aside>
+    <main>
+      <div class="top"><span class="crumb">Learning / Today</span><span class="profile">Study profile</span></div>
+      <h1>Good to see you.</h1>
+      <p class="intro">A clear place to pick up your learning and plan what comes next.</p>
+      <section class="content" aria-label="Today's learning">
+        <article class="current">
+          <div class="folio"><span>Study skills</span><span>Folio 02</span></div>
+          <h2>Focus techniques</h2>
+          <p>Build a study rhythm that works for you, one manageable step at a time.</p>
+          <span class="button">Continue lesson</span>
+          <div class="progress" aria-label="Lesson progress"><span></span></div>
+        </article>
+        <section class="week">
+          <h2>Your study list</h2>
+          <div class="line"><strong>Focus techniques<small>Ready to continue</small></strong><span>›</span></div>
+          <div class="line"><strong>Note-taking<small>Study skills</small></strong><span>›</span></div>
+          <div class="line"><strong>Emotional regulation<small>Study skills</small></strong><span>›</span></div>
+        </section>
+      </section>
+      <div class="next"><strong>A steady pace is a good pace.</strong><p>Take a short break whenever you need one.</p></div>
+    </main>
+  </body>
+</html>

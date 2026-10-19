@@ -27,7 +27,7 @@ export async function getUserCapabilities(userId: string): Promise<UserCapabilit
 
 export async function resolvePostLoginRedirect(userId: string, role: string): Promise<string> {
   if (role === "SUPERADMIN") return "/admin";
-  if (role === "CHILD") return "/learn";
+  if (role === "CHILD" || role === "LEARNER") return "/learn";
 
   const caps = await getUserCapabilities(userId);
   if (caps.hasParentProfile) return "/parent";

@@ -5,6 +5,7 @@ import {
   getResolvedAgeBands,
 } from "@/data/curriculum-merge";
 import { GUIDE_ENRICHMENTS } from "@/data/study-guide-enrichment";
+import { AGE_BANDS, ageBandProximity, quizBandPriority } from "@/data/age-bands";
 
 describe("curriculum age bands and depth", () => {
   it("every declared subject age band has at least one lesson", () => {
@@ -62,5 +63,11 @@ describe("curriculum age bands and depth", () => {
       expect(bands).toContain("8-10");
       expect(bands).toContain("20-23");
     }
+  });
+
+  it("lets learners aged 24+ access the curriculum without age-ranked recommendations", () => {
+    expect(ageBandProximity("24+", "20-23")).toBe(0);
+    expect(ageBandProximity("24+", "5-7")).toBe(0);
+    expect(quizBandPriority("24+")).toEqual([...AGE_BANDS]);
   });
 });

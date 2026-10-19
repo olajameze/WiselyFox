@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Chapter Grid</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { width: 1440px; height: 900px; margin: 0; overflow: hidden; }
+      body { display: flex; background: #f5f0e6; color: #202c32; font: 16px/1.5 Arial, sans-serif; }
+      aside { width: 246px; padding: 38px 23px; background: #202c32; color: #f5f0e6; }
+      .brand { font: 600 25px Georgia, serif; }
+      .brand small { display: block; margin-top: 8px; color: #c9c8ba; font: 14px Arial, sans-serif; }
+      nav { display: grid; gap: 8px; margin-top: 66px; }
+      nav span { padding: 13px 12px; color: #d8d9d1; }
+      nav .active { background: #39474c; color: white; }
+      .account { margin-top: 374px; color: #c9c8ba; font-size: 14px; }
+      main { flex: 1; padding: 45px 66px; }
+      .top { display: flex; justify-content: space-between; color: #667075; }
+      h1 { margin: 43px 0 7px; font: 500 43px/1.15 Georgia, serif; }
+      .intro { margin: 0; color: #59666b; font-size: 18px; }
+      .grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 1px; margin-top: 38px; background: #bfc6c0; border: 1px solid #bfc6c0; }
+      .cell { min-height: 178px; padding: 24px; background: #faf7ef; }
+      .cell h2 { margin: 13px 0 5px; font: 500 24px Georgia, serif; }
+      .cell p { margin: 0; color: #627076; }
+      .kicker { color: #9b4c38; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+      .featured { grid-row: span 2; min-height: 357px; background: #ebe4d6; }
+      .featured h2 { margin-top: 27px; font-size: 34px; }
+      .button { display: inline-block; margin-top: 22px; padding: 12px 17px; background: #af533b; color: white; font-weight: 700; }
+      .bottom { display: flex; gap: 30px; margin-top: 28px; padding-top: 20px; border-top: 1px solid #bfc6c0; color: #59666b; }
+      .bottom strong { color: #202c32; }
+    </style>
+  </head>
+  <body>
+    <aside>
+      <div class="brand">WiselyFox<small>Study space</small></div>
+      <nav aria-label="Learning navigation">
+        <span class="active">Today</span><span>Courses</span><span>Quizzes</span><span>Focus</span><span>Progress</span>
+      </nav>
+      <div class="account">Preferences&nbsp;&nbsp; · &nbsp;&nbsp;Account</div>
+    </aside>
+    <main>
+      <div class="top"><span>Learning / Today</span><span>Study profile</span></div>
+      <h1>Your learning, in order.</h1>
+      <p class="intro">A clear view of the work in front of you and what comes next.</p>
+      <section class="grid" aria-label="Courses and next steps">
+        <article class="cell featured"><div class="kicker">Study skills / Current</div><h2>Focus techniques</h2><p>Pick a strategy, try it in a short session, and notice what helped.</p><span class="button">Continue lesson</span></article>
+        <article class="cell"><div class="kicker">Next to explore</div><h2>Note-taking</h2><p>Find a format that makes review easier.</p></article>
+        <article class="cell"><div class="kicker">Study skills</div><h2>Review</h2><p>Return to ideas you have already practised.</p></article>
+        <article class="cell"><div class="kicker">Take a breather</div><h2>Focus</h2><p>Set a session that suits your day.</p></article>
+        <article class="cell"><div class="kicker">Your progress</div><h2>See your work</h2><p>Review completed lessons and quizzes.</p></article>
+      </section>
+      <div class="bottom"><span><strong>Courses</strong> &nbsp; Study skills</span><span><strong>Quizzes</strong> &nbsp; Ready when you are</span></div>
+    </main>
+  </body>
+</html>

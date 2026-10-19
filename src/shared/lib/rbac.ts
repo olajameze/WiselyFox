@@ -12,8 +12,14 @@ export function shouldBlockCrossRoleMutation({ role, method, pathname }: RoleBou
 
   const normalizedPath = pathname.toLowerCase();
   const isChildArea = normalizedPath.startsWith("/learn") || normalizedPath.startsWith("/child");
+  const isParentArea =
+    normalizedPath.startsWith("/parent") || normalizedPath.startsWith("/api/parent");
 
   if (role === "PARENT" && isChildArea) {
+    return true;
+  }
+
+  if (role === "LEARNER" && isParentArea) {
     return true;
   }
 

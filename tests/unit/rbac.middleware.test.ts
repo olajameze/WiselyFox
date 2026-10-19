@@ -14,6 +14,14 @@ describe("shouldBlockCrossRoleMutation", () => {
     expect(shouldBlockCrossRoleMutation({ role: "CHILD", method: "POST", pathname: "/learn/lesson/math/fractions-intro" })).toBe(false);
   });
 
+  it("allows a self-managed learner to mutate their learning space", () => {
+    expect(shouldBlockCrossRoleMutation({ role: "LEARNER", method: "POST", pathname: "/learn/lesson/math/fractions-intro" })).toBe(false);
+  });
+
+  it("blocks a self-managed learner from mutating parent routes", () => {
+    expect(shouldBlockCrossRoleMutation({ role: "LEARNER", method: "POST", pathname: "/api/parent/children" })).toBe(true);
+  });
+
   it("blocks a tutor from mutating parent routes", () => {
     expect(shouldBlockCrossRoleMutation({ role: "TUTOR", method: "POST", pathname: "/parent/children/child-123/progress" })).toBe(true);
   });

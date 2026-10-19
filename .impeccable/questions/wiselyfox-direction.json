@@ -1,0 +1,143 @@
+{
+  "title": "Choose the learning experience direction",
+  "question": "Every option keeps the book theme and puts older learners first. Choose a direction, ask for a fresh hand, or take the category standard.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "The Living Folio",
+      "kicker": "THE ROLL",
+      "lineage": "Split-flap departure boards, translated into a bookish study folio",
+      "thesis": "A familiar study workspace where one calm folio marker advances as learners move through a lesson.",
+      "palette": ["#f4efe4", "#172421", "#a44834", "#b78942"],
+      "materials": ["book cloth", "warm paper", "ink"],
+      "viewport": "A standard learner workspace: clear navigation, today's study, a next lesson, and named progress. A brief, restrained folio transition marks meaningful lesson progress.",
+      "risk": "If the folio movement spreads to routine interactions, it will feel theatrical instead of natural.",
+      "raised": [
+        {
+          "from": "brand-identity-canon-saville-catalog-sleeve",
+          "raise": "Colour can distinguish a course, but never replaces its readable name."
+        },
+        {
+          "from": "notation-diagram-systems-star-atlas",
+          "raise": "Progress always appears as named, understandable milestones before any visual path."
+        },
+        {
+          "from": "vernacular-ephemera-cassette-j-card",
+          "raise": "Study sessions remain flexible; no fixed sides or assumed duration."
+        },
+        {
+          "from": "crouwel-grid-specimen",
+          "raise": "Course names, progress and next actions align with deliberate editorial precision."
+        },
+        {
+          "from": "digital-design-canon-monochrome-product-marketing",
+          "raise": "Learning claims sit beside real lesson tasks, not decorative promises."
+        },
+        {
+          "from": "signals-instruments-split-flap-concourse",
+          "raise": "Motion marks a real learner action only; the interface never pretends to be a live departures board."
+        }
+      ],
+      "html": ".impeccable/mocks/decision/assigned.html"
+    },
+    {
+      "id": "model-pick",
+      "label": "The Annotated Reader",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "University reading journals and useful marginal notes",
+      "thesis": "A calm, book-first study journal that makes today's work and the next step easy to find.",
+      "palette": ["#f7f2e8", "#24332d", "#9b4c38", "#d0ae70"],
+      "materials": ["uncoated paper", "printed margins", "cloth binding"],
+      "viewport": "A clear learner workspace with the current lesson up front, a slim chapter index, and progress notes kept in the margin.",
+      "risk": "Margin details must stay functional, not turn the screen into ruled-paper wallpaper.",
+      "html": ".impeccable/mocks/decision/model-pick.html"
+    },
+    {
+      "id": "crouwel-grid-specimen",
+      "label": "The Chapter Grid",
+      "verdict": "competitive",
+      "lineage": "Modular editorial type systems",
+      "thesis": "A chapter-led learning workspace where courses, progress and next actions sit in a precise grid.",
+      "palette": ["#f5f0e6", "#202c32", "#af533b", "#9cae9e"],
+      "materials": ["book paper", "hairline rules", "typeset headings"],
+      "viewport": "A familiar learner shell with course modules arranged in a clear grid and the next lesson given priority.",
+      "case": "The grid brings strong course hierarchy and task clarity, but carries less of the requested book identity than the folio directions.",
+      "risk": "An over-visible grid could make the study space feel like a worksheet.",
+      "html": ".impeccable/mocks/decision/challenger-crouwel-grid-specimen.html"
+    },
+    {
+      "id": "brand-identity-canon-saville-catalog-sleeve",
+      "label": "The Coded Catalog Sleeve",
+      "verdict": "declined",
+      "lineage": "Factory Records catalog sleeves",
+      "thesis": "Course identities reduced to a pulse and a coded strip of colour.",
+      "palette": ["#101010", "#f2eee7", "#dd4a2c", "#d2a931"],
+      "materials": ["matte cover stock", "hairline plots", "colour blocks"],
+      "case": "Fuses poorly: replacing course names with a colour code hides the information learners need.",
+      "kept": "A consistent course accent, always paired with a readable title.",
+      "risk": "A cryptic visual code would make navigation harder."
+    },
+    {
+      "id": "notation-diagram-systems-star-atlas",
+      "label": "The Study Atlas",
+      "verdict": "declined",
+      "lineage": "Printed star atlases",
+      "thesis": "Study progress drawn as a field of connected milestones.",
+      "palette": ["#101a2d", "#f3eedf", "#a9c1d1", "#cf9a55"],
+      "materials": ["dark chart stock", "fine linework", "tabular labels"],
+      "case": "The map may feel exploratory, but an astronomy metaphor does not explain ordinary lesson states clearly enough.",
+      "kept": "Show named milestones in a legible sequence before adding any path visualization.",
+      "risk": "A decorative map can turn clear progress into a puzzle."
+    },
+    {
+      "id": "vernacular-ephemera-cassette-j-card",
+      "label": "The Study Mixtape",
+      "verdict": "declined",
+      "lineage": "Hand-lettered cassette inlay cards",
+      "thesis": "Study activities grouped into two sides of a timed session.",
+      "palette": ["#f5f1e8", "#273d4d", "#a94a32", "#cfaa67"],
+      "materials": ["folded inlay stock", "ballpoint ink", "pencil notes"],
+      "case": "The split-side metaphor assumes a fixed session length and imposes structure that conflicts with flexible pacing.",
+      "kept": "Make it easy to return to the next unfinished study step.",
+      "risk": "A side-A/side-B interaction is cute but can obstruct a real task."
+    },
+    {
+      "id": "digital-design-canon-monochrome-product-marketing",
+      "label": "The Claim-and-Proof Page",
+      "verdict": "declined",
+      "lineage": "Minimal software marketing pages",
+      "thesis": "Each learning claim is paired immediately with a product example.",
+      "palette": ["#fbfaf8", "#181b1d", "#a64a36"],
+      "materials": ["neutral scale", "soft image grounds", "product captures"],
+      "case": "This is a sales-page structure, not a daily learning workspace; its neutral, sparse system also weakens active learning states.",
+      "kept": "Pair learning actions with concrete lesson content instead of unsupported promises.",
+      "risk": "Marketing conventions would make the learner app feel like an advertisement."
+    },
+    {
+      "id": "signals-instruments-split-flap-concourse",
+      "label": "The Departure-Board Duplicate",
+      "verdict": "declined",
+      "lineage": "Rail concourse split-flap boards",
+      "thesis": "A second reading of the same changing-row metaphor.",
+      "palette": ["#17191a", "#f7f3e9", "#d7a146", "#9c4334"],
+      "materials": ["matte flaps", "painted type", "amber lamps"],
+      "case": "It duplicates the assigned direction without adding student identity or product clarity.",
+      "kept": "Animate only meaningful learner progress; do not imitate live departure data.",
+      "risk": "Repeated flips would compete with reading and accessibility."
+    }
+  ],
+  "reroll": {
+    "registers": ["safer", "bolder"]
+  },
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "A familiar, polished learning dashboard with no distinctive book-world expression.",
+    "palette": ["#ffffff", "#17212b", "#3c68a8"],
+    "materials": ["neutral interface surfaces", "standard dashboard components"],
+    "viewport": "A conventional course dashboard with clear navigation, progress summaries and a task list.",
+    "risk": "It meets category expectations but gives up the requested book identity.",
+    "html": ".impeccable/mocks/decision/canon.html"
+  },
+  "steer": true
+}

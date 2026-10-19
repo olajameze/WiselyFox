@@ -29,7 +29,7 @@ describe("ChildSignInForm", () => {
     await user.click(screen.getByRole("button", { name: /let's learn/i }));
 
     expect(signInChildMock).toHaveBeenCalledWith({
-      accessCode: "wfox-demo-alex",
+      accessCode: "WFOX-DEMO-ALEX",
       pin: "1234",
     });
   }, 15000);

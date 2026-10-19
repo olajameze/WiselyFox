@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { ConsentType } from "@prisma/client";
+import { ConsentType, UserRole } from "@prisma/client";
 import { requireChild } from "@/shared/lib/permissions";
 import { prisma } from "@/shared/lib/prisma";
 import { getLearnChildByUserId } from "@/features/learning/services/child-session.service";
@@ -18,7 +18,9 @@ import styles from "@/features/parent/ui/parent.module.css";
 export default async function LearnLayout({ children }: { children: React.ReactNode }) {
   const user = await requireChild();
   const child = await getLearnChildByUserId(user.id);
-  if (!child?.learningProfile) redirect("/child-sign-in");
+  if (!child?.learningProfile) {
+    redirect(user.role === UserRole.LEARNER ? "/sign-in?role=learner" : "/child-sign-in");
+  }
 
   const profile = child.learningProfile;
   const rules = getAccommodationRules(profile);
@@ -31,8 +33,14 @@ export default async function LearnLayout({ children }: { children: React.ReactN
     }),
     getTodaySchedule(child.id),
   ]);
-  if (!parent || !isConsentGranted(parent.consents, ConsentType.CHILD_DATA)) {
-    redirect("/child-sign-in?error=consent");
+  const requiredConsent =
+    user.role === UserRole.LEARNER ? ConsentType.LEARNER_DATA : ConsentType.CHILD_DATA;
+  if (!parent || !isConsentGranted(parent.consents, requiredConsent)) {
+    redirect(
+      user.role === UserRole.LEARNER
+        ? "/sign-in?role=learner&error=consent"
+        : "/child-sign-in?error=consent",
+    );
   }
 
   const showSchedule = rules.showVisualSchedule || todaySchedule.length > 0;

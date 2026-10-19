@@ -97,12 +97,47 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: Partial<Record<"email" | "password", unknown>>) {
-        const email = credentials?.email as string | undefined;
+        const rawEmail = credentials?.email as string | undefined;
         const password = credentials?.password as string | undefined;
-        if (!email || !password) return null;
+        if (!rawEmail || !password) return null;
+        const email = rawEmail.toLowerCase().trim();
 
         const user = await prisma.user.findUnique({ where: { email } });
-        if (!user?.passwordHash) return null;
+        if (!user?.passwordHash || user.role === UserRole.CHILD) return null;
+
+        const valid = await bcrypt.compare(password, user.passwordHash);
+        if (!valid) return null;
+
+        const [role, flags] = await Promise.all([
+          syncSuperAdminRole(user.id, user.email),
+          loadProfileFlags(user.id),
+        ]);
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role,
+          hasParentProfile: flags.hasParentProfile,
+          hasTutorProfile: flags.hasTutorProfile,
+        };
+      },
+    }),
+    Credentials({
+      id: "learner-credentials",
+      name: "Learner",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials: Partial<Record<"email" | "password", unknown>>) {
+        const rawEmail = credentials?.email as string | undefined;
+        const password = credentials?.password as string | undefined;
+        if (!rawEmail || !password) return null;
+        const email = rawEmail.toLowerCase().trim();
+
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (!user?.passwordHash || user.role !== UserRole.CHILD) return null;
 
         const valid = await bcrypt.compare(password, user.passwordHash);
         if (!valid) return null;
@@ -130,9 +165,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: Partial<Record<"email" | "password", unknown>>) {
-        const email = credentials?.email as string | undefined;
+        const rawEmail = credentials?.email as string | undefined;
         const password = credentials?.password as string | undefined;
-        if (!email || !password) return null;
+        if (!rawEmail || !password) return null;
+        const email = rawEmail.toLowerCase().trim();
 
         const user = await prisma.user.findUnique({ where: { email } });
         if (!user?.passwordHash) return null;
@@ -239,10 +275,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           });
         }
 
-        await syncSuperAdminRole(dbUser.id, dbUser.email);
+        const [role, flags] = await Promise.all([
+          syncSuperAdminRole(dbUser.id, dbUser.email),
+          loadProfileFlags(dbUser.id),
+        ]);
         user.id = dbUser.id;
-        user.role = dbUser.role;
-        user.hasParentProfile = true;
+        user.role = role;
+        user.hasParentProfile = flags.hasParentProfile;
+        user.hasTutorProfile = flags.hasTutorProfile;
       }
       return true;
     },

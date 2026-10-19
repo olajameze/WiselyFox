@@ -85,7 +85,7 @@ export async function requireTutorOnly(): Promise<{ user: SessionUser; tutor: Tu
 export async function requireChild(): Promise<SessionUser> {
   const user = await requireAuth();
   if (user.role !== UserRole.CHILD) {
-    throw new AppError("Child access required", "FORBIDDEN", 403);
+    throw new AppError("Learner access required", "FORBIDDEN", 403);
   }
   return user;
 }

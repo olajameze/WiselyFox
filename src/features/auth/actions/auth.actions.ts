@@ -36,7 +36,8 @@ export async function signUpParent(
   const parsed = signUpSchema.safeParse(input);
   if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? "Invalid input");
 
-  const { name, email, password, marketingOptIn } = parsed.data;
+  const { name, password, marketingOptIn } = parsed.data;
+  const email = parsed.data.email.trim().toLowerCase();
   const ip = await getClientIp();
   const limited = checkRateLimit("sign-up", `${ip}:${email}`);
   if (!limited.ok) return fail(limited.message);
@@ -132,10 +133,135 @@ export async function signUpParent(
   }
 }
 
+const learnerSignUpSchema = signUpSchema.extend({
+  ageConfirmed: z.boolean().refine((value) => value, {
+    message: "You must confirm that you are 18 or older",
+  }),
+  ageBand: z.enum(["17-19", "20-23", "24+"]),
+  learnerDataConsent: z.boolean().refine((value) => value, {
+    message: "You must agree to the use of your learning data",
+  }),
+});
+
+export async function signUpLearner(
+  input: z.infer<typeof learnerSignUpSchema>,
+): Promise<ActionResult<{ email: string }>> {
+  const parsed = learnerSignUpSchema.safeParse(input);
+  if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? "Invalid input");
+
+  const { name, password, marketingOptIn, ageBand } = parsed.data;
+  const email = parsed.data.email.trim().toLowerCase();
+  const ip = await getClientIp();
+  const limited = checkRateLimit("sign-up", `${ip}:${email}`);
+  if (!limited.ok) return fail(limited.message);
+
+  try {
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) return fail("An account with this email already exists");
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    const fraudScore = scoreSignupFraud(email);
+    const trialStartsAt = new Date();
+    const trialEndsAt = new Date(trialStartsAt);
+    trialEndsAt.setDate(trialEndsAt.getDate() + env.TRIAL_PERIOD_DAYS);
+
+    const user = await prisma.$transaction(async (tx) => {
+      const createdUser = await tx.user.create({
+        data: {
+          email,
+          name,
+          passwordHash,
+          role: UserRole.CHILD,
+          parentProfile: {
+            create: {
+              onboardingDone: true,
+              subscription: {
+                create: {
+                  trialStartsAt,
+                  trialEndsAt,
+                  status: "TRIALING",
+                },
+              },
+              consents: {
+                create: [
+                  { type: ConsentType.TERMS, granted: true, version: CONSENT_VERSION },
+                  { type: ConsentType.PRIVACY, granted: true, version: CONSENT_VERSION },
+                  {
+                    type: ConsentType.MARKETING,
+                    granted: marketingOptIn,
+                    version: CONSENT_VERSION,
+                  },
+                  {
+                    type: ConsentType.CHILD_DATA,
+                    granted: true,
+                    version: CONSENT_VERSION,
+                  },
+                ],
+              },
+              ...(shouldFlagForReview(fraudScore)
+                ? {
+                    fraudSignals: {
+                      create: {
+                        signal: "signup_risk",
+                        score: fraudScore,
+                        status: fraudScore >= 80 ? "BLOCKED" : "REVIEW",
+                      },
+                    },
+                  }
+                : {}),
+            },
+          },
+        },
+        include: { parentProfile: true },
+      });
+
+      if (!createdUser.parentProfile) {
+        throw new Error("Self-managed learner account is missing its profile owner");
+      }
+
+      await tx.childProfile.create({
+        data: {
+          parentId: createdUser.parentProfile.id,
+          userId: createdUser.id,
+          displayName: name,
+          ageBand,
+          learningProfile: { create: {} },
+        },
+      });
+
+      return createdUser;
+    });
+
+    await syncSuperAdminRole(user.id, email);
+    await logAudit({
+      actorId: user.id,
+      action: "learner.signup",
+      resource: "User",
+      resourceId: user.id,
+    });
+
+    return ok({ email });
+  } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code?: string }).code === "P2002"
+    ) {
+      return fail("An account with this email already exists");
+    }
+
+    console.error("[signUpLearner] failed:", error);
+    return fail(
+      "We could not create your account right now. Please try again in a moment — if it keeps failing, contact support.",
+    );
+  }
+}
+
 const signInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
-  role: z.enum(["parent", "tutor"]),
+  role: z.enum(["learner", "parent", "tutor"]),
 });
 
 export async function signInWithEmail(
@@ -144,27 +270,37 @@ export async function signInWithEmail(
   const parsed = signInSchema.safeParse(input);
   if (!parsed.success) return fail("Invalid credentials");
 
+  const email = parsed.data.email.trim().toLowerCase();
   const ip = await getClientIp();
-  const limited = checkRateLimit("sign-in", `${ip}:${parsed.data.email}`);
+  const limited = checkRateLimit("sign-in", `${ip}:${email}`);
   if (!limited.ok) return fail(limited.message);
 
-  const provider = parsed.data.role === "tutor" ? "tutor-credentials" : "parent-credentials";
+  const provider =
+    parsed.data.role === "learner"
+      ? "learner-credentials"
+      : parsed.data.role === "tutor"
+        ? "tutor-credentials"
+        : "parent-credentials";
 
   try {
     const result = await signIn(provider, {
-      email: parsed.data.email,
+      email,
       password: parsed.data.password,
       redirect: false,
     });
     if (result?.error) return fail("Invalid email or password");
 
     const account = await prisma.user.findUnique({
-      where: { email: parsed.data.email },
+      where: { email },
       select: { id: true, role: true },
     });
     const redirectTo = account
       ? await resolvePostLoginRedirect(account.id, account.role)
-      : (parsed.data.role === "tutor" ? "/tutor" : "/parent");
+      : parsed.data.role === "tutor"
+        ? "/tutor"
+        : parsed.data.role === "learner"
+          ? "/learn"
+          : "/parent";
     return ok({ redirectTo });
   } catch {
     return fail("Invalid email or password");

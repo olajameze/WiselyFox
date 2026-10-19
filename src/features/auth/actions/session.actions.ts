@@ -7,9 +7,9 @@ export async function signOutUser() {
 }
 
 export async function signOutToSignIn() {
-  await signOut({ redirectTo: "/sign-in" });
+  await signOut({ redirectTo: "/login" });
 }
 
 export async function signOutToChildSignIn() {
-  await signOut({ redirectTo: "/child-sign-in" });
+  await signOut({ redirectTo: "/login?role=student" });
 }

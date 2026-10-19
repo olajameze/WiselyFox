@@ -101,6 +101,28 @@
   font-size: 1.0625rem;
 }
 
+.oauthDivider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--color-text-muted, #64748b);
+  font-family: var(--font-sans, "Lexend", sans-serif);
+  font-size: 0.85rem;
+  margin: 0.75rem 0;
+  width: 100%;
+}
+
+.oauthDivider::before,
+.oauthDivider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px dashed rgba(44, 36, 22, 0.2);
+}
+
+.oauthDivider span {
+  padding: 0 0.5rem;
+}
+
 .oauthRow {
   display: flex;
   gap: var(--space-sm);

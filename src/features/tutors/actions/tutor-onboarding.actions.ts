@@ -74,11 +74,12 @@ export async function signUpTutor(
   if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? "Invalid input");
 
   const { name, email, password, dateOfBirth } = parsed.data;
+  const normalizedEmail = email.trim().toLowerCase();
   const dob = parseDateOfBirth(dateOfBirth);
   if (!dob) return fail("Invalid date of birth");
   if (!isAdultTutorAge(dob)) return fail("You must be at least 18 years old to tutor");
 
-  const existing = await prisma.user.findUnique({ where: { email } });
+  const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
   if (existing) return fail("An account with this email already exists");
 
   const passwordHash = await bcrypt.hash(password, 10);
@@ -86,7 +87,7 @@ export async function signUpTutor(
 
   const user = await prisma.user.create({
     data: {
-      email,
+      email: normalizedEmail,
       name,
       passwordHash,
       role: UserRole.PARENT,

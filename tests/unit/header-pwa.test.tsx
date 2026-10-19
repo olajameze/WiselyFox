@@ -41,7 +41,7 @@ describe("PWA manifest", () => {
   it("opens the installed app directly at the login screen", () => {
     const manifest = manifestFactory();
 
-    expect(manifest.start_url).toBe("/sign-in");
+    expect(manifest.start_url).toBe("/login?source=pwa");
     expect(manifest.display).toBe("standalone");
   });
 });
