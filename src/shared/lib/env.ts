@@ -58,7 +58,35 @@ const envSchema = z.object({
 
 export type Env = z.infer<typeof envSchema>;
 
+/**
+ * True while Next.js is compiling or prerendering the production build.
+ * During this phase runtime-only secrets (DATABASE_URL, AUTH_SECRET) are not
+ * guaranteed: page-data collection and static generation (sitemap, robots)
+ * must succeed without a live database. Vercel sets NEXT_PHASE for the build
+ * worker; the argv check covers local `next build` runs.
+ */
+function isBuildPhase(): boolean {
+  return (
+    process.env.NEXT_PHASE === "phase-production-build" ||
+    (process.argv.some((arg) => arg.includes("next")) &&
+      process.argv.some((arg) => arg.includes("build")))
+  );
+}
+
+const BUILD_PLACEHOLDER = "__build_phase_placeholder__";
+
 function getEnv(): Env {
+  // During the build, supply placeholders for runtime-only secrets so static
+  // generation and page-data collection never crash on DATABASE_URL etc.
+  // Real values are still enforced at request time.
+  if (isBuildPhase()) {
+    const buildParsed = envSchema.safeParse({
+      ...process.env,
+      DATABASE_URL: process.env.DATABASE_URL ?? "postgresql://" + BUILD_PLACEHOLDER,
+      AUTH_SECRET: process.env.AUTH_SECRET ?? BUILD_PLACEHOLDER.repeat(3),
+    });
+    if (buildParsed.success) return buildParsed.data;
+  }
   const parsed = envSchema.safeParse(process.env);
   if (!parsed.success) {
     const message = parsed.error.issues.map((i) => i.path.join(".")).join(", ");
