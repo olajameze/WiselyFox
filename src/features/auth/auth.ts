@@ -4,7 +4,7 @@ import Google from "next-auth/providers/google";
 import Facebook from "next-auth/providers/facebook";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/shared/lib/prisma";
-import { env } from "@/shared/lib/env";
+import { env, requireEnv } from "@/shared/lib/env";
 import { syncSuperAdminRole } from "@/server/services/super-admin.service";
 import { getUserCapabilities } from "@/shared/lib/user-capabilities";
 import { logAudit } from "@/server/services/audit.service";
@@ -305,5 +305,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
   },
-  secret: env.AUTH_SECRET,
+  secret: requireEnv("AUTH_SECRET"),
 });

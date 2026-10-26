@@ -10,13 +10,11 @@ const optionalEmail = z.preprocess(emptyToUndefined, z.string().email().optional
 const optionalUrl = z.preprocess(emptyToUndefined, z.string().url().optional());
 
 const envSchema = z.object({
-  DATABASE_URL: z
-    .string()
-    .min(1)
-    .refine((url) => !url.includes("db.example.com"), {
-      message: "DATABASE_URL is still a placeholder — set it to a real PostgreSQL connection string",
-    }),
-  AUTH_SECRET: z.string().min(16),
+  // Runtime-only secrets are intentionally optional in the schema: the build
+  // (page-data collection, static prerender) must never depend on them. They
+  // are enforced at runtime — see getPrismaClient() and getRuntimeSecret().
+  DATABASE_URL: optionalString,
+  AUTH_SECRET: optionalString,
   AUTH_URL: optionalUrl,
   RESEND_API_KEY: optionalString,
   EMAIL_FROM: optionalString,
@@ -59,40 +57,41 @@ const envSchema = z.object({
 export type Env = z.infer<typeof envSchema>;
 
 /**
- * True while Next.js is compiling or prerendering the production build.
- * During this phase runtime-only secrets (DATABASE_URL, AUTH_SECRET) are not
- * guaranteed: page-data collection and static generation (sitemap, robots)
- * must succeed without a live database. Vercel sets NEXT_PHASE for the build
- * worker; the argv check covers local `next build` runs.
+ * Validate and return the typed environment. Optional in the schema means the
+ * build never fails; use requireEnv() for runtime-only secrets that must be
+ * present while serving requests.
  */
-function isBuildPhase(): boolean {
-  return (
-    process.env.NEXT_PHASE === "phase-production-build" ||
-    (process.argv.some((arg) => arg.includes("next")) &&
-      process.argv.some((arg) => arg.includes("build")))
-  );
-}
-
-const BUILD_PLACEHOLDER = "__build_phase_placeholder__";
-
 function getEnv(): Env {
-  // During the build, supply placeholders for runtime-only secrets so static
-  // generation and page-data collection never crash on DATABASE_URL etc.
-  // Real values are still enforced at request time.
-  if (isBuildPhase()) {
-    const buildParsed = envSchema.safeParse({
-      ...process.env,
-      DATABASE_URL: process.env.DATABASE_URL ?? "postgresql://" + BUILD_PLACEHOLDER,
-      AUTH_SECRET: process.env.AUTH_SECRET ?? BUILD_PLACEHOLDER.repeat(3),
-    });
-    if (buildParsed.success) return buildParsed.data;
-  }
   const parsed = envSchema.safeParse(process.env);
   if (!parsed.success) {
     const message = parsed.error.issues.map((i) => i.path.join(".")).join(", ");
     throw new Error(`Invalid environment: ${message}`);
   }
   return parsed.data;
+}
+
+/**
+ * Fail-fast accessor for runtime-only secrets. Throws a clear error the first
+ * time a required secret is actually needed (i.e. while serving requests),
+ * never during `next build`.
+ */
+export function requireEnv<K extends "DATABASE_URL" | "AUTH_SECRET">(key: K): string {
+  const value = env[key];
+  if (!value || value.trim().length === 0) {
+    throw new Error(
+      `Missing required environment variable ${key}. ` +
+        "Add it in Vercel (Project Settings > Environment Variables) or your local .env file.",
+    );
+  }
+  if (key === "DATABASE_URL" && value.includes("db.example.com")) {
+    throw new Error(
+      "DATABASE_URL is still a placeholder — set it to a real PostgreSQL connection string",
+    );
+  }
+  if (key === "AUTH_SECRET" && value.trim().length < 16) {
+    throw new Error("AUTH_SECRET must be at least 16 characters long");
+  }
+  return value;
 }
 
 /**

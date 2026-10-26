@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { requireEnv } from "@/shared/lib/env";
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
 
@@ -12,6 +13,8 @@ const REQUIRED_DELEGATES = [
 ] as const;
 
 function createPrismaClient() {
+  // Fail fast at request time if DATABASE_URL is missing — never at build time.
+  requireEnv("DATABASE_URL");
   return new PrismaClient({
     log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
   });
