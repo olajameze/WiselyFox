@@ -19,7 +19,7 @@ export default async function LearnLayout({ children }: { children: React.ReactN
   const user = await requireChild();
   const child = await getLearnChildByUserId(user.id);
   if (!child?.learningProfile) {
-    redirect(user.role === UserRole.LEARNER ? "/sign-in?role=learner" : "/child-sign-in");
+    redirect(user.role === UserRole.CHILD ? "/sign-in?role=learner" : "/child-sign-in");
   }
 
   const profile = child.learningProfile;
@@ -33,11 +33,10 @@ export default async function LearnLayout({ children }: { children: React.ReactN
     }),
     getTodaySchedule(child.id),
   ]);
-  const requiredConsent =
-    user.role === UserRole.LEARNER ? ConsentType.LEARNER_DATA : ConsentType.CHILD_DATA;
+  const requiredConsent = ConsentType.CHILD_DATA;
   if (!parent || !isConsentGranted(parent.consents, requiredConsent)) {
     redirect(
-      user.role === UserRole.LEARNER
+      user.role === UserRole.CHILD
         ? "/sign-in?role=learner&error=consent"
         : "/child-sign-in?error=consent",
     );

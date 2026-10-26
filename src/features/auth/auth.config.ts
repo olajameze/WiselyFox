@@ -66,7 +66,7 @@ export const authConfig = {
         }
         let redirectUrl = "/";
         if (userRole === "PARENT") redirectUrl = "/parent";
-        else if (userRole === "CHILD" || userRole === "LEARNER") redirectUrl = "/learn";
+        else if (userRole === "CHILD") redirectUrl = "/learn";
         else if (userRole === "ADMIN" || userRole === "SUPERADMIN") redirectUrl = "/admin";
         else if (hasTutorProfile) redirectUrl = "/tutor";
 
@@ -88,7 +88,7 @@ export const authConfig = {
       }
 
       if (pathname.startsWith("/learn")) {
-        return userRole === "CHILD" || userRole === "LEARNER";
+        return userRole === "CHILD";
       }
 
       if (pathname === "/tutor" || pathname.startsWith("/tutor/")) {
