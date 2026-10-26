@@ -67,7 +67,37 @@ function getEnv(): Env {
   return parsed.data;
 }
 
-export const env = getEnv();
+/**
+ * Lazy environment access.
+ *
+ * Validation must NOT run at module import time: during `next build`, Vercel
+ * imports every route to collect page data in an environment where runtime
+ * secrets (e.g. DATABASE_URL) are not guaranteed to be present. Evaluating
+ * lazily on first property access keeps the build green while still failing
+ * fast at runtime if required variables are missing.
+ */
+let cachedEnv: Env | undefined;
+
+export const env: Env = new Proxy({} as Env, {
+  get(_target, prop: string | symbol) {
+    if (!cachedEnv) cachedEnv = getEnv();
+    return cachedEnv[prop as keyof Env];
+  },
+  has(_target, prop) {
+    if (!cachedEnv) cachedEnv = getEnv();
+    return prop in cachedEnv;
+  },
+  ownKeys() {
+    if (!cachedEnv) cachedEnv = getEnv();
+    return Reflect.ownKeys(cachedEnv);
+  },
+  getOwnPropertyDescriptor(_target, prop) {
+    if (!cachedEnv) cachedEnv = getEnv();
+    const descriptor = Reflect.getOwnPropertyDescriptor(cachedEnv, prop);
+    if (descriptor) descriptor.configurable = true;
+    return descriptor;
+  },
+});
 
 export function parseEmailList(raw: string | undefined): string[] {
   return (raw ?? "")
