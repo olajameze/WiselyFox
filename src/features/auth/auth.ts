@@ -233,10 +233,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         });
 
         if (!dbUser) {
-          const trialDays = env.TRIAL_PERIOD_DAYS || 14;
-          const trialEnds = new Date();
-          trialEnds.setDate(trialEnds.getDate() + trialDays);
-
           dbUser = await prisma.user.create({
             data: {
               email,
@@ -249,9 +245,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                   subscription: {
                     create: {
                       plan: "ESSENTIAL",
-                      status: "TRIALING",
-                      trialStartsAt: new Date(),
-                      trialEndsAt: trialEnds,
+                      status: "ACTIVE",
                     },
                   },
                   consents: {

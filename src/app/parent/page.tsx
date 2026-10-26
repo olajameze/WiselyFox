@@ -28,14 +28,7 @@ export default async function ParentDashboardPage() {
     getParentNotifications(user.id),
   ]);
 
-  const sub = parent.subscription;
-  let trialDaysLeft: number | null = null;
-  if (sub?.status === "TRIALING" && sub.trialEndsAt) {
-    trialDaysLeft = Math.max(
-      0,
-      Math.ceil((sub.trialEndsAt.getTime() - Date.now()) / (1000 * 60 * 60 * 24)),
-    );
-  }
+
 
   const unreadCount = notifications.filter((n) => !n.read).length;
   const totalXp = parent.children.reduce((sum, c) => sum + (c.learningProfile?.xp ?? 0), 0);
@@ -53,14 +46,8 @@ export default async function ParentDashboardPage() {
         </p>
       </header>
 
-      <Alert variant="info" title="Family pilot mode">
-        Full access with no billing. Plan changes in Settings apply instantly, no card required.
-        {trialDaysLeft !== null && (
-          <>
-            {" "}
-            Trial period: {trialDaysLeft} day{trialDaysLeft === 1 ? "" : "s"} remaining.
-          </>
-        )}
+      <Alert variant="info" title="Free to use">
+        WiselyFox is free for parents and learners — full access, no card required.
       </Alert>
 
       <div className={`${styles.grid} ${styles.grid3} ${styles.mtLg}`}>
@@ -156,8 +143,8 @@ export default async function ParentDashboardPage() {
           )}
         </Card>
         <Card header={<h2>Quick stats</h2>}>
-          <p>Plan: <strong>{sub?.plan ?? "Essential"}</strong></p>
-          <p>Status: <Badge>{sub?.status ?? "TRIALING"}</Badge></p>
+          <p>Plan: <strong>Free</strong></p>
+          <p>Status: <Badge>Active</Badge></p>
           <p className={styles.meta}>Household XP: {totalXp}</p>
           <Link href="/parent/notifications">
             <Button variant="ghost" size="sm">

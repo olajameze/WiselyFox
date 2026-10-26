@@ -7,63 +7,6 @@ import { requireParentOwner, assertHouseholdAccess } from "@/shared/lib/permissi
 import { fail, ok, type ActionResult } from "@/shared/lib/errors";
 import { logAudit } from "@/server/services/audit.service";
 import { createUserNotification } from "@/server/services/notification-delivery.service";
-import { PlanTier } from "@prisma/client";
-
-export async function upgradeToFamilyPlan(): Promise<ActionResult<null>> {
-  const user = await requireParentOwner();
-  const parent = await prisma.parentProfile.findUnique({
-    where: { userId: user.id },
-    include: { subscription: true },
-  });
-  if (!parent?.subscription) return fail("No subscription found");
-  if (parent.subscription.plan === PlanTier.FAMILY) {
-    return fail("You are already on the Family plan");
-  }
-
-  await prisma.subscription.update({
-    where: { id: parent.subscription.id },
-    data: { plan: PlanTier.FAMILY },
-  });
-
-  await logAudit({
-    actorId: user.id,
-    action: "subscription.upgrade.family",
-    resource: "Subscription",
-    resourceId: parent.subscription.id,
-  });
-
-  revalidatePath("/parent");
-  revalidatePath("/parent/settings");
-  return ok(null);
-}
-
-export async function downgradeToEssentialPlan(): Promise<ActionResult<null>> {
-  const user = await requireParentOwner();
-  const parent = await prisma.parentProfile.findUnique({
-    where: { userId: user.id },
-    include: { subscription: true, children: true },
-  });
-  if (!parent?.subscription) return fail("No subscription found");
-  if (parent.children.length > 1) {
-    return fail("Essential supports 1 child. Remove extra children before downgrading.");
-  }
-
-  await prisma.subscription.update({
-    where: { id: parent.subscription.id },
-    data: { plan: PlanTier.ESSENTIAL },
-  });
-
-  await logAudit({
-    actorId: user.id,
-    action: "subscription.downgrade.essential",
-    resource: "Subscription",
-    resourceId: parent.subscription.id,
-  });
-
-  revalidatePath("/parent");
-  revalidatePath("/parent/settings");
-  return ok(null);
-}
 
 const scheduleItemSchema = z.object({
   dayOfWeek: z.number().min(0).max(6),

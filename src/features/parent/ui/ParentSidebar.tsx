@@ -24,8 +24,8 @@ export function ParentSidebar({ userName }: ParentSidebarProps) {
         <Link href="/parent/children" className={styles.navLink}>
           Manage Children
         </Link>
-        <Link href="/parent/billing" className={styles.navLink}>
-          Billing &amp; Plan
+        <Link href="/parent/settings" className={styles.navLink}>
+          Plan
         </Link>
       </nav>
 

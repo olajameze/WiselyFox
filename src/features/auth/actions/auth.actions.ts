@@ -8,7 +8,6 @@ import { fail, ok, type ActionResult } from "@/shared/lib/errors";
 import { scoreSignupFraud, shouldFlagForReview } from "@/server/services/fraud-detection.service";
 import { logAudit } from "@/server/services/audit.service";
 import { ConsentType, UserRole } from "@prisma/client";
-import { env } from "@/shared/lib/env";
 import { CONSENT_VERSION } from "@/shared/lib/consent";
 import { syncSuperAdminRole } from "@/server/services/super-admin.service";
 import { resolvePostLoginRedirect } from "@/shared/lib/user-capabilities";
@@ -97,16 +96,10 @@ export async function signUpParent(
       });
     }
 
-    const trialDays = env.TRIAL_PERIOD_DAYS;
-    const trialEnds = new Date();
-    trialEnds.setDate(trialEnds.getDate() + trialDays);
-
     await prisma.subscription.create({
       data: {
         parentId: user.parentProfile!.id,
-        trialStartsAt: new Date(),
-        trialEndsAt: trialEnds,
-        status: "TRIALING",
+        status: "ACTIVE",
       },
     });
 
@@ -161,9 +154,6 @@ export async function signUpLearner(
 
     const passwordHash = await bcrypt.hash(password, 10);
     const fraudScore = scoreSignupFraud(email);
-    const trialStartsAt = new Date();
-    const trialEndsAt = new Date(trialStartsAt);
-    trialEndsAt.setDate(trialEndsAt.getDate() + env.TRIAL_PERIOD_DAYS);
 
     const user = await prisma.$transaction(async (tx) => {
       const createdUser = await tx.user.create({
@@ -177,9 +167,7 @@ export async function signUpLearner(
               onboardingDone: true,
               subscription: {
                 create: {
-                  trialStartsAt,
-                  trialEndsAt,
-                  status: "TRIALING",
+                  status: "ACTIVE",
                 },
               },
               consents: {

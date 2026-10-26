@@ -5,7 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/shared/lib/prisma";
 import { requireParentOwner, assertHouseholdAccess } from "@/shared/lib/permissions";
 import { fail, ok, type ActionResult } from "@/shared/lib/errors";
-import { PlanTier, UserRole, type EngagementStyle } from "@prisma/client";
+import { UserRole, type EngagementStyle } from "@prisma/client";
 import { logAudit } from "@/server/services/audit.service";
 import { recordChildDataConsent } from "@/features/parent/actions/consent.actions";
 import { mergeAccessibilityFromOnboarding } from "@/features/inclusive/services/accommodation.service";
@@ -38,19 +38,9 @@ export async function createChildProfile(
 
   const parent = await prisma.parentProfile.findUnique({
     where: { userId: user.id },
-    include: { subscription: true, children: true },
+    include: { children: true },
   });
   if (!parent) return fail("Parent profile not found");
-
-  const plan = parent.subscription?.plan ?? PlanTier.ESSENTIAL;
-  const limit = plan === PlanTier.FAMILY ? 5 : 1;
-  if (parent.children.length >= limit) {
-    return fail(
-      plan === PlanTier.ESSENTIAL
-        ? "Essential plan supports 1 child. Upgrade to Family to add more."
-        : "Maximum 5 children reached.",
-    );
-  }
 
   const pinHash = await bcrypt.hash(parsed.data.pin, 10);
   const accessibility = mergeAccessibilityFromOnboarding(parsed.data.learningNeeds, {

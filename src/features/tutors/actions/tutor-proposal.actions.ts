@@ -10,8 +10,7 @@ import {
   assertHouseholdAccess,
 } from "@/shared/lib/permissions";
 import { logAudit } from "@/server/services/audit.service";
-import { createCheckoutSession } from "@/server/services/billing.service";
-import { PlanTier, BillingInterval, ProposalStatus } from "@prisma/client";
+import { ProposalStatus } from "@prisma/client";
 import { isProposalEligibleAgeBand } from "@/features/tutors/lib/tutor-proposal";
 
 const createProposalSchema = z.object({
@@ -105,16 +104,11 @@ export async function approveProposalAndCheckoutAction(
   }
   await assertHouseholdAccess(child.id, user.id);
 
-  // Mark the proposal as approved and trigger the Stripe purchase redirect.
+  // Mark the proposal as approved. The platform earns nothing from the parent;
+  // tutors pay the 5% platform fee when they receive payment for sessions.
   await prisma.tutorProposal.update({
     where: { id: proposal.id },
     data: { status: ProposalStatus.APPROVED_AND_PAID },
-  });
-
-  const { url } = await createCheckoutSession({
-    parentUserId: user.id,
-    plan: PlanTier.ESSENTIAL,
-    interval: BillingInterval.MONTHLY,
   });
 
   await logAudit({
@@ -125,5 +119,5 @@ export async function approveProposalAndCheckoutAction(
   });
 
   revalidatePath("/parent");
-  return ok({ url });
+  return ok({ url: "/parent" });
 }

@@ -12,13 +12,11 @@ export function getStripe(): Stripe | null {
 }
 
 export function getPriceId(plan: "ESSENTIAL" | "FAMILY", interval: "MONTHLY" | "ANNUAL") {
-  const prices: Record<string, string | undefined> = {
-    ESSENTIAL_MONTHLY: process.env.STRIPE_PRICE_ESSENTIAL_MONTHLY,
-    ESSENTIAL_ANNUAL: process.env.STRIPE_PRICE_ESSENTIAL_ANNUAL,
-    FAMILY_MONTHLY: process.env.STRIPE_PRICE_FAMILY_MONTHLY,
-    FAMILY_ANNUAL: process.env.STRIPE_PRICE_FAMILY_ANNUAL,
-  };
-  return prices[`${plan}_${interval}`];
+  void plan;
+  void interval;
+  // Parents/learners use WiselyFox for free. The only paid price was the
+  // removed learning subscription; tutors pay the 5% platform fee instead.
+  return undefined;
 }
 
 export async function cancelStripeSubscription(stripeSubscriptionId: string): Promise<boolean> {

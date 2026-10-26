@@ -4,7 +4,6 @@ import { BecomeTutorForm } from "@/features/tutors/ui/BecomeTutorForm";
 import { prisma } from "@/shared/lib/prisma";
 import { Card, Button, Alert, Badge } from "@/shared/ui";
 import { DeleteAccountSection } from "@/features/parent/ui/DeleteAccountSection";
-import { PlanUpgradeSection } from "@/features/parent/ui/PlanUpgradeSection";
 import { DataExportButton } from "@/features/parent/ui/DataExportButton";
 import { ConsentPreferences } from "@/features/parent/ui/ConsentPreferences";
 import { PushNotificationSettings } from "@/features/pwa/ui/PushNotificationSettings";
@@ -30,12 +29,12 @@ export default async function ParentSettingsPage() {
     <div className={styles.dashboard}>
       <header className={styles.pageHeader}>
         <h1>Settings & privacy</h1>
-        <p className={styles.pageSubtitle}>Subscription, billing, account, and data preferences.</p>
+        <p className={styles.pageSubtitle}>Account, plan, and data preferences.</p>
       </header>
 
-      <Alert variant="info" title="Family pilot mode">
-        No real billing during this pilot. Plan upgrades apply instantly for testing. Card collection
-        is not required.
+      <Alert variant="info" title="Free to use">
+        WiselyFox is free for parents and learners. Tutors pay a small platform fee when they
+        receive payment for sessions.
       </Alert>
 
       <Card header={<h2>Account</h2>} className={styles.mtLg}>
@@ -61,22 +60,11 @@ export default async function ParentSettingsPage() {
         )}
       </Card>
 
-      <Card header={<h2>Subscription & plan</h2>} className={styles.mtLg}>
+      <Card header={<h2>Plan</h2>} className={styles.mtLg}>
         <p>
-          Plan: <strong>{parent?.subscription?.plan ?? "Essential"}</strong>
+          WiselyFox is <strong>free to use</strong> for parents and learners — no subscription,
+          no card required. Tutors pay a small platform fee when they receive payment for sessions.
         </p>
-        <p>
-          Status: <Badge>{parent?.subscription?.status ?? "TRIALING"}</Badge>
-        </p>
-        {parent?.subscription?.trialEndsAt && (
-          <p className={styles.meta}>
-            Trial ends: {parent.subscription.trialEndsAt.toLocaleDateString("en-GB")}
-          </p>
-        )}
-        <PlanUpgradeSection
-          plan={parent?.subscription?.plan ?? "ESSENTIAL"}
-          childCount={parent?.children.length ?? 0}
-        />
       </Card>
 
       <Card header={<h2>Privacy & consent</h2>} className={styles.mtLg}>
